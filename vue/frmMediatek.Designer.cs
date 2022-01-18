@@ -309,7 +309,7 @@ namespace Mediatek86.vue
             this.txbLivresAuteur.Location = new System.Drawing.Point(150, 70);
             this.txbLivresAuteur.Name = "txbLivresAuteur";
             this.txbLivresAuteur.ReadOnly = true;
-            this.txbLivresAuteur.Size = new System.Drawing.Size(100, 20);
+            this.txbLivresAuteur.Size = new System.Drawing.Size(207, 20);
             this.txbLivresAuteur.TabIndex = 26;
             // 
             // txbLivresTitre
@@ -570,9 +570,15 @@ namespace Mediatek86.vue
             // 
             this.dgvLivresListe.AllowUserToAddRows = false;
             this.dgvLivresListe.AllowUserToDeleteRows = false;
+            this.dgvLivresListe.AllowUserToResizeColumns = false;
+            this.dgvLivresListe.AllowUserToResizeRows = false;
             this.dgvLivresListe.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvLivresListe.Location = new System.Drawing.Point(9, 150);
+            this.dgvLivresListe.MultiSelect = false;
             this.dgvLivresListe.Name = "dgvLivresListe";
+            this.dgvLivresListe.ReadOnly = true;
+            this.dgvLivresListe.RowHeadersVisible = false;
+            this.dgvLivresListe.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvLivresListe.Size = new System.Drawing.Size(844, 200);
             this.dgvLivresListe.TabIndex = 4;
             this.dgvLivresListe.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DgvLivresListe_ColumnHeaderMouseClick);
@@ -692,7 +698,7 @@ namespace Mediatek86.vue
             this.txbDvdRealisateur.Location = new System.Drawing.Point(150, 70);
             this.txbDvdRealisateur.Name = "txbDvdRealisateur";
             this.txbDvdRealisateur.ReadOnly = true;
-            this.txbDvdRealisateur.Size = new System.Drawing.Size(100, 20);
+            this.txbDvdRealisateur.Size = new System.Drawing.Size(207, 20);
             this.txbDvdRealisateur.TabIndex = 26;
             // 
             // txbDvdTitre
@@ -953,9 +959,15 @@ namespace Mediatek86.vue
             // 
             this.dgvDvdListe.AllowUserToAddRows = false;
             this.dgvDvdListe.AllowUserToDeleteRows = false;
+            this.dgvDvdListe.AllowUserToResizeColumns = false;
+            this.dgvDvdListe.AllowUserToResizeRows = false;
             this.dgvDvdListe.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvDvdListe.Location = new System.Drawing.Point(9, 150);
+            this.dgvDvdListe.MultiSelect = false;
             this.dgvDvdListe.Name = "dgvDvdListe";
+            this.dgvDvdListe.ReadOnly = true;
+            this.dgvDvdListe.RowHeadersVisible = false;
+            this.dgvDvdListe.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvDvdListe.Size = new System.Drawing.Size(844, 200);
             this.dgvDvdListe.TabIndex = 4;
             this.dgvDvdListe.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvDvdListe_ColumnHeaderMouseClick);
@@ -1336,9 +1348,15 @@ namespace Mediatek86.vue
             // 
             this.dgvRevuesListe.AllowUserToAddRows = false;
             this.dgvRevuesListe.AllowUserToDeleteRows = false;
+            this.dgvRevuesListe.AllowUserToResizeColumns = false;
+            this.dgvRevuesListe.AllowUserToResizeRows = false;
             this.dgvRevuesListe.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvRevuesListe.Location = new System.Drawing.Point(9, 150);
+            this.dgvRevuesListe.MultiSelect = false;
             this.dgvRevuesListe.Name = "dgvRevuesListe";
+            this.dgvRevuesListe.ReadOnly = true;
+            this.dgvRevuesListe.RowHeadersVisible = false;
+            this.dgvRevuesListe.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvRevuesListe.Size = new System.Drawing.Size(844, 200);
             this.dgvRevuesListe.TabIndex = 4;
             this.dgvRevuesListe.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvRevuesListe_ColumnHeaderMouseClick);
@@ -1370,7 +1388,7 @@ namespace Mediatek86.vue
             this.tabReceptionRevue.Name = "tabReceptionRevue";
             this.tabReceptionRevue.Size = new System.Drawing.Size(875, 633);
             this.tabReceptionRevue.TabIndex = 4;
-            this.tabReceptionRevue.Text = "Réception Revue";
+            this.tabReceptionRevue.Text = "Parutions des revues";
             this.tabReceptionRevue.UseVisualStyleBackColor = true;
             this.tabReceptionRevue.Enter += new System.EventHandler(this.tabReceptionRevue_Enter);
             // 
@@ -1390,7 +1408,7 @@ namespace Mediatek86.vue
             this.grpReceptionExemplaire.Size = new System.Drawing.Size(859, 244);
             this.grpReceptionExemplaire.TabIndex = 16;
             this.grpReceptionExemplaire.TabStop = false;
-            this.grpReceptionExemplaire.Text = "Numéro réceptionné pour cette revue";
+            this.grpReceptionExemplaire.Text = "Nouvelle parution réceptionnée pour cette revue";
             // 
             // btnReceptionExemplaireImage
             // 
@@ -1542,9 +1560,15 @@ namespace Mediatek86.vue
             // 
             this.dgvReceptionExemplairesListe.AllowUserToAddRows = false;
             this.dgvReceptionExemplairesListe.AllowUserToDeleteRows = false;
+            this.dgvReceptionExemplairesListe.AllowUserToResizeColumns = false;
+            this.dgvReceptionExemplairesListe.AllowUserToResizeRows = false;
             this.dgvReceptionExemplairesListe.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvReceptionExemplairesListe.Location = new System.Drawing.Point(150, 221);
+            this.dgvReceptionExemplairesListe.MultiSelect = false;
             this.dgvReceptionExemplairesListe.Name = "dgvReceptionExemplairesListe";
+            this.dgvReceptionExemplairesListe.ReadOnly = true;
+            this.dgvReceptionExemplairesListe.RowHeadersVisible = false;
+            this.dgvReceptionExemplairesListe.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvReceptionExemplairesListe.Size = new System.Drawing.Size(391, 134);
             this.dgvReceptionExemplairesListe.TabIndex = 52;
             this.dgvReceptionExemplairesListe.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvExemplairesListe_ColumnHeaderMouseClick);

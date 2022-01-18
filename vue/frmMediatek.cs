@@ -86,14 +86,14 @@ namespace Mediatek86.vue
         {
             bdgRevuesListe.DataSource = revues;
             dgvRevuesListe.DataSource = bdgRevuesListe;
-            dgvRevuesListe.Columns["id"].Visible = false;
             dgvRevuesListe.Columns["empruntable"].Visible = false;
             dgvRevuesListe.Columns["idRayon"].Visible = false;
             dgvRevuesListe.Columns["idGenre"].Visible = false;
             dgvRevuesListe.Columns["idPublic"].Visible = false;
             dgvRevuesListe.Columns["image"].Visible = false;
             dgvRevuesListe.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-            dgvRevuesListe.Columns["titre"].DisplayIndex = 0;
+            dgvRevuesListe.Columns["id"].DisplayIndex = 0;
+            dgvRevuesListe.Columns["titre"].DisplayIndex = 1;
         }
 
         /// <summary>
@@ -186,6 +186,23 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
+        /// Vide les zones d'affichage des informations de la reuve
+        /// </summary>
+        private void VideRevuesInfos()
+        {
+            txbRevuesPeriodicite.Text = "";
+            chkRevuesEmpruntable.Checked = false;
+            txbRevuesImage.Text = "";
+            txbRevuesDateMiseADispo.Text = "";
+            txbRevuesNumero.Text = "";
+            txbRevuesGenre.Text = "";
+            txbRevuesPublic.Text = "";
+            txbRevuesRayon.Text = "";
+            txbRevuesTitre.Text = "";
+            pcbRevuesImage.Image = null;
+        }
+
+        /// <summary>
         /// Filtre sur le genre
         /// </summary>
         /// <param name="sender"></param>
@@ -252,16 +269,19 @@ namespace Mediatek86.vue
         {
             if (dgvRevuesListe.CurrentCell != null)
             {
-                dgvRevuesListe.Rows[dgvRevuesListe.CurrentCell.RowIndex].Selected = true;
+                try
+                {
+                    Revue revue = (Revue)bdgRevuesListe.List[bdgRevuesListe.Position];
+                    AfficheRevuesInfos(revue);
+                }
+                catch
+                {
+                    VideRevuesZones();
+                }
             }
-            try
+            else
             {
-                Revue revue = (Revue)bdgRevuesListe.List[bdgRevuesListe.Position];
-                AfficheRevuesInfos(revue);
-            }
-            catch 
-            {
-                VideRevuesZones();
+                VideRevuesInfos();
             }
         }
 
@@ -329,8 +349,8 @@ namespace Mediatek86.vue
             List<Revue> sortedList = new List<Revue>();
             switch (titreColonne)
             {
-                case "Genre":
-                    sortedList = lesRevues.OrderBy(o => o.Genre).ToList();
+                case "Id":
+                    sortedList = lesRevues.OrderBy(o => o.Id).ToList();
                     break;
                 case "Titre":
                     sortedList = lesRevues.OrderBy(o => o.Titre).ToList();
@@ -340,6 +360,9 @@ namespace Mediatek86.vue
                     break;
                 case "DelaiMiseADispo":
                     sortedList = lesRevues.OrderBy(o => o.DelaiMiseADispo).ToList();
+                    break;
+                case "Genre":
+                    sortedList = lesRevues.OrderBy(o => o.Genre).ToList();
                     break;
                 case "Public":
                     sortedList = lesRevues.OrderBy(o => o.Public).ToList();
@@ -382,14 +405,14 @@ namespace Mediatek86.vue
         {
             bdgLivresListe.DataSource = livres;
             dgvLivresListe.DataSource = bdgLivresListe;
-            dgvLivresListe.Columns["id"].Visible = false;
             dgvLivresListe.Columns["isbn"].Visible = false;
             dgvLivresListe.Columns["idRayon"].Visible = false;
             dgvLivresListe.Columns["idGenre"].Visible = false;
             dgvLivresListe.Columns["idPublic"].Visible = false;
             dgvLivresListe.Columns["image"].Visible = false;
             dgvLivresListe.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-            dgvLivresListe.Columns["titre"].DisplayIndex = 0;
+            dgvLivresListe.Columns["id"].DisplayIndex = 0;
+            dgvLivresListe.Columns["titre"].DisplayIndex = 1;
         }
 
         /// <summary>
@@ -482,6 +505,23 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
+        /// Vide les zones d'affichage des informations du livre
+        /// </summary>
+        private void VideLivresInfos()
+        {
+            txbLivresAuteur.Text = "";
+            txbLivresCollection.Text = "";
+            txbLivresImage.Text = "";
+            txbLivresIsbn.Text = "";
+            txbLivresNumero.Text = "";
+            txbLivresGenre.Text = "";
+            txbLivresPublic.Text = "";
+            txbLivresRayon.Text = "";
+            txbLivresTitre.Text = "";
+            pcbLivresImage.Image = null;
+        }
+
+        /// <summary>
         /// Filtre sur le genre
         /// </summary>
         /// <param name="sender"></param>
@@ -548,16 +588,19 @@ namespace Mediatek86.vue
         {
             if (dgvLivresListe.CurrentCell != null)
             {
-                dgvLivresListe.Rows[dgvLivresListe.CurrentCell.RowIndex].Selected = true;
+                try
+                {
+                    Livre livre = (Livre)bdgLivresListe.List[bdgLivresListe.Position];
+                    AfficheLivresInfos(livre);
+                }
+                catch
+                {
+                    VideLivresZones();
+                }
             }
-            try
+            else
             {
-                Livre livre = (Livre)bdgLivresListe.List[bdgLivresListe.Position];
-                AfficheLivresInfos(livre);
-            }
-            catch 
-            {
-                VideLivresZones();
+                VideLivresInfos();
             }
         }
 
@@ -625,8 +668,8 @@ namespace Mediatek86.vue
             List<Livre> sortedList = new List<Livre>();
             switch (titreColonne)
             {
-                case "Genre":
-                    sortedList = lesLivres.OrderBy(o => o.Genre).ToList();
+                case "Id":
+                    sortedList = lesLivres.OrderBy(o => o.Id).ToList();
                     break;
                 case "Titre":
                     sortedList = lesLivres.OrderBy(o => o.Titre).ToList();
@@ -636,6 +679,9 @@ namespace Mediatek86.vue
                     break;
                 case "Auteur":
                     sortedList = lesLivres.OrderBy(o => o.Auteur).ToList();
+                    break;
+                case "Genre":
+                    sortedList = lesLivres.OrderBy(o => o.Genre).ToList();
                     break;
                 case "Public":
                     sortedList = lesLivres.OrderBy(o => o.Public).ToList();
@@ -677,14 +723,14 @@ namespace Mediatek86.vue
         {
             bdgDvdListe.DataSource = Dvds;
             dgvDvdListe.DataSource = bdgDvdListe;
-            dgvDvdListe.Columns["id"].Visible = false;
             dgvDvdListe.Columns["idRayon"].Visible = false;
             dgvDvdListe.Columns["idGenre"].Visible = false;
             dgvDvdListe.Columns["idPublic"].Visible = false;
             dgvDvdListe.Columns["image"].Visible = false;
             dgvDvdListe.Columns["synopsis"].Visible = false;
             dgvDvdListe.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-            dgvDvdListe.Columns["titre"].DisplayIndex = 0;
+            dgvDvdListe.Columns["id"].DisplayIndex = 0;
+            dgvDvdListe.Columns["titre"].DisplayIndex = 1;
         }
 
         /// <summary>
@@ -777,6 +823,23 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
+        /// Vide les zones d'affichage des informations du dvd
+        /// </summary>
+        private void VideDvdInfos()
+        {
+            txbDvdRealisateur.Text = "";
+            txbDvdSynopsis.Text = "";
+            txbDvdImage.Text = "";
+            txbDvdDuree.Text = "";
+            txbDvdNumero.Text = "";
+            txbDvdGenre.Text = "";
+            txbDvdPublic.Text = "";
+            txbDvdRayon.Text = "";
+            txbDvdTitre.Text = "";
+            pcbDvdImage.Image = null;
+        }
+
+        /// <summary>
         /// Filtre sur le genre
         /// </summary>
         /// <param name="sender"></param>
@@ -843,16 +906,19 @@ namespace Mediatek86.vue
         {
             if (dgvDvdListe.CurrentCell != null)
             {
-                dgvDvdListe.Rows[dgvDvdListe.CurrentCell.RowIndex].Selected = true;
+                try
+                {
+                    Dvd dvd = (Dvd)bdgDvdListe.List[bdgDvdListe.Position];
+                    AfficheDvdInfos(dvd);
+                }
+                catch
+                {
+                    VideDvdZones();
+                }
             }
-            try
+            else
             {
-                Dvd dvd = (Dvd)bdgDvdListe.List[bdgDvdListe.Position];
-                AfficheDvdInfos(dvd);
-            }
-            catch 
-            {
-                VideDvdZones();
+                VideDvdInfos();
             }
         }
 
@@ -920,17 +986,20 @@ namespace Mediatek86.vue
             List<Dvd> sortedList = new List<Dvd>();
             switch (titreColonne)
             {
-                case "Genre":
-                    sortedList = lesDvd.OrderBy(o => o.Genre).ToList();
+                case "Id":
+                    sortedList = lesDvd.OrderBy(o => o.Id).ToList();
                     break;
                 case "Titre":
                     sortedList = lesDvd.OrderBy(o => o.Titre).ToList();
                     break;
-                case "Synopsis":
-                    sortedList = lesDvd.OrderBy(o => o.Synopsis).ToList();
+                case "Duree":
+                    sortedList = lesDvd.OrderBy(o => o.Duree).ToList();
                     break;
                 case "Realisateur":
                     sortedList = lesDvd.OrderBy(o => o.Realisateur).ToList();
+                    break;
+                case "Genre":
+                    sortedList = lesDvd.OrderBy(o => o.Genre).ToList();
                     break;
                 case "Public":
                     sortedList = lesDvd.OrderBy(o => o.Public).ToList();
@@ -992,12 +1061,12 @@ namespace Mediatek86.vue
                 else
                 {
                     MessageBox.Show("numéro introuvable");
-                    viderReceptionRevueInfo();
+                    VideReceptionRevueInfos();
                 }
             }
             else
             {
-                viderReceptionRevueInfo();
+                VideReceptionRevueInfos();
             }
         }
 
@@ -1010,7 +1079,7 @@ namespace Mediatek86.vue
         private void txbReceptionRevueNumero_TextChanged(object sender, EventArgs e)
         {
             accesReceptionExemplaireGroupBox(false);
-            viderReceptionRevueInfo();
+            VideReceptionRevueInfos();
         }
 
         /// <summary>
@@ -1054,7 +1123,7 @@ namespace Mediatek86.vue
         /// <summary>
         /// Vide les zones d'affchage des informations de la revue
         /// </summary>
-        private void viderReceptionRevueInfo()
+        private void VideReceptionRevueInfos()
         {
             txbReceptionRevuePeriodicite.Text = "";
             chkReceptionRevueEmpruntable.Checked = false;
@@ -1073,7 +1142,7 @@ namespace Mediatek86.vue
         /// <summary>
         /// Vide les zones d'affichage des informations de l'exemplaire
         /// </summary>
-        private void viderReceptionExemplaireGroupBox()
+        private void VideReceptionExemplaireInfos()
         {
             txbReceptionExemplaireImage.Text = "";
             txbReceptionExemplaireNumero.Text = "";
@@ -1088,7 +1157,7 @@ namespace Mediatek86.vue
         /// <param name="acces"></param>
         private void accesReceptionExemplaireGroupBox(bool acces)
         {
-            viderReceptionExemplaireGroupBox();
+            VideReceptionExemplaireInfos();
             grpReceptionExemplaire.Enabled = acces;
         }
 
@@ -1137,7 +1206,7 @@ namespace Mediatek86.vue
                     Exemplaire exemplaire = new Exemplaire(numero, dateAchat, photo, idEtat, idDocument);
                     if (controle.CreerExemplaire(exemplaire))
                     {
-                        viderReceptionExemplaireGroupBox();
+                        VideReceptionExemplaireInfos();
                         afficheReceptionExemplairesRevue();
                     }
                     else
@@ -1169,10 +1238,13 @@ namespace Mediatek86.vue
             switch (titreColonne)
             {
                 case "Numero":
-                    sortedList = lesExemplaires.OrderBy(o => o.Numero).ToList();
+                    sortedList = lesExemplaires.OrderBy(o => o.Numero).Reverse().ToList();
                     break;
                 case "DateAchat":
-                    sortedList = lesExemplaires.OrderBy(o => o.DateAchat).ToList();
+                    sortedList = lesExemplaires.OrderBy(o => o.DateAchat).Reverse().ToList();
+                    break;
+                case "Photo":
+                    sortedList = lesExemplaires.OrderBy(o => o.Photo).ToList();
                     break;
             }
             RemplirReceptionExemplairesListe(sortedList);
@@ -1187,7 +1259,6 @@ namespace Mediatek86.vue
         {
             if (dgvReceptionExemplairesListe.CurrentCell != null)
             {
-                dgvReceptionExemplairesListe.Rows[dgvReceptionExemplairesListe.CurrentCell.RowIndex].Selected = true;
                 Exemplaire exemplaire = (Exemplaire)bdgExemplairesListe.List[bdgExemplairesListe.Position];
                 string image = exemplaire.Photo;
                 try
