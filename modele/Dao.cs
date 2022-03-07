@@ -205,7 +205,7 @@ namespace Mediatek86.modele
         /// Retourne les exemplaires d'une revue
         /// </summary>
         /// <returns>Liste d'objets Exemplaire</returns>
-        public static List<Exemplaire> GetExemplairesRevue(string idDocument)
+        public static List<Exemplaire> GetExemplairesRevue(string idDoc)
         {
             List<Exemplaire> lesExemplaires = new List<Exemplaire>();
             string req = "Select e.id, e.numero, e.dateAchat, e.photo, e.idEtat ";
@@ -214,7 +214,7 @@ namespace Mediatek86.modele
             req += "order by e.dateAchat DESC";
             Dictionary<string, object> parameters = new Dictionary<string, object>
                 {
-                    { "@id", idDocument}
+                    { "@id", idDoc}
                 };
 
             BddMySql curs = BddMySql.GetInstance(connectionString);
@@ -222,12 +222,12 @@ namespace Mediatek86.modele
 
             while (curs.Read())
             {
-                string idDocuement = (string)curs.Field("id");
+                string idDocument = (string)curs.Field("id");
                 int numero = (int)curs.Field("numero");
                 DateTime dateAchat = (DateTime)curs.Field("dateAchat");
                 string photo = (string)curs.Field("photo");
                 string idEtat = (string)curs.Field("idEtat");
-                Exemplaire exemplaire = new Exemplaire(numero, dateAchat, photo, idEtat, idDocuement);
+                Exemplaire exemplaire = new Exemplaire(numero, dateAchat, photo, idEtat, idDocument);
                 lesExemplaires.Add(exemplaire);
             }
             curs.Close();

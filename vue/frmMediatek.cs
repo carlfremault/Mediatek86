@@ -80,7 +80,7 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// Remplit le dategrid avec la liste reçue en paramètre
+        /// Remplit le datagrid avec la liste reçue en paramètre
         /// </summary>
         private void RemplirRevuesListe(List<Revue> revues)
         {
@@ -1115,8 +1115,8 @@ namespace Mediatek86.vue
 
         private void afficheReceptionExemplairesRevue()
         {
-            string idDocuement = txbReceptionRevueNumero.Text;
-            lesExemplaires = controle.GetExemplairesRevue(idDocuement);
+            string idDocument = txbReceptionRevueNumero.Text;
+            lesExemplaires = controle.GetExemplairesRevue(idDocument);
             RemplirReceptionExemplairesListe(lesExemplaires);
         }
 
