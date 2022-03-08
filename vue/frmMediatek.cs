@@ -21,6 +21,9 @@ namespace Mediatek86.vue
         private readonly BindingSource bdgGenres = new BindingSource();
         private readonly BindingSource bdgPublics = new BindingSource();
         private readonly BindingSource bdgRayons = new BindingSource();
+        private readonly BindingSource bdgInfosGenres = new BindingSource();
+        private readonly BindingSource bdgInfosPublics = new BindingSource();
+        private readonly BindingSource bdgInfosRayons = new BindingSource();
         private readonly BindingSource bdgRevuesListe = new BindingSource();
         private readonly BindingSource bdgExemplairesListe = new BindingSource();
         private List<Livre> lesLivres = new List<Livre>();
@@ -388,6 +391,11 @@ namespace Mediatek86.vue
         /// </summary>
         private bool saisieLivre;
 
+        /// <summary>
+        /// Booléen, validé comme 'true' si on est en train de modifier un livre
+        /// </summary>
+        private bool modifLivre = false;
+
 
         /// <summary>
         /// Ouverture de l'onglet Livres : 
@@ -403,10 +411,15 @@ namespace Mediatek86.vue
             RemplirComboCategorie(controle.GetAllGenres(), bdgGenres, cbxLivresGenres);
             RemplirComboCategorie(controle.GetAllPublics(), bdgPublics, cbxLivresPublics);
             RemplirComboCategorie(controle.GetAllRayons(), bdgRayons, cbxLivresRayons);
+            RemplirComboCategorie(controle.GetAllGenres(), bdgInfosGenres, cbxInfosLivresGenres);
+            RemplirComboCategorie(controle.GetAllPublics(), bdgInfosPublics, cbxInfosLivresPublics);
+            RemplirComboCategorie(controle.GetAllRayons(), bdgInfosRayons, cbxInfosLivresRayons);
             RemplirLivresListeComplete();
             ActiverBoutonEnregLivre(false);
             ActiverBoutonAnnulerSaisieLivre(false);
+            AutoriserModifLivre(false);
             saisieLivre = false;
+            modifLivre = false;
         }
 
         /// <summary>
@@ -546,9 +559,9 @@ namespace Mediatek86.vue
             txbLivresImage.Text = livre.Image;
             txbLivresIsbn.Text = livre.Isbn;
             txbLivresNumero.Text = livre.Id;
-            txbLivresGenre.Text = livre.Genre;
-            txbLivresPublic.Text = livre.Public;
-            txbLivresRayon.Text = livre.Rayon;
+            cbxInfosLivresGenres.SelectedIndex = cbxInfosLivresGenres.FindStringExact(livre.Genre);
+            cbxInfosLivresPublics.SelectedIndex = cbxInfosLivresPublics.FindStringExact(livre.Public);
+            cbxInfosLivresRayons.SelectedIndex = cbxInfosLivresRayons.FindStringExact(livre.Rayon);            
             txbLivresTitre.Text = livre.Titre;
             string image = livre.Image;
             try
@@ -571,9 +584,9 @@ namespace Mediatek86.vue
             txbLivresImage.Text = "";
             txbLivresIsbn.Text = "";
             txbLivresNumero.Text = "";
-            txbLivresGenre.Text = "";
-            txbLivresPublic.Text = "";
-            txbLivresRayon.Text = "";
+            cbxInfosLivresGenres.SelectedIndex = -1;
+            cbxInfosLivresPublics.SelectedIndex = -1;
+            cbxInfosLivresRayons.SelectedIndex = -1;
             txbLivresTitre.Text = "";
             pcbLivresImage.Image = null;
         }
@@ -948,14 +961,103 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// Evénement clic sur le bouton 'Ajouter'
+        /// Evénement clic sur le bouton 'Ajouter'. Vide les champs 'infos', déverrouille le champ 'Numéro de document', Démarre la saisie d'un livre
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void btnAjoutLivre_Click(object sender, EventArgs e)
         {
             VideLivresInfos();
+            AutoriserModifDocId(true);
             StartSaisieLivre();
+        }
+
+        /// <summary>
+        /// Evénement clic sur le bouton 'Modifier'. Verrouille le champ 'Numéro de document'. Démarre la saisie d'un livre
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnModifLivre_Click(object sender, EventArgs e)
+        {
+            modifLivre = true;
+            AutoriserModifDocId(false);
+            StartSaisieLivre();
+        }
+
+        /// <summary>
+        /// Evénement clic sur le bouton 'Enregistrer'
+        /// Vérifie si les champs requis (numéro, genre, public, rayon) sont saisies.
+        /// Si oui procède à l'ajout ou modification du livre
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnEnregistrerLivre_Click(object sender, EventArgs e)
+        {
+            if(cbxInfosLivresGenres.SelectedIndex == -1 || cbxInfosLivresPublics.SelectedIndex == -1 || cbxInfosLivresRayons.SelectedIndex == -1 || txbLivresNumero.Text == "")
+            {
+                MessageBox.Show("Les champs 'Numéro de document', 'Genre', 'Public' et 'Rayon' ne peuvent être vides.", "Information");
+                return;
+            }
+ 
+                
+            Genre leGenre = (Genre)bdgInfosGenres.List[bdgInfosGenres.Position];
+            String idGenre = leGenre.Id;
+            String genre = leGenre.ToString();
+            Public lePublic = (Public)bdgInfosPublics.List[bdgInfosPublics.Position];
+            String idPublic = lePublic.Id;
+            String unPublic = lePublic.ToString();
+            Rayon leRayon = (Rayon)bdgInfosRayons.List[bdgInfosRayons.Position];
+            String idRayon = leRayon.Id;
+            String rayon = leRayon.ToString();
+            String id = txbLivresNumero.Text;
+            String titre = txbLivresTitre.Text;
+            String image = txbLivresImage.Text;
+            String isbn = txbLivresIsbn.Text;
+            String auteur = txbLivresAuteur.Text;
+            String collection = txbLivresCollection.Text;
+
+            Livre leLivre = new Livre(id, titre, image, isbn, auteur, collection, idGenre, genre, idPublic, unPublic, idRayon, rayon);
+
+            if (modifLivre)
+            {
+                if (!controle.ModifLivre(leLivre)) 
+                { 
+                    MessageBox.Show("Une erreur est survenue.", "Erreur");
+                    return;
+                }
+            } 
+            else
+            {
+                if(!controle.CreerLivre(leLivre))                
+                {
+                    MessageBox.Show("numéro de publication déjà existant", "Erreur");
+                    txbLivresNumero.Text = "";
+                    txbLivresNumero.Focus();
+                    return;
+                }
+            }
+            VideLivresInfos();
+            StopSaisieLivre();
+            controle.RefreshAllLivres();
+            lesLivres = controle.GetAllLivres();
+            RemplirLivresListeComplete();
+
+        }
+
+        /// <summary>
+        /// Evénement clic sur le bouton annuler lors d'une saisie
+        /// Vide les champs infos, arrête la saisie et affiche les infos du livre sélectionné dans la liste
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnAnnulerSaisieLivre_Click(object sender, EventArgs e)
+        {
+            if (VerifAbandonSaisie())
+            {
+                VideLivresInfos();
+                StopSaisieLivre();
+                LivresListeSelection();
+            }
         }
 
         /// <summary>
@@ -965,6 +1067,9 @@ namespace Mediatek86.vue
         {
             saisieLivre = true;          
             AutoriserModifLivre(true);
+            ActiverBoutonAjoutLivre(false);
+            ActiverBoutonModifLivre(false);
+            ActiverBoutonSupprLivre(false);
         }
 
         /// <summary>
@@ -973,7 +1078,11 @@ namespace Mediatek86.vue
         private void StopSaisieLivre()
         {
             saisieLivre = false;
+            modifLivre = false;
             AutoriserModifLivre(false);
+            ActiverBoutonAjoutLivre(true);
+            ActiverBoutonModifLivre(true);
+            ActiverBoutonSupprLivre(true);
         }
 
         /// <summary>
@@ -985,17 +1094,23 @@ namespace Mediatek86.vue
             txbLivresAuteur.ReadOnly = !actif;
             txbLivresCollection.ReadOnly = !actif;
             txbLivresImage.ReadOnly = !actif;
-            txbLivresIsbn.ReadOnly = !actif;
-            txbLivresNumero.ReadOnly = !actif;
-            txbLivresGenre.ReadOnly = !actif;
-            txbLivresPublic.ReadOnly = !actif;
-            txbLivresRayon.ReadOnly = !actif;
+            txbLivresIsbn.ReadOnly = !actif;          
+            cbxInfosLivresGenres.Enabled = actif;
+            cbxInfosLivresPublics.Enabled = actif;
+            cbxInfosLivresRayons.Enabled = actif;
             txbLivresTitre.ReadOnly = !actif;
             ActiverBoutonEnregLivre(actif);
             ActiverBoutonAnnulerSaisieLivre(actif);
         }
 
-
+        /// <summary>
+        /// (Dés)activation de la protection du champ 'Numéro du document'
+        /// </summary>
+        /// <param name="actif"></param>
+        private void AutoriserModifDocId(Boolean actif)
+        {
+            txbLivresNumero.ReadOnly = !actif;
+        }
 
 
 
@@ -1601,5 +1716,7 @@ namespace Mediatek86.vue
             }
 
         }
+
+
     }
 }

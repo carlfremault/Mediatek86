@@ -11,7 +11,7 @@ namespace Mediatek86.bdd
         /// Unique instance de la classe
         /// </summary>
         private static BddMySql instance = null;
-        
+
         /// <summary>
         /// objet de connexion à la BDD à partir d'une chaîne de connexion
         /// </summary>
@@ -60,7 +60,7 @@ namespace Mediatek86.bdd
         public void ReqSelect(string stringQuery, Dictionary<string, object> parameters)
         {
             MySqlCommand command;
-            
+
             try
             {
                 command = new MySqlCommand(stringQuery, connection);
@@ -126,35 +126,42 @@ namespace Mediatek86.bdd
         }
 
         /// <summary>
-        /// Exécution d'une requête autre que "select"
+        /// Exécution de requêtes autre que "select" dans une seule transaction
         /// </summary>
-        /// <param name="stringQuery">requête autre que select</param>
-        /// <param name="parameters">dictionnire contenant les parametres</param>
-        public void ReqUpdate(string stringQuery, Dictionary<string, object> parameters)
+        /// <param name="queries">Liste des requêtes à faire</param>
+        /// <param name="parameters"></param>
+        public void ReqUpdate(List<string> queries, Dictionary<string, object> parameters)
         {
             MySqlCommand command;
-            try
-            {
-                command = new MySqlCommand(stringQuery, connection);
-                if (!(parameters is null))
+            MySqlTransaction transaction = connection.BeginTransaction();
+                try
                 {
-                    foreach (KeyValuePair<string, object> parameter in parameters)
+                    foreach (string stringQuery in queries)
                     {
-                        command.Parameters.Add(new MySqlParameter(parameter.Key, parameter.Value));
+                        command = new MySqlCommand(stringQuery, connection, transaction);
+                        if (!(parameters is null))
+                        {
+                            foreach (KeyValuePair<string, object> parameter in parameters)
+                            {
+                                command.Parameters.Add(new MySqlParameter(parameter.Key, parameter.Value));
+                            }
+                        }
+                        command.Prepare();
+                        command.ExecuteNonQuery();
                     }
+
+                    transaction.Commit();
                 }
-                command.Prepare();
-                command.ExecuteNonQuery();
-            }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e.Message);
-                throw;
-            }
-            catch (InvalidOperationException e)
-            {
-                ErreurGraveBddNonAccessible(e);
-            }
+                catch (MySqlException e)
+                {
+                    transaction.Rollback();
+                    Console.WriteLine(e.Message);
+                    throw;
+                }
+                catch (InvalidOperationException e)
+                {
+                    ErreurGraveBddNonAccessible(e);
+                }
         }
 
         /// <summary>

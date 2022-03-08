@@ -8,7 +8,7 @@ namespace Mediatek86.controleur
 {
     internal class Controle
     {
-        private readonly List<Livre> lesLivres;
+        private List<Livre> lesLivres;
         private readonly List<Dvd> lesDvd;
         private readonly List<Revue> lesRevues;
         private readonly List<Categorie> lesRayons;
@@ -46,6 +46,14 @@ namespace Mediatek86.controleur
         public List<Livre> GetAllLivres()
         {
             return lesLivres;
+        }
+
+        /// <summary>
+        /// Recupère la liste des livres depuis la bdd
+        /// </summary>
+        public void RefreshAllLivres()
+        {
+            lesLivres = Dao.GetAllLivres();
         }
 
         /// <summary>
@@ -101,6 +109,26 @@ namespace Mediatek86.controleur
         public bool CreerExemplaire(Exemplaire exemplaire)
         {
             return Dao.CreerExemplaire(exemplaire);
+        }
+
+        /// <summary>
+        /// Crée un livre dans la bdd
+        /// </summary>
+        /// <param name="livre">L'objet Livre concerné</param>
+        /// <returns>True si la création a pu se faire</returns>
+        public bool CreerLivre(Livre livre)
+        {
+            return Dao.CreerLivre(livre);
+        }
+
+        /// <summary>
+        /// Modifie un livre dans la bss
+        /// </summary>
+        /// <param name="livre">L'objet Livre concerné</param>
+        /// <returns>True si la modification a pu se faire</returns>
+        public bool ModifLivre(Livre livre)
+        {
+            return Dao.ModifLivre(livre);
         }
 
     }

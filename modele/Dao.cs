@@ -244,7 +244,8 @@ namespace Mediatek86.modele
         {
             try
             {
-                string req = "insert into exemplaire values (@idDocument,@numero,@dateAchat,@photo,@idEtat)";
+                List<string> requetes = new List<string>();
+                requetes.Add("insert into exemplaire values (@idDocument,@numero,@dateAchat,@photo,@idEtat)");
                 Dictionary<string, object> parameters = new Dictionary<string, object>
                 {
                     { "@idDocument", exemplaire.IdDocument},
@@ -254,7 +255,7 @@ namespace Mediatek86.modele
                     { "@idEtat",exemplaire.IdEtat}
                 };
                 BddMySql curs = BddMySql.GetInstance(connectionString);
-                curs.ReqUpdate(req, parameters);
+                curs.ReqUpdate(requetes, parameters);
                 curs.Close();
                 return true;
             }catch{
@@ -262,5 +263,75 @@ namespace Mediatek86.modele
             }
         }
 
+        /// <summary>
+        /// écriture d'un livre en base de données
+        /// </summary>
+        /// <param name="livre"></param>
+        /// <returns>true si l'insertion a pu se faire</returns>
+        public static bool CreerLivre(Livre livre)
+        {
+            try
+            {
+                List<string> requetes = new List<string>();
+                requetes.Add("insert into document values (@id, @titre, @image, @idRayon, @idPublic, @idGenre)");
+                requetes.Add("insert into livres_dvd values (@id)");
+                requetes.Add("insert into livre values (@id, @isbn, @auteur, @collection)");
+                Dictionary<string, object> parameters = new Dictionary<string, object>
+                {
+                    {"@id", livre.Id },
+                    {"@titre", livre.Titre },
+                    {"@image", livre.Image },
+                    {"@idRayon", livre.IdRayon },
+                    {"@idPublic", livre.IdPublic },
+                    {"@idGenre", livre.IdGenre },
+                    {"@isbn", livre.Isbn },
+                    {"@auteur", livre.Auteur },
+                    {"@collection", livre.Collection },
+                };
+                BddMySql curs = BddMySql.GetInstance(connectionString);              
+                curs.ReqUpdate(requetes, parameters);
+                curs.Close();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }           
+        }
+
+        /// <summary>
+        /// modification d'un livre en base de données
+        /// </summary>
+        /// <param name="livre"></param>
+        /// <returns>true si la modification a pu se faire</returns>
+        public static bool ModifLivre(Livre livre)
+        {
+            try
+            {
+                List<string> requetes = new List<string>();
+                requetes.Add("update document set titre=@titre, image=@image, idRayon=@idRayon, idPublic=@idPublic, idGenre=@idGenre where id=@id");
+                requetes.Add("update livre set isbn=@isbn, auteur=@auteur, collection=@collection where id=@id");
+                Dictionary<string, object> parameters = new Dictionary<string, object>
+                {
+                    {"@id", livre.Id },
+                    {"@titre", livre.Titre },
+                    {"@image", livre.Image },
+                    {"@idRayon", livre.IdRayon },
+                    {"@idPublic", livre.IdPublic },
+                    {"@idGenre", livre.IdGenre },
+                    {"@isbn", livre.Isbn },
+                    {"@auteur", livre.Auteur },
+                    {"@collection", livre.Collection },
+                };
+                BddMySql curs = BddMySql.GetInstance(connectionString);
+                curs.ReqUpdate(requetes, parameters);
+                curs.Close();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }            
+        }
     }
 }
