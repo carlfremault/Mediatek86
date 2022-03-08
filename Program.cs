@@ -18,7 +18,9 @@ namespace Mediatek86
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+#pragma warning disable S1848 // Objects should not be created to be dropped immediately without being used
             new Controle();
+#pragma warning restore S1848 // Objects should not be created to be dropped immediately without being used
         }
     }
 }

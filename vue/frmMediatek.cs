@@ -173,14 +173,14 @@ namespace Mediatek86.vue
             txbRevuesGenre.Text = revue.Genre;
             txbRevuesPublic.Text = revue.Public;
             txbRevuesRayon.Text = revue.Rayon;
-            txbRevuesTitre.Text = revue.Titre;     
+            txbRevuesTitre.Text = revue.Titre;
             string image = revue.Image;
             try
             {
                 pcbRevuesImage.Image = Image.FromFile(image);
             }
-            catch 
-            { 
+            catch
+            {
                 pcbRevuesImage.Image = null;
             }
         }
@@ -384,8 +384,16 @@ namespace Mediatek86.vue
         //-----------------------------------------------------------
 
         /// <summary>
+        /// Booléen, validé comme 'true' si on est en train de faire une saisie pour ajouter/modifier un livre
+        /// </summary>
+        private bool saisieLivre;
+
+
+        /// <summary>
         /// Ouverture de l'onglet Livres : 
         /// appel des méthodes pour remplir le datagrid des livres et des combos (genre, rayon, public)
+        /// Désactive boutons 'enregistrer' et 'annuler' qui ne doivent être actifs qu'en cas de modification/ajout d'un livre. 
+        /// Met le booleen 'saisieLivre' en 'false'
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -396,6 +404,9 @@ namespace Mediatek86.vue
             RemplirComboCategorie(controle.GetAllPublics(), bdgPublics, cbxLivresPublics);
             RemplirComboCategorie(controle.GetAllRayons(), bdgRayons, cbxLivresRayons);
             RemplirLivresListeComplete();
+            ActiverBoutonEnregLivre(false);
+            ActiverBoutonAnnulerSaisieLivre(false);
+            saisieLivre = false;
         }
 
         /// <summary>
@@ -416,12 +427,34 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// Recherche et affichage du livre dont on a saisi le numéro.
-        /// Si non trouvé, affichage d'un MessageBox.
+        /// Evénement clic sur le bouton 'Rechercher'. Vérifie si on est en train de faire une saisie (ajout ou modif de livre)
+        /// Si non : effectue la recherche
+        /// Si oui : demande si l'utilisateur veut abandonner la saisie, si oui  : abandon, vide les champs 'infos' et effectue la recherche
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void BtnLivresNumRecherche_Click(object sender, EventArgs e)
+        {
+            if (saisieLivre && VerifAbandonSaisie()) // On est en train de saisir, et on décide d'abandonner
+            {
+                StopSaisieLivre();              
+                LivresNumRecherche();                
+            }
+            else if (saisieLivre) // On est en train de saisir, et on n'abandonne pas
+            {
+                txbLivresNumRecherche.Text = "";
+            }
+            else // On n'est pas en train de saisir
+            {
+                LivresNumRecherche();
+            }
+        }
+
+        /// <summary>
+        /// Recherche et affichage du livre dont on a saisi le numéro.
+        /// Si non trouvé, affichage d'un MessageBox.
+        /// </summary>
+        private void LivresNumRecherche()
         {
             if (!txbLivresNumRecherche.Text.Equals(""))
             {
@@ -449,13 +482,37 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// Recherche et affichage des livres dont le titre matche acec la saisie.
-        /// Cette procédure est exécutée à chaque ajout ou suppression de caractère
-        /// dans le textBox de saisie.
+        /// Cette procédure est exécutée à chaque ajout ou suppression de caractère dans le textBox de recherche de titre.
+        /// Vérifie si on est en train de faire une saisie (ajout ou modif de livre)
+        /// Si non : effectue la recherche
+        /// Si oui : vérification si l'utilisateur veut abandonner la saisie et si le champs n'est pas vidé (pour éviter double trigger)
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void TxbLivresTitreRecherche_TextChanged(object sender, EventArgs e)
+        {
+            if (saisieLivre) // On est en train de saisir
+            {
+                if (txbLivresTitreRecherche.Text != "" && VerifAbandonSaisie()) // Le champ de recherche n'est pas vidé, on vérifie si l'utilisateur veut abandonner la saisie
+                {
+                    StopSaisieLivre();
+                    LivresTitreRecherche();
+                }
+                else // L'utilisateur ne veut pas abandonner la saisie
+                {
+                    txbLivresTitreRecherche.Text = "";
+                }
+            }
+            else // On n'est pas en train de saisir
+            {
+                LivresTitreRecherche();
+            }
+        }
+
+        /// <summary>
+        /// Recherche et affichage des livres dont le titre matche acec la saisie.
+        /// </summary>
+        private void LivresTitreRecherche()
         {
             if (!txbLivresTitreRecherche.Text.Equals(""))
             {
@@ -470,7 +527,7 @@ namespace Mediatek86.vue
             else
             {
                 // si la zone de saisie est vide et aucun élément combo sélectionné, réaffichage de la liste complète
-                if (cbxLivresGenres.SelectedIndex < 0 && cbxLivresPublics.SelectedIndex < 0 && cbxLivresRayons.SelectedIndex < 0 
+                if (cbxLivresGenres.SelectedIndex < 0 && cbxLivresPublics.SelectedIndex < 0 && cbxLivresRayons.SelectedIndex < 0
                     && txbLivresNumRecherche.Text.Equals(""))
                 {
                     RemplirLivresListeComplete();
@@ -492,13 +549,13 @@ namespace Mediatek86.vue
             txbLivresGenre.Text = livre.Genre;
             txbLivresPublic.Text = livre.Public;
             txbLivresRayon.Text = livre.Rayon;
-            txbLivresTitre.Text = livre.Titre;      
+            txbLivresTitre.Text = livre.Titre;
             string image = livre.Image;
             try
             {
                 pcbLivresImage.Image = Image.FromFile(image);
             }
-            catch 
+            catch
             {
                 pcbLivresImage.Image = null;
             }
@@ -522,11 +579,38 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// Filtre sur le genre
+        /// Evénement changement de sélection combobox Genres
+        /// On vérifie si l'utilisateur est en train de faire une saisie
+        /// Si non, le filtre s'exécute
+        /// Si oui, vérification s'il veut abandonner la saisie, et si la sélection n'est pas vidée (pour éviter double trigger)
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void CbxLivresGenres_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (saisieLivre) // On est en train de saisir
+            {
+                if (cbxLivresGenres.SelectedIndex != -1 &&  VerifAbandonSaisie()) // Le champ de recherche n'est pas vidé, on vérifie si l'utilisateur veut abandonner la saisie
+                {
+                    StopSaisieLivre();
+                    FiltreLivresGenre();
+                }
+                else // L'utilisateur ne veut pas abandonner la saisie
+                {
+                    cbxLivresGenres.SelectedIndex = -1;
+                }
+             
+            }
+            else // On n'est pas en train de saisir
+            {
+                FiltreLivresGenre();
+            }            
+        }
+
+        /// <summary>
+        /// Filtre sur le genre
+        /// </summary>
+        private void FiltreLivresGenre()
         {
             if (cbxLivresGenres.SelectedIndex >= 0)
             {
@@ -541,11 +625,37 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// Filtre sur la catégorie de public
+        /// Evénement changement de sélection combobox Publics
+        /// On vérifie si l'utilisateur est en train de faire une saisie
+        /// Si non, le filtre s'exécute
+        /// Si oui, vérification s'il veut abandonner la saisie, et si la sélection n'est pas vidée (pour éviter double trigger)
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void CbxLivresPublics_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (saisieLivre) // On est en train de saisir
+            {
+                if (cbxLivresPublics.SelectedIndex != -1 && VerifAbandonSaisie()) // Le champ de recherche n'est pas vidé, on vérifie si l'utilisateur veut abandonner la saisie
+                {
+                    StopSaisieLivre();
+                    FiltreLivresPublic();
+                }
+                else // L'utilisateur ne veut pas abandonner la saisie
+                {
+                    cbxLivresPublics.SelectedIndex = -1;
+                }
+            }
+            else // On n'est pas en train de saisir
+            {
+                FiltreLivresPublic();
+            }
+        }
+
+        /// <summary>
+        /// Filtre sur la catégorie de public
+        /// </summary>
+        private void FiltreLivresPublic ()
         {
             if (cbxLivresPublics.SelectedIndex >= 0)
             {
@@ -560,11 +670,38 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// Filtre sur le rayon
+        /// Evénement changement de sélection combobox Rayons
+        /// On vérifie si l'utilisateur est en train de faire une saisie
+        /// Si non, le filtre s'exécute
+        /// Si oui, vérification s'il veut abandonner la saisie, et si la sélection n'est pas vidée (pour éviter double trigger)
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void CbxLivresRayons_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (saisieLivre) // On est en train de saisir
+            {
+                if (cbxLivresRayons.SelectedIndex != -1 && VerifAbandonSaisie()) // Le champ de recherche n'est pas vidé, on vérifie si l'utilisateur veut abandonner la saisie
+                {
+                    StopSaisieLivre();
+                    FiltreLivresRayon();
+                }
+                else // L'utilisateur ne veut pas abandonner la saisie
+                {
+                    cbxLivresRayons.SelectedIndex = -1;
+                }
+
+            }
+            else // On n'est pas en train de saisir
+            {
+                FiltreLivresRayon();
+            }
+        }
+
+        /// <summary>
+        /// Filtre sur le rayon
+        /// </summary>
+        private void FiltreLivresRayon()
         {
             if (cbxLivresRayons.SelectedIndex >= 0)
             {
@@ -580,11 +717,33 @@ namespace Mediatek86.vue
 
         /// <summary>
         /// Sur la sélection d'une ligne ou cellule dans le grid
-        /// affichage des informations du livre
+        /// Vérifie si on est en train de faire une saisie
+        /// Si non, affiche infos livre sélectionné
+        /// Si oui, vérifie si l'utilisateur veut abandonner la saisie d'abord
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void DgvLivresListe_SelectionChanged(object sender, EventArgs e)
+        {
+            if (saisieLivre)
+            {
+                if (VerifAbandonSaisie())
+                {
+                    StopSaisieLivre();
+                    LivresListeSelection();
+                }
+            } 
+            else
+            {
+                LivresListeSelection();
+            }
+        }
+
+        /// <summary>
+        /// Affichage des informations du livre sélectionné dans le grid
+        /// Désactive saisie et verouille les champs infos
+        /// </summary>
+        private void LivresListeSelection()
         {
             if (dgvLivresListe.CurrentCell != null)
             {
@@ -592,6 +751,10 @@ namespace Mediatek86.vue
                 {
                     Livre livre = (Livre)bdgLivresListe.List[bdgLivresListe.Position];
                     AfficheLivresInfos(livre);
+                    ActiverBoutonModifLivre(true);
+                    ActiverBoutonSupprLivre(true);
+                    AutoriserModifLivre(false);
+                    saisieLivre = false;
                 }
                 catch
                 {
@@ -601,37 +764,61 @@ namespace Mediatek86.vue
             else
             {
                 VideLivresInfos();
+                ActiverBoutonModifLivre(false);
+                ActiverBoutonSupprLivre(false);
             }
         }
 
         /// <summary>
-        /// Sur le clic du bouton d'annulation, affichage de la liste complète des livres
+        /// Sur le clic du bouton d'annulation, appel de la fonction AnnulFiltreCbo
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void BtnLivresAnnulPublics_Click(object sender, EventArgs e)
         {
-            RemplirLivresListeComplete();
+            AnnulFiltreCbo();
         }
 
         /// <summary>
-        /// Sur le clic du bouton d'annulation, affichage de la liste complète des livres
+        /// Sur le clic du bouton d'annulation, appel de la fonction AnnulFiltreCbo
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void BtnLivresAnnulRayons_Click(object sender, EventArgs e)
         {
-            RemplirLivresListeComplete();
+            AnnulFiltreCbo();
         }
 
         /// <summary>
-        /// Sur le clic du bouton d'annulation, affichage de la liste complète des livres
+        /// Sur le clic du bouton d'annulation, appel de la fonction AnnulFiltreCbo
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void BtnLivresAnnulGenres_Click(object sender, EventArgs e)
         {
-            RemplirLivresListeComplete();
+            AnnulFiltreCbo();
+        }
+
+        /// <summary>
+        /// Sur le clic d'un bouton d'annulation, vérification si on est en train de faire une saisie.
+        /// Si non affichage de la liste complète des livres.
+        /// Si oui, verification si l'utilisateur veut abandonner sa saisie d'abord.
+        /// </summary>
+        private void AnnulFiltreCbo()
+        {
+            if (saisieLivre)
+            {
+                if (VerifAbandonSaisie())
+                {
+                    StopSaisieLivre();
+                    RemplirLivresListeComplete();
+                    LivresListeSelection();
+                }
+            }
+            else
+            {
+                RemplirLivresListeComplete();
+            }
         }
 
         /// <summary>
@@ -657,11 +844,33 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// Tri sur les colonnes
+        /// Vérification si on est en train de saisir. 
+        /// Si non lance le tri sur les colonnes.
+        /// Si oui demande confirmation d'abandonner saisie d'abord.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void DgvLivresListe_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (saisieLivre)
+            {
+                if(VerifAbandonSaisie())
+                {
+                    StopSaisieLivre();
+                    LivresListeSortColumns(e);
+                }
+            }
+            else
+            {
+                LivresListeSortColumns(e);
+            }
+        }
+
+        /// <summary>
+        /// Tri sur les colonnes.
+        /// </summary>
+        /// <param name="e"></param>
+        private void LivresListeSortColumns (DataGridViewCellMouseEventArgs e)
         {
             VideLivresZones();
             string titreColonne = dgvLivresListe.Columns[e.ColumnIndex].HeaderText;
@@ -692,6 +901,103 @@ namespace Mediatek86.vue
             }
             RemplirLivresListe(sortedList);
         }
+
+        /// <summary>
+        /// (Dés)Activer le bouton qui permet d'ajouter un livre
+        /// </summary>
+        /// <param name="actif"></param>
+        private void ActiverBoutonAjoutLivre(Boolean actif)
+        {
+            btnAjoutLivre.Enabled = actif;
+        }
+
+        /// <summary>
+        /// (Dés)Activer le bouton qui permet de modifier un livre
+        /// </summary>
+        /// <param name="actif"></param>
+        private void ActiverBoutonModifLivre(Boolean actif)
+        {
+            btnModifLivre.Enabled = actif;
+        }
+
+        /// <summary>
+        /// (Dés)Activer le bouton qui permet de supprimer un livre
+        /// </summary>
+        /// <param name="actif"></param>
+        private void ActiverBoutonSupprLivre(Boolean actif)
+        {
+            btnSupprLivre.Enabled = actif;
+        }
+
+        /// <summary>
+        /// (Dés)Activer le bouton qui permet d'enregistrer un livre
+        /// </summary>
+        /// <param name="actif"></param>
+        private void ActiverBoutonEnregLivre(Boolean actif)
+        {
+            btnEnregistrerLivre.Enabled = actif;
+        }
+
+        /// <summary>
+        /// (Dés)Activer le bouton qui permet d'annuler une saisie d'un livre
+        /// </summary>
+        /// <param name="actif"></param>
+        private void ActiverBoutonAnnulerSaisieLivre(Boolean actif)
+        {
+            btnAnnulerSaisieLivre.Enabled = actif;
+        }
+
+        /// <summary>
+        /// Evénement clic sur le bouton 'Ajouter'
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnAjoutLivre_Click(object sender, EventArgs e)
+        {
+            VideLivresInfos();
+            StartSaisieLivre();
+        }
+
+        /// <summary>
+        /// Démarre la saisie d'un livre, déverouille les champs 'infos'
+        /// </summary>
+        private void StartSaisieLivre()
+        {
+            saisieLivre = true;          
+            AutoriserModifLivre(true);
+        }
+
+        /// <summary>
+        /// Arrête la saisie d'un livre, verouille les champs 'infos'
+        /// </summary>
+        private void StopSaisieLivre()
+        {
+            saisieLivre = false;
+            AutoriserModifLivre(false);
+        }
+
+        /// <summary>
+        /// (Dés)activation de La protection des différents champs 'informations détaillées' ainsi que le bouton 'enregistrer'
+        /// </summary>
+        /// <param name="actif"></param>
+        private void AutoriserModifLivre(Boolean actif)
+        {
+            txbLivresAuteur.ReadOnly = !actif;
+            txbLivresCollection.ReadOnly = !actif;
+            txbLivresImage.ReadOnly = !actif;
+            txbLivresIsbn.ReadOnly = !actif;
+            txbLivresNumero.ReadOnly = !actif;
+            txbLivresGenre.ReadOnly = !actif;
+            txbLivresPublic.ReadOnly = !actif;
+            txbLivresRayon.ReadOnly = !actif;
+            txbLivresTitre.ReadOnly = !actif;
+            ActiverBoutonEnregLivre(actif);
+            ActiverBoutonAnnulerSaisieLivre(actif);
+        }
+
+
+
+
 
         #endregion
 
@@ -805,7 +1111,7 @@ namespace Mediatek86.vue
             txbDvdRealisateur.Text = dvd.Realisateur;
             txbDvdSynopsis.Text = dvd.Synopsis;
             txbDvdImage.Text = dvd.Image;
-            txbDvdDuree.Text = dvd.Duree.ToString() ;
+            txbDvdDuree.Text = dvd.Duree.ToString();
             txbDvdNumero.Text = dvd.Id;
             txbDvdGenre.Text = dvd.Genre;
             txbDvdPublic.Text = dvd.Public;
@@ -816,7 +1122,7 @@ namespace Mediatek86.vue
             {
                 pcbDvdImage.Image = Image.FromFile(image);
             }
-            catch 
+            catch
             {
                 pcbDvdImage.Image = null;
             }
@@ -1097,13 +1403,13 @@ namespace Mediatek86.vue
             txbReceptionRevueGenre.Text = revue.Genre;
             txbReceptionRevuePublic.Text = revue.Public;
             txbReceptionRevueRayon.Text = revue.Rayon;
-            txbReceptionRevueTitre.Text = revue.Titre;         
+            txbReceptionRevueTitre.Text = revue.Titre;
             string image = revue.Image;
             try
             {
                 pcbReceptionRevueImage.Image = Image.FromFile(image);
             }
-            catch 
+            catch
             {
                 pcbReceptionRevueImage.Image = null;
             }
@@ -1176,12 +1482,12 @@ namespace Mediatek86.vue
             {
                 filePath = openFileDialog.FileName;
             }
-            txbReceptionExemplaireImage.Text = filePath;         
+            txbReceptionExemplaireImage.Text = filePath;
             try
             {
                 pcbReceptionExemplaireImage.Image = Image.FromFile(filePath);
             }
-            catch 
+            catch
             {
                 pcbReceptionExemplaireImage.Image = null;
             }
@@ -1213,7 +1519,8 @@ namespace Mediatek86.vue
                     {
                         MessageBox.Show("numéro de publication déjà existant", "Erreur");
                     }
-                }catch
+                }
+                catch
                 {
                     MessageBox.Show("le numéro de parution doit être numérique", "Information");
                     txbReceptionExemplaireNumero.Text = "";
@@ -1278,5 +1585,21 @@ namespace Mediatek86.vue
 
         #endregion
 
+        /// <summary>
+        /// Affichage d'un MessageBox pour vérifier si l'utilisateur veut bien abandonner sa saisie
+        /// </summary>
+        /// <returns>True si abandon saisie confirmé, sinon false</returns>
+        private bool VerifAbandonSaisie()
+        {
+            if (MessageBox.Show("Etes-vous sûr de vouloir abandonner votre saisie ?", "Confirmation d'abandon de saisie", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
     }
 }
