@@ -185,7 +185,7 @@ namespace Mediatek86.modele
                 string periodicite = (string)curs.Field("periodicite");
                 string titre = (string)curs.Field("titre");
                 string image = (string)curs.Field("image");
-                int delaiMiseADispo = (int)curs.Field("delaimiseadispo");
+                int? delaiMiseADispo = (int?)curs.Field("delaimiseadispo");
                 string idgenre = (string)curs.Field("idgenre");
                 string idrayon = (string)curs.Field("idrayon");
                 string idpublic = (string)curs.Field("idpublic");
@@ -346,6 +346,202 @@ namespace Mediatek86.modele
                 List<string> requetes = new List<string>();
                 requetes.Add("delete from livre  where id=@id");
                 requetes.Add("delete from livres_dvd  where id=@id");
+                requetes.Add("delete from document  where id=@id");
+                Dictionary<string, object> parameters = new Dictionary<string, object>
+                {
+                    {"@id", id },
+                };
+                BddMySql curs = BddMySql.GetInstance(connectionString);
+                curs.ReqUpdate(requetes, parameters);
+                curs.Close();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// écriture d'un DVD en base de données
+        /// </summary>
+        /// <param name="dvd">le DVD à ajouter</param>
+        /// <returns>true si l'insertion a pu se faire</returns>
+        public static bool CreerDvd(Dvd dvd)
+        {
+            try
+            {
+                List<string> requetes = new List<string>();
+                requetes.Add("insert into document values (@id, @titre, @image, @idRayon, @idPublic, @idGenre)");
+                requetes.Add("insert into livres_dvd values (@id)");
+                requetes.Add("insert into dvd values (@id, @synopsis, @realisateur, @duree)");
+                Dictionary<string, object> parameters = new Dictionary<string, object>
+                {
+                    {"@id", dvd.Id },
+                    {"@titre", dvd.Titre },
+                    {"@image", dvd.Image },
+                    {"@idRayon", dvd.IdRayon },
+                    {"@idPublic", dvd.IdPublic },
+                    {"@idGenre", dvd.IdGenre },
+                    {"@synopsis", dvd.Synopsis },
+                    {"@realisateur", dvd.Realisateur },
+                    {"@duree", dvd.Duree },
+                };
+                BddMySql curs = BddMySql.GetInstance(connectionString);
+                curs.ReqUpdate(requetes, parameters);
+                curs.Close();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// modification d'un DVD en base de données
+        /// </summary>
+        /// <param name="dvd">le DVD à modifier</param>
+        /// <returns>true si la modification a pu se faire</returns>
+        public static bool ModifDvd(Dvd dvd)
+        {
+            try
+            {
+                List<string> requetes = new List<string>();
+                requetes.Add("update document set titre=@titre, image=@image, idRayon=@idRayon, idPublic=@idPublic, idGenre=@idGenre where id=@id");
+                requetes.Add("update dvd set synopsis=@synopsis, realisateur=@realisateur, duree=@duree where id=@id");
+                Dictionary<string, object> parameters = new Dictionary<string, object>
+                {
+                    {"@id", dvd.Id },
+                    {"@titre", dvd.Titre },
+                    {"@image", dvd.Image },
+                    {"@idRayon", dvd.IdRayon },
+                    {"@idPublic", dvd.IdPublic },
+                    {"@idGenre", dvd.IdGenre },
+                    {"@synopsis", dvd.Synopsis },
+                    {"@realisateur", dvd.Realisateur },
+                    {"@duree", dvd.Duree },
+                };
+                BddMySql curs = BddMySql.GetInstance(connectionString);
+                curs.ReqUpdate(requetes, parameters);
+                curs.Close();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Suppression d'un DVD de la base de données
+        /// </summary>
+        /// <param name="id">identifiant du DVD à supprimer</param>
+        /// <returns>true si la modification a pu se faire</returns>
+        public static bool SupprDvd(string id)
+        {
+            try
+            {
+                List<string> requetes = new List<string>();
+                requetes.Add("delete from dvd  where id=@id");
+                requetes.Add("delete from livres_dvd  where id=@id");
+                requetes.Add("delete from document  where id=@id");
+                Dictionary<string, object> parameters = new Dictionary<string, object>
+                {
+                    {"@id", id },
+                };
+                BddMySql curs = BddMySql.GetInstance(connectionString);
+                curs.ReqUpdate(requetes, parameters);
+                curs.Close();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// écriture d'une revue en base de données
+        /// </summary>
+        /// <param name="revue">la revue à ajouter</param>
+        /// <returns>true si l'insertion a pu se faire</returns>
+        public static bool CreerRevue(Revue revue)
+        {
+            try
+            {
+                List<string> requetes = new List<string>();
+                requetes.Add("insert into document values (@id, @titre, @image, @idRayon, @idPublic, @idGenre)");
+                requetes.Add("insert into revue values (@id, @empruntable, @periodicite, @delaiMiseADispo)");
+                Dictionary<string, object> parameters = new Dictionary<string, object>
+                {
+                    {"@id", revue.Id },
+                    {"@titre", revue.Titre },
+                    {"@image", revue.Image },
+                    {"@idRayon", revue.IdRayon },
+                    {"@idPublic", revue.IdPublic },
+                    {"@idGenre", revue.IdGenre },
+                    {"@empruntable", revue.Empruntable },
+                    {"@periodicite", revue.Periodicite },
+                    {"@delaiMiseADispo", revue.DelaiMiseADispo }
+                };
+                BddMySql curs = BddMySql.GetInstance(connectionString);
+                curs.ReqUpdate(requetes, parameters);
+                curs.Close();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// modification d'une revue en base de données
+        /// </summary>
+        /// <param name="revue">la revue à modifier</param>
+        /// <returns>true si la modification a pu se faire</returns>
+        public static bool ModifRevue(Revue revue)
+        {
+            try
+            {
+                List<string> requetes = new List<string>();
+                requetes.Add("update document set titre=@titre, image=@image, idRayon=@idRayon, idPublic=@idPublic, idGenre=@idGenre where id=@id");
+                requetes.Add("update revue set empruntable=@empruntable, periodicite=@periodicite, delaiMiseADispo=@delaiMiseADispo where id=@id");
+                Dictionary<string, object> parameters = new Dictionary<string, object>
+                {
+                    {"@id", revue.Id },
+                    {"@titre", revue.Titre },
+                    {"@image", revue.Image },
+                    {"@idRayon", revue.IdRayon },
+                    {"@idPublic", revue.IdPublic },
+                    {"@idGenre", revue.IdGenre },
+                    {"@empruntable", revue.Empruntable },
+                    {"@periodicite", revue.Periodicite },
+                    {"@delaiMiseADispo", revue.DelaiMiseADispo }
+                };
+                BddMySql curs = BddMySql.GetInstance(connectionString);
+                curs.ReqUpdate(requetes, parameters);
+                curs.Close();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Suppression d'une revue de la base de données
+        /// </summary>
+        /// <param name="id">identifiant de la revue à supprimer</param>
+        /// <returns>true si la modification a pu se faire</returns>
+        public static bool SupprRevue(string id)
+        {
+            try
+            {
+                List<string> requetes = new List<string>();
+                requetes.Add("delete from revue  where id=@id");
                 requetes.Add("delete from document  where id=@id");
                 Dictionary<string, object> parameters = new Dictionary<string, object>
                 {

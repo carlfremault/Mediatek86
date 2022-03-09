@@ -9,8 +9,8 @@ namespace Mediatek86.controleur
     internal class Controle
     {
         private List<Livre> lesLivres;
-        private readonly List<Dvd> lesDvd;
-        private readonly List<Revue> lesRevues;
+        private List<Dvd> lesDvd;
+        private List<Revue> lesRevues;
         private readonly List<Categorie> lesRayons;
         private readonly List<Categorie> lesPublics;
         private readonly List<Categorie> lesGenres;
@@ -66,12 +66,28 @@ namespace Mediatek86.controleur
         }
 
         /// <summary>
+        /// Recupère la liste des DVD depuis la bdd
+        /// </summary>
+        public void RefreshAllDvd()
+        {
+            lesDvd = Dao.GetAllDvd();
+        }
+
+        /// <summary>
         /// getter sur la liste des revues
         /// </summary>
         /// <returns>Collection d'objets Revue</returns>
         public List<Revue> GetAllRevues()
         {
             return lesRevues;
+        }
+
+        /// <summary>
+        /// Recupère la liste des revues depuis la bdd
+        /// </summary>
+        public void RefreshAllRevues()
+        {
+            lesRevues = Dao.GetAllRevues();
         }
 
         /// <summary>
@@ -139,6 +155,66 @@ namespace Mediatek86.controleur
         public bool SupprLivre(string id)
         {
             return Dao.SupprLivre(id);
+        }
+
+        /// <summary>
+        /// Crée une revue dans la bdd
+        /// </summary>
+        /// <param name="revue">L'objet revue concernée</param>
+        /// <returns>True si la création a pu se faire</returns>
+        public bool CreerRevue(Revue revue)
+        {
+            return Dao.CreerRevue(revue);
+        }
+
+        /// <summary>
+        /// Modifie une revue dans la bdd
+        /// </summary>
+        /// <param name="revue">L'objet revue concernée</param>
+        /// <returns>True si la modification a pu se faire</returns>
+        public bool ModifRevue(Revue revue)
+        {
+            return Dao.ModifRevue(revue);
+        }
+
+        /// <summary>
+        /// Supprime une revue dans la bdd
+        /// </summary>
+        /// <param name="id">L'id de la revue à supprimer</param>
+        /// <returns>True si la suppression a pu se faire</returns>
+        public bool SupprRevue(string id)
+        {
+            return Dao.SupprRevue(id);
+        }
+
+        /// <summary>
+        /// Crée un DVD dans la bdd
+        /// </summary>
+        /// <param name="dvd">L'objet DVD concernée</param>
+        /// <returns>True si la création a pu se faire</returns>
+        public bool CreerDvd(Dvd dvd)
+        {
+            return Dao.CreerDvd(dvd);
+        }
+
+        /// <summary>
+        /// Modifie un DVD dans la bdd
+        /// </summary>
+        /// <param name="dvd">L'objet DVD concernée</param>
+        /// <returns>True si la modification a pu se faire</returns>
+        public bool ModifDvd(Dvd dvd)
+        {
+            return Dao.ModifDvd(dvd);
+        }
+
+        /// <summary>
+        /// Supprime un DVD dans la bdd
+        /// </summary>
+        /// <param name="id">L'id du DVD à supprimer</param>
+        /// <returns>True si la suppression a pu se faire</returns>
+        public bool SupprDvd(string id)
+        {
+            return Dao.SupprDvd(id);
         }
     }
 

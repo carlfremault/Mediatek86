@@ -8,7 +8,6 @@ namespace Mediatek86.metier
 {
     public class Dvd : LivreDvd
     {
-
         private readonly int duree;
         private readonly string realisateur;
         private readonly string synopsis;
