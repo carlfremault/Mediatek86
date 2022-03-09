@@ -122,7 +122,7 @@ namespace Mediatek86.controleur
         }
 
         /// <summary>
-        /// Modifie un livre dans la bss
+        /// Modifie un livre dans la bdd
         /// </summary>
         /// <param name="livre">L'objet Livre concerné</param>
         /// <returns>True si la modification a pu se faire</returns>
@@ -131,6 +131,15 @@ namespace Mediatek86.controleur
             return Dao.ModifLivre(livre);
         }
 
+        /// <summary>
+        /// Supprime un livre dans la bdd
+        /// </summary>
+        /// <param name="id">L'id du livre à supprimer</param>
+        /// <returns>True si la suppression a pu se faire</returns>
+        public bool SupprLivre(string id)
+        {
+            return Dao.SupprLivre(id);
+        }
     }
 
 }

@@ -275,6 +275,7 @@ namespace Mediatek86.vue
             this.btnSupprLivre.TabIndex = 2;
             this.btnSupprLivre.Text = "Supprimer";
             this.btnSupprLivre.UseVisualStyleBackColor = true;
+            this.btnSupprLivre.Click += new System.EventHandler(this.btnSupprLivre_Click);
             // 
             // btnModifLivre
             // 

@@ -266,7 +266,7 @@ namespace Mediatek86.modele
         /// <summary>
         /// écriture d'un livre en base de données
         /// </summary>
-        /// <param name="livre"></param>
+        /// <param name="livre">le livre à ajouter</param>
         /// <returns>true si l'insertion a pu se faire</returns>
         public static bool CreerLivre(Livre livre)
         {
@@ -302,7 +302,7 @@ namespace Mediatek86.modele
         /// <summary>
         /// modification d'un livre en base de données
         /// </summary>
-        /// <param name="livre"></param>
+        /// <param name="livre">le livre à modifier</param>
         /// <returns>true si la modification a pu se faire</returns>
         public static bool ModifLivre(Livre livre)
         {
@@ -332,6 +332,34 @@ namespace Mediatek86.modele
             {
                 return false;
             }            
+        }
+
+        /// <summary>
+        /// Suppression d'un livre de la base de données
+        /// </summary>
+        /// <param name="id">identifiant du livre à supprimer</param>
+        /// <returns>true si la modification a pu se faire</returns>
+        public static bool SupprLivre(string id)
+        {
+            try
+            {
+                List<string> requetes = new List<string>();
+                requetes.Add("delete from livre  where id=@id");
+                requetes.Add("delete from livres_dvd  where id=@id");
+                requetes.Add("delete from document  where id=@id");
+                Dictionary<string, object> parameters = new Dictionary<string, object>
+                {
+                    {"@id", id },
+                };
+                BddMySql curs = BddMySql.GetInstance(connectionString);
+                curs.ReqUpdate(requetes, parameters);
+                curs.Close();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

@@ -985,6 +985,28 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
+        /// Evénement clic sur le bouton 'Supprimer'. Vérifie validation de l'utilisateur avant de procéder.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnSupprLivre_Click(object sender, EventArgs e)
+        {
+            if(ValidationSuppression(txbLivresTitre.Text))
+            {
+                if (controle.SupprLivre(txbLivresNumero.Text))
+                {
+                    controle.RefreshAllLivres();
+                    lesLivres = controle.GetAllLivres();
+                    RemplirLivresListeComplete();
+                } 
+                else
+                {
+                    MessageBox.Show("Il n'est pas possible de supprimer ce document car ils existent un ou plusieurs exemplaires ou commandes le concernant.", "Erreur");
+                }
+            }
+        }
+
+        /// <summary>
         /// Evénement clic sur le bouton 'Enregistrer'
         /// Vérifie si les champs requis (numéro, genre, public, rayon) sont saisies.
         /// Si oui procède à l'ajout ou modification du livre
@@ -1706,17 +1728,18 @@ namespace Mediatek86.vue
         /// <returns>True si abandon saisie confirmé, sinon false</returns>
         private bool VerifAbandonSaisie()
         {
-            if (MessageBox.Show("Etes-vous sûr de vouloir abandonner votre saisie ?", "Confirmation d'abandon de saisie", MessageBoxButtons.YesNo) == DialogResult.Yes)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-
+            return (MessageBox.Show("Etes-vous sûr de vouloir abandonner votre saisie ?", "Confirmation d'abandon de saisie", MessageBoxButtons.YesNo) == DialogResult.Yes);
         }
 
+        /// <summary>
+        /// Affichage d'un MessageBox pour demander validation de suppression d'un document
+        /// </summary>
+        /// <param name="titre">Le titre du document concerné</param>
+        /// <returns>True si suppression confirmée, sinon false</returns>
+        private bool ValidationSuppression(string titre)
+        {
+            return (MessageBox.Show("Etes-vous sûr de vouloir supprimer '" + titre + "' ?", "Confirmation de suppression", MessageBoxButtons.YesNo) == DialogResult.Yes);
+        }
 
     }
 }
