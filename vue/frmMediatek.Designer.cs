@@ -341,27 +341,30 @@ namespace Mediatek86.vue
             // 
             // cbxInfosLivresRayons
             // 
+            this.cbxInfosLivresRayons.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxInfosLivresRayons.FormattingEnabled = true;
             this.cbxInfosLivresRayons.Location = new System.Drawing.Point(150, 171);
             this.cbxInfosLivresRayons.Name = "cbxInfosLivresRayons";
             this.cbxInfosLivresRayons.Size = new System.Drawing.Size(207, 21);
-            this.cbxInfosLivresRayons.TabIndex = 36;
+            this.cbxInfosLivresRayons.TabIndex = 30;
             // 
             // cbxInfosLivresPublics
             // 
+            this.cbxInfosLivresPublics.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxInfosLivresPublics.FormattingEnabled = true;
             this.cbxInfosLivresPublics.Location = new System.Drawing.Point(150, 146);
             this.cbxInfosLivresPublics.Name = "cbxInfosLivresPublics";
             this.cbxInfosLivresPublics.Size = new System.Drawing.Size(207, 21);
-            this.cbxInfosLivresPublics.TabIndex = 35;
+            this.cbxInfosLivresPublics.TabIndex = 29;
             // 
             // cbxInfosLivresGenres
             // 
+            this.cbxInfosLivresGenres.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxInfosLivresGenres.FormattingEnabled = true;
             this.cbxInfosLivresGenres.Location = new System.Drawing.Point(150, 121);
             this.cbxInfosLivresGenres.Name = "cbxInfosLivresGenres";
             this.cbxInfosLivresGenres.Size = new System.Drawing.Size(207, 21);
-            this.cbxInfosLivresGenres.TabIndex = 17;
+            this.cbxInfosLivresGenres.TabIndex = 28;
             // 
             // btnAnnulerSaisieLivre
             // 
@@ -616,6 +619,7 @@ namespace Mediatek86.vue
             // 
             // cbxLivresRayons
             // 
+            this.cbxLivresRayons.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxLivresRayons.FormattingEnabled = true;
             this.cbxLivresRayons.Location = new System.Drawing.Point(620, 105);
             this.cbxLivresRayons.Name = "cbxLivresRayons";
@@ -635,6 +639,7 @@ namespace Mediatek86.vue
             // 
             // cbxLivresPublics
             // 
+            this.cbxLivresPublics.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxLivresPublics.FormattingEnabled = true;
             this.cbxLivresPublics.Location = new System.Drawing.Point(620, 60);
             this.cbxLivresPublics.Name = "cbxLivresPublics";
@@ -654,6 +659,7 @@ namespace Mediatek86.vue
             // 
             // cbxLivresGenres
             // 
+            this.cbxLivresGenres.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxLivresGenres.FormattingEnabled = true;
             this.cbxLivresGenres.Location = new System.Drawing.Point(620, 18);
             this.cbxLivresGenres.Name = "cbxLivresGenres";
@@ -811,31 +817,34 @@ namespace Mediatek86.vue
             this.txbDvdRealisateur.Name = "txbDvdRealisateur";
             this.txbDvdRealisateur.ReadOnly = true;
             this.txbDvdRealisateur.Size = new System.Drawing.Size(207, 20);
-            this.txbDvdRealisateur.TabIndex = 37;
+            this.txbDvdRealisateur.TabIndex = 26;
             // 
             // cbxInfosDvdRayons
             // 
+            this.cbxInfosDvdRayons.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxInfosDvdRayons.FormattingEnabled = true;
             this.cbxInfosDvdRayons.Location = new System.Drawing.Point(150, 190);
             this.cbxInfosDvdRayons.Name = "cbxInfosDvdRayons";
             this.cbxInfosDvdRayons.Size = new System.Drawing.Size(207, 21);
-            this.cbxInfosDvdRayons.TabIndex = 36;
+            this.cbxInfosDvdRayons.TabIndex = 30;
             // 
             // cbxInfosDvdPublics
             // 
+            this.cbxInfosDvdPublics.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxInfosDvdPublics.FormattingEnabled = true;
             this.cbxInfosDvdPublics.Location = new System.Drawing.Point(150, 165);
             this.cbxInfosDvdPublics.Name = "cbxInfosDvdPublics";
             this.cbxInfosDvdPublics.Size = new System.Drawing.Size(207, 21);
-            this.cbxInfosDvdPublics.TabIndex = 35;
+            this.cbxInfosDvdPublics.TabIndex = 29;
             // 
             // cbxInfosDvdGenres
             // 
+            this.cbxInfosDvdGenres.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxInfosDvdGenres.FormattingEnabled = true;
             this.cbxInfosDvdGenres.Location = new System.Drawing.Point(150, 140);
             this.cbxInfosDvdGenres.Name = "cbxInfosDvdGenres";
             this.cbxInfosDvdGenres.Size = new System.Drawing.Size(207, 21);
-            this.cbxInfosDvdGenres.TabIndex = 17;
+            this.cbxInfosDvdGenres.TabIndex = 28;
             // 
             // btnAnnulerSaisieDvd
             // 
@@ -1085,6 +1094,7 @@ namespace Mediatek86.vue
             // 
             // cbxDvdRayons
             // 
+            this.cbxDvdRayons.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxDvdRayons.FormattingEnabled = true;
             this.cbxDvdRayons.Location = new System.Drawing.Point(620, 105);
             this.cbxDvdRayons.Name = "cbxDvdRayons";
@@ -1104,6 +1114,7 @@ namespace Mediatek86.vue
             // 
             // cbxDvdPublics
             // 
+            this.cbxDvdPublics.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxDvdPublics.FormattingEnabled = true;
             this.cbxDvdPublics.Location = new System.Drawing.Point(620, 60);
             this.cbxDvdPublics.Name = "cbxDvdPublics";
@@ -1123,6 +1134,7 @@ namespace Mediatek86.vue
             // 
             // cbxDvdGenres
             // 
+            this.cbxDvdGenres.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxDvdGenres.FormattingEnabled = true;
             this.cbxDvdGenres.Location = new System.Drawing.Point(620, 18);
             this.cbxDvdGenres.Name = "cbxDvdGenres";
@@ -1277,27 +1289,30 @@ namespace Mediatek86.vue
             // 
             // cbxInfosRevuesRayons
             // 
+            this.cbxInfosRevuesRayons.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxInfosRevuesRayons.FormattingEnabled = true;
             this.cbxInfosRevuesRayons.Location = new System.Drawing.Point(150, 171);
             this.cbxInfosRevuesRayons.Name = "cbxInfosRevuesRayons";
             this.cbxInfosRevuesRayons.Size = new System.Drawing.Size(207, 21);
-            this.cbxInfosRevuesRayons.TabIndex = 36;
+            this.cbxInfosRevuesRayons.TabIndex = 30;
             // 
             // cbxInfosRevuesPublics
             // 
+            this.cbxInfosRevuesPublics.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxInfosRevuesPublics.FormattingEnabled = true;
             this.cbxInfosRevuesPublics.Location = new System.Drawing.Point(150, 146);
             this.cbxInfosRevuesPublics.Name = "cbxInfosRevuesPublics";
             this.cbxInfosRevuesPublics.Size = new System.Drawing.Size(207, 21);
-            this.cbxInfosRevuesPublics.TabIndex = 35;
+            this.cbxInfosRevuesPublics.TabIndex = 29;
             // 
             // cbxInfosRevuesGenres
             // 
+            this.cbxInfosRevuesGenres.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxInfosRevuesGenres.FormattingEnabled = true;
             this.cbxInfosRevuesGenres.Location = new System.Drawing.Point(150, 121);
             this.cbxInfosRevuesGenres.Name = "cbxInfosRevuesGenres";
             this.cbxInfosRevuesGenres.Size = new System.Drawing.Size(207, 21);
-            this.cbxInfosRevuesGenres.TabIndex = 17;
+            this.cbxInfosRevuesGenres.TabIndex = 28;
             // 
             // btnAnnulerSaisieRevue
             // 
@@ -1555,6 +1570,7 @@ namespace Mediatek86.vue
             // 
             // cbxRevuesRayons
             // 
+            this.cbxRevuesRayons.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxRevuesRayons.FormattingEnabled = true;
             this.cbxRevuesRayons.Location = new System.Drawing.Point(620, 105);
             this.cbxRevuesRayons.Name = "cbxRevuesRayons";
@@ -1574,6 +1590,7 @@ namespace Mediatek86.vue
             // 
             // cbxRevuesPublics
             // 
+            this.cbxRevuesPublics.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxRevuesPublics.FormattingEnabled = true;
             this.cbxRevuesPublics.Location = new System.Drawing.Point(620, 60);
             this.cbxRevuesPublics.Name = "cbxRevuesPublics";
@@ -1593,6 +1610,7 @@ namespace Mediatek86.vue
             // 
             // cbxRevuesGenres
             // 
+            this.cbxRevuesGenres.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxRevuesGenres.FormattingEnabled = true;
             this.cbxRevuesGenres.Location = new System.Drawing.Point(620, 18);
             this.cbxRevuesGenres.Name = "cbxRevuesGenres";
