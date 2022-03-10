@@ -118,6 +118,16 @@ namespace Mediatek86.controleur
         }
 
         /// <summary>
+        /// récupère les commandes d'un livre ou d'un DVD
+        /// </summary>
+        /// <param name="idDocument"></param>
+        /// <returns></returns>
+        public List<CommandeDocument> GetCommandeDocument(string idDocument)
+        {
+            return Dao.GetCommandeDocument(idDocument);
+        }
+
+        /// <summary>
         /// Crée un exemplaire d'une revue dans la bdd
         /// </summary>
         /// <param name="exemplaire">L'objet Exemplaire concerné</param>
