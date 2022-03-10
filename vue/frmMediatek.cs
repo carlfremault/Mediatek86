@@ -793,17 +793,24 @@ namespace Mediatek86.vue
             else
             {
                 String message = controle.CreerRevue(laRevue);
-                if (message.Substring(0, 9) != "Duplicate")
+                if (message.Substring(0, 5) == "Ajout")
                 {
                     MessageBox.Show(message, "Information");
-                } else
+                } 
+                else if (message.Substring(0, 9) == "Duplicate")
                 {
                     MessageBox.Show("Ce numéro de publication existe déjà.", "Erreur");
                     txbRevuesNumero.Text = "";
                     txbRevuesNumero.Focus();
                     return;
                 }
+                else
+                {
+                    MessageBox.Show(message, "Erreur");
+                    return;
+                }
             }
+
             VideRevuesInfos();
             StopSaisieRevue();
             controle.RefreshAllRevues();
@@ -1555,15 +1562,20 @@ namespace Mediatek86.vue
             else
             {
                 String message = controle.CreerLivre(leLivre);
-                if (message.Substring(0, 9) != "Duplicate")
+                if (message.Substring(0, 5) == "Ajout")
                 {
                     MessageBox.Show(message, "Information");
                 }
-                else
+                else if (message.Substring(0, 9) == "Duplicate")
                 {
                     MessageBox.Show("Ce numéro de publication existe déjà.", "Erreur");
                     txbLivresNumero.Text = "";
                     txbLivresNumero.Focus();
+                    return;
+                }
+                else
+                {
+                    MessageBox.Show(message, "Erreur");
                     return;
                 }
             }
@@ -2329,15 +2341,20 @@ namespace Mediatek86.vue
             else
             {
                 String message = controle.CreerDvd(leDvd);
-                if (message.Substring(0, 9) != "Duplicate")
+                if (message.Substring(0, 5) == "Ajout")
                 {
                     MessageBox.Show(message, "Information");
                 }
-                else
+                else if (message.Substring(0, 9) == "Duplicate")
                 {
                     MessageBox.Show("Ce numéro de publication existe déjà.", "Erreur");
                     txbDvdNumero.Text = "";
                     txbDvdNumero.Focus();
+                    return;
+                }
+                else
+                {
+                    MessageBox.Show(message, "Erreur");
                     return;
                 }
             }
