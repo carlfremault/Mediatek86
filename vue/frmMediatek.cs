@@ -792,9 +792,13 @@ namespace Mediatek86.vue
             }
             else
             {
-                if (!controle.CreerRevue(laRevue))
+                String message = controle.CreerRevue(laRevue);
+                if (message.Substring(0, 9) != "Duplicate")
                 {
-                    MessageBox.Show("numéro de publication déjà existant", "Erreur");
+                    MessageBox.Show(message, "Information");
+                } else
+                {
+                    MessageBox.Show("Ce numéro de publication existe déjà.", "Erreur");
                     txbRevuesNumero.Text = "";
                     txbRevuesNumero.Focus();
                     return;
@@ -1550,9 +1554,14 @@ namespace Mediatek86.vue
             } 
             else
             {
-                if(!controle.CreerLivre(leLivre))                
+                String message = controle.CreerLivre(leLivre);
+                if (message.Substring(0, 9) != "Duplicate")
                 {
-                    MessageBox.Show("numéro de publication déjà existant", "Erreur");
+                    MessageBox.Show(message, "Information");
+                }
+                else
+                {
+                    MessageBox.Show("Ce numéro de publication existe déjà.", "Erreur");
                     txbLivresNumero.Text = "";
                     txbLivresNumero.Focus();
                     return;
@@ -2319,9 +2328,14 @@ namespace Mediatek86.vue
             }
             else
             {
-                if (!controle.CreerDvd(leDvd))
+                String message = controle.CreerDvd(leDvd);
+                if (message.Substring(0, 9) != "Duplicate")
                 {
-                    MessageBox.Show("numéro de publication déjà existant", "Erreur");
+                    MessageBox.Show(message, "Information");
+                }
+                else
+                {
+                    MessageBox.Show("Ce numéro de publication existe déjà.", "Erreur");
                     txbDvdNumero.Text = "";
                     txbDvdNumero.Focus();
                     return;

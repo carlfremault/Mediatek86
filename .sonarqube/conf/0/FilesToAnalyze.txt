@@ -18,6 +18,7 @@ C:\Users\carlf\source\repos\Mediatek86gestion\Program.cs
 C:\Users\carlf\source\repos\Mediatek86gestion\Properties\AssemblyInfo.cs
 C:\Users\carlf\source\repos\Mediatek86gestion\Properties\Resources.resx
 C:\Users\carlf\source\repos\Mediatek86gestion\vue\FrmMediatek.resx
+C:\Users\carlf\source\repos\Mediatek86gestion\.sonarlint\mediatek86csharp.ruleset
 C:\Users\carlf\source\repos\Mediatek86gestion\packages.config
 C:\Users\carlf\source\repos\Mediatek86gestion\Properties\Settings.settings
 C:\Users\carlf\source\repos\Mediatek86gestion\App.config

@@ -144,5 +144,8 @@
   <ItemGroup>
     <AdditionalFiles Include=".sonarlint\mediatek86\CSharp\SonarLint.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

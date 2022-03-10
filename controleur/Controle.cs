@@ -132,7 +132,7 @@ namespace Mediatek86.controleur
         /// </summary>
         /// <param name="livre">L'objet Livre concerné</param>
         /// <returns>True si la création a pu se faire</returns>
-        public bool CreerLivre(Livre livre)
+        public string CreerLivre(Livre livre)
         {
             return Dao.CreerLivre(livre);
         }
@@ -162,7 +162,7 @@ namespace Mediatek86.controleur
         /// </summary>
         /// <param name="revue">L'objet revue concernée</param>
         /// <returns>True si la création a pu se faire</returns>
-        public bool CreerRevue(Revue revue)
+        public string CreerRevue(Revue revue)
         {
             return Dao.CreerRevue(revue);
         }
@@ -192,7 +192,7 @@ namespace Mediatek86.controleur
         /// </summary>
         /// <param name="dvd">L'objet DVD concernée</param>
         /// <returns>True si la création a pu se faire</returns>
-        public bool CreerDvd(Dvd dvd)
+        public string CreerDvd(Dvd dvd)
         {
             return Dao.CreerDvd(dvd);
         }

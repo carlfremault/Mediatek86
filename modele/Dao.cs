@@ -185,7 +185,7 @@ namespace Mediatek86.modele
                 string periodicite = (string)curs.Field("periodicite");
                 string titre = (string)curs.Field("titre");
                 string image = (string)curs.Field("image");
-                int? delaiMiseADispo = (int?)curs.Field("delaimiseadispo");
+                int delaiMiseADispo = (int)curs.Field("delaimiseadispo");
                 string idgenre = (string)curs.Field("idgenre");
                 string idrayon = (string)curs.Field("idrayon");
                 string idpublic = (string)curs.Field("idpublic");
@@ -268,7 +268,7 @@ namespace Mediatek86.modele
         /// </summary>
         /// <param name="livre">le livre à ajouter</param>
         /// <returns>true si l'insertion a pu se faire</returns>
-        public static bool CreerLivre(Livre livre)
+        public static string CreerLivre(Livre livre)
         {
             try
             {
@@ -291,11 +291,11 @@ namespace Mediatek86.modele
                 BddMySql curs = BddMySql.GetInstance(connectionString);              
                 curs.ReqUpdate(requetes, parameters);
                 curs.Close();
-                return true;
+                return "Ajout de livre réussi!";
             }
-            catch
+            catch (Exception e)
             {
-                return false;
+                return e.Message;
             }           
         }
 
@@ -367,7 +367,7 @@ namespace Mediatek86.modele
         /// </summary>
         /// <param name="dvd">le DVD à ajouter</param>
         /// <returns>true si l'insertion a pu se faire</returns>
-        public static bool CreerDvd(Dvd dvd)
+        public static string CreerDvd(Dvd dvd)
         {
             try
             {
@@ -390,11 +390,11 @@ namespace Mediatek86.modele
                 BddMySql curs = BddMySql.GetInstance(connectionString);
                 curs.ReqUpdate(requetes, parameters);
                 curs.Close();
-                return true;
+                return "Ajout de DVD réussi!";
             }
-            catch
+            catch (Exception e)
             {
-                return false;
+                return e.Message;
             }
         }
 
@@ -466,7 +466,7 @@ namespace Mediatek86.modele
         /// </summary>
         /// <param name="revue">la revue à ajouter</param>
         /// <returns>true si l'insertion a pu se faire</returns>
-        public static bool CreerRevue(Revue revue)
+        public static string CreerRevue(Revue revue)
         {
             try
             {
@@ -488,11 +488,11 @@ namespace Mediatek86.modele
                 BddMySql curs = BddMySql.GetInstance(connectionString);
                 curs.ReqUpdate(requetes, parameters);
                 curs.Close();
-                return true;
+                return "Ajout de Revue réussi!";
             }
-            catch
+            catch (Exception e)
             {
-                return false;
+                return e.Message;
             }
         }
 
