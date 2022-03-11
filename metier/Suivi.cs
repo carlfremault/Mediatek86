@@ -6,8 +6,17 @@ using System.Threading.Tasks;
 
 namespace Mediatek86.metier
 {
-    class Suivi
+    public class Suivi 
     {
-        public Suivi(int id, string libelle) { }
+        private readonly int id;
+        private readonly string libelle;
+
+        public Suivi(int id, string libelle) {
+            this.id = id;
+            this.libelle = libelle;
+        }
+
+        public int Id { get => id; }
+        public string Libelle { get => libelle; }
     }
 }

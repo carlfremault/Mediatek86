@@ -14,6 +14,7 @@ namespace Mediatek86.controleur
         private readonly List<Categorie> lesRayons;
         private readonly List<Categorie> lesPublics;
         private readonly List<Categorie> lesGenres;
+        private readonly List<Suivi> lesSuivis;
 
         /// <summary>
         /// Ouverture de la fenêtre
@@ -26,6 +27,7 @@ namespace Mediatek86.controleur
             lesGenres = Dao.GetAllGenres();
             lesRayons = Dao.GetAllRayons();
             lesPublics = Dao.GetAllPublics();
+            lesSuivis = Dao.GetAllSuivis();
             FrmMediatek frmMediatek = new FrmMediatek(this);
             frmMediatek.ShowDialog();
         }
@@ -37,6 +39,33 @@ namespace Mediatek86.controleur
         public List<Categorie> GetAllGenres()
         {
             return lesGenres;
+        }
+
+        /// <summary>
+        /// getter sur les rayons
+        /// </summary>
+        /// <returns>Collection d'objets Rayon</returns>
+        public List<Categorie> GetAllRayons()
+        {
+            return lesRayons;
+        }
+
+        /// <summary>
+        /// getter sur les publics
+        /// </summary>
+        /// <returns>Collection d'objets Public</returns>
+        public List<Categorie> GetAllPublics()
+        {
+            return lesPublics;
+        }
+
+        /// <summary>
+        /// Getter sur les suivis
+        /// </summary>
+        /// <returns>Collection d'objets Suivi</returns>
+        public List<Suivi> GetAllSuivis()
+        {
+            return lesSuivis;
         }
 
         /// <summary>
@@ -91,24 +120,6 @@ namespace Mediatek86.controleur
         }
 
         /// <summary>
-        /// getter sur les rayons
-        /// </summary>
-        /// <returns>Collection d'objets Rayon</returns>
-        public List<Categorie> GetAllRayons()
-        {
-            return lesRayons;
-        }
-
-        /// <summary>
-        /// getter sur les publics
-        /// </summary>
-        /// <returns>Collection d'objets Public</returns>
-        public List<Categorie> GetAllPublics()
-        {
-            return lesPublics;
-        }
-
-        /// <summary>
         /// récupère les exemplaires d'une revue
         /// </summary>
         /// <returns>Collection d'objets Exemplaire</returns>
@@ -151,7 +162,7 @@ namespace Mediatek86.controleur
         /// Crée un livre dans la bdd
         /// </summary>
         /// <param name="livre">L'objet Livre concerné</param>
-        /// <returns>True si la création a pu se faire</returns>
+        /// <returns>Le message de confirmation ou d'erreur</returns>
         public string CreerLivre(Livre livre)
         {
             return Dao.CreerLivre(livre);
@@ -181,7 +192,7 @@ namespace Mediatek86.controleur
         /// Crée une revue dans la bdd
         /// </summary>
         /// <param name="revue">L'objet revue concernée</param>
-        /// <returns>True si la création a pu se faire</returns>
+        /// <returns>Le message de confirmation ou d'erreur</returns>
         public string CreerRevue(Revue revue)
         {
             return Dao.CreerRevue(revue);
@@ -211,7 +222,7 @@ namespace Mediatek86.controleur
         /// Crée un DVD dans la bdd
         /// </summary>
         /// <param name="dvd">L'objet DVD concernée</param>
-        /// <returns>True si la création a pu se faire</returns>
+        /// <returns>Le message de confirmation ou d'erreur</returns>
         public string CreerDvd(Dvd dvd)
         {
             return Dao.CreerDvd(dvd);
@@ -235,6 +246,37 @@ namespace Mediatek86.controleur
         public bool SupprDvd(string id)
         {
             return Dao.SupprDvd(id);
+        }
+
+        /// <summary>
+        /// Crée une CommandeDocument dans la bss
+        /// </summary>
+        /// <param name="commandeDocument">L'objet CommandeDocument concerné</param>
+        /// <returns>Le message de confirmation ou d'erreur</returns>
+        public string CreerCommandeDocument(CommandeDocument commandeDocument)
+        {
+            return Dao.CreerCommandeDocument(commandeDocument);
+        }
+
+        /// <summary>
+        /// Supprime une CommandeDocument de la bdd
+        /// </summary>
+        /// <param name="id">Identifiant de la CommandeDocument à supprimer</param>
+        /// <returns>True si la suppression a réussi</returns>
+        public bool SupprCommandeDocument(string id)
+        {
+            return Dao.SupprCommandeDocument(id);
+        }
+
+        /// <summary>
+        /// Modification d'état de suivi d'une CommandeDocument
+        /// </summary>
+        /// <param name="idCommandeDocument">identifiant de la CommandeDocument à modifier</param>
+        /// <param name="idSuivi">identifiant du nouveau état de suivi</param>
+        /// <returns>True si la modification a réussi</returns>
+        public bool ModifSuiviCommandeDocument(string idCommandeDocument, int idSuivi)
+        {
+            return Dao.ModifSuiviCommandeDocument(idCommandeDocument, idSuivi);
         }
     }
 

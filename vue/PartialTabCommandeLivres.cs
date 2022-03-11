@@ -1,0 +1,550 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
+using Mediatek86.metier;
+using Mediatek86.controleur;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Globalization;
+
+namespace Mediatek86.vue
+{
+    public partial class FrmMediatek : Form
+    {
+        //-----------------------------------------------------------
+        // ONGLET "COMMANDE DE LIVRES"
+        //-----------------------------------------------------------
+
+        private bool saisieCommandeLivres = false;
+
+        /// <summary>
+        /// Ouverture de l'onglet : 
+        /// Tous les booléens concernant une saisie sont mis en false (validation d'abandon a été demandé avant changement d'onglet)
+        /// Récupération des livres et suivis depuis le contrôleur
+        /// Désactivation de groupBox de gestion de commandes
+        /// Vide les champs de détails de commande
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void tabCommandeLivres_Enter(object sender, EventArgs e)
+        {
+            CancelAllSaisies();
+            lesLivres = controle.GetAllLivres();
+            lesSuivis = controle.GetAllSuivis();
+            accesGestionCommandeLivresGroupBox(false);
+            VideDetailsCommandeLivres();
+        }
+
+        /// <summary>
+        /// Remplit le dategrid avec la liste reçue en paramètre
+        /// </summary>
+        private void RemplirCommandeLivresListe(List<CommandeDocument> lesCommandeDocument)
+        {
+            bdgCommandesLivresListe.DataSource = lesCommandeDocument;
+            dgvCommandeLivresListe.DataSource = bdgCommandesLivresListe;
+            dgvCommandeLivresListe.Columns["id"].Visible = false;
+            dgvCommandeLivresListe.Columns["idSuivi"].Visible = false;
+            dgvCommandeLivresListe.Columns["idLivreDvd"].Visible = false;
+            dgvCommandeLivresListe.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dgvCommandeLivresListe.Columns[6].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dgvCommandeLivresListe.Columns[6].DefaultCellStyle.Format = "c2";
+            dgvCommandeLivresListe.Columns[6].DefaultCellStyle.FormatProvider = CultureInfo.GetCultureInfo("fr-FR");
+            dgvCommandeLivresListe.Columns["dateCommande"].DisplayIndex = 0;
+            dgvCommandeLivresListe.Columns["montant"].DisplayIndex = 1;
+            dgvCommandeLivresListe.Columns[4].HeaderCell.Value = "Date";
+            dgvCommandeLivresListe.Columns[0].HeaderCell.Value = "Exemplaires";
+            dgvCommandeLivresListe.Columns[2].HeaderCell.Value = "Etat";
+        }
+
+        /// <summary>
+        /// Evénement clic sur le bouton de recherche de livre. 
+        /// Vérifie si on est en train de saisier une commande avant de procéder
+        /// Demande confirmation d'abandon si une saisie est en cours
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnCommandeLivreRechercher_Click(object sender, EventArgs e)
+        {
+            if (saisieCommandeLivres && VerifAbandonSaisie())
+            {
+                FinSaisieCommandeLivres();
+                CommandeLivresRechercher();
+            } 
+            else if (!saisieCommandeLivres)
+            {
+                CommandeLivresRechercher();
+            }
+        }
+
+        /// <summary>
+        /// Recherche d'un numéro de livre et affiche ses informations
+        /// </summary>
+        private void CommandeLivresRechercher()
+        {
+            if (!txbCommandeLivresNumeroLivre.Text.Equals(""))
+            {
+                Livre livre = lesLivres.Find(x => x.Id.Equals(txbCommandeLivresNumeroLivre.Text.Trim()));
+                if (livre != null)
+                {
+                    AfficheCommandeLivresInfos(livre);
+                }
+                else
+                {
+                    MessageBox.Show("numéro introuvable");
+                    VideCommandeLivresInfos();
+                }
+            }
+            else
+            {
+                VideCommandeLivresInfos();
+            }
+        }
+
+        /// <summary>
+        /// Entrée dans champ de recherche déclenche la recherche aussi
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void txbCommandeLivreNumero_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                btnCommandeLivreRechercher_Click(sender, e);
+            }
+        }
+
+        /// <summary>
+        /// Si le numéro de livre est modifié, la zone de commande est désactivée
+        /// et les informations du livre sont effacées
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void txbCommandeLivreNumero_TextChanged(object sender, EventArgs e)
+        {
+            if (!saisieCommandeLivres)
+            {
+                accesGestionCommandeLivresGroupBox(false);
+                VideCommandeLivresInfos();
+            }
+           
+        }
+
+        /// <summary>
+        /// Affichage des informations du livre sélectionné et les commandes
+        /// </summary>
+        /// <param name="revue"></param>
+        private void AfficheCommandeLivresInfos(Livre livre)
+        {
+            // informations sur le livre
+            txbCommandeLivresTitre.Text = livre.Titre;
+            txbCommandeLivresAuteur.Text = livre.Auteur;
+            txbCommandeLivresCollection.Text = livre.Collection;
+            txbCommandeLivresGenre.Text = livre.Genre;
+            txbCommandeLivresPublic.Text = livre.Public;
+            txbCommandeLivresRayon.Text = livre.Rayon;
+            txbCommandeLivresImage.Text = livre.Image;
+            txbCommandeLivresISBN.Text = livre.Isbn;
+            string image = livre.Image;
+            try
+            {
+                pcbCommandeLivresImage.Image = Image.FromFile(image);
+            }
+            catch
+            {
+                pcbCommandeLivresImage.Image = null;
+            }
+            // affiche la liste des commandes du livre
+            AfficheCommandeDocumentLivre();
+
+            // accès à la zone de gestion de commande
+            accesGestionCommandeLivresGroupBox(true);
+        }
+
+        /// <summary>
+        /// Affichage des détails d'une commande
+        /// </summary>
+        /// <param name="commandeDocument"></param>
+        private void AfficheCommandeLivresCommande(CommandeDocument commandeDocument)
+        {
+            txbCommandeLivresNumeroCommande.Text = commandeDocument.Id;
+            dtpCommandeLivresDateCommande.Value = commandeDocument.DateCommande;
+            nudCommandeLivresExemplaires.Value = commandeDocument.NbExemplaires;
+            txbCommandeLivresMontant.Text = commandeDocument.Montant.ToString("C2",
+                  CultureInfo.CreateSpecificCulture("fr-FR"));
+        }
+
+        /// <summary>
+        /// Récupération de la liste de commandes d'un livre puis affichage dans la liste
+        /// </summary>
+        private void AfficheCommandeDocumentLivre()
+        {
+            string idDocument = txbCommandeLivresNumeroLivre.Text.Trim();
+            lesCommandeDocument = controle.GetCommandeDocument(idDocument);
+            RemplirCommandeLivresListe(lesCommandeDocument);
+        }
+
+        /// <summary>
+        /// Vide les zones d'affchage des informations du livre et de commande
+        /// </summary>
+        private void VideCommandeLivresInfos()
+        {
+            txbCommandeLivresTitre.Text = "";
+            txbCommandeLivresAuteur.Text = "";
+            txbCommandeLivresCollection.Text = "";
+            txbCommandeLivresGenre.Text = "";
+            txbCommandeLivresPublic.Text = "";
+            txbCommandeLivresRayon.Text = "";
+            txbCommandeLivresImage.Text = "";
+            txbCommandeLivresISBN.Text = "";
+            pcbCommandeLivresImage.Image = null;
+            lesCommandeDocument = new List<CommandeDocument>();
+            RemplirCommandeLivresListe(lesCommandeDocument);
+            accesGestionCommandeLivresGroupBox(false);
+        }
+
+        /// <summary>
+        /// Vide les zones d'affichage des détails de commande.
+        /// </summary>
+        private void VideDetailsCommandeLivres()
+        {
+            txbCommandeLivresNumeroCommande.Text = "";
+            dtpCommandeLivresDateCommande.Value = DateTime.Now;
+            nudCommandeLivresExemplaires.Value = 1;
+            txbCommandeLivresMontant.Text = "";
+        }
+
+        /// <summary>
+        /// (Dés)active la zone de gestion de commandes
+        /// et vide les objets graphiques
+        /// </summary>
+        /// <param name="acces"></param>
+        private void accesGestionCommandeLivresGroupBox(bool acces)
+        {
+            grpGestionCommandeLivres.Enabled = acces;
+            btnCommandeLivresAjouter.Enabled = acces;
+        }
+
+        /// <summary>
+        /// Tri sur une colonne
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dgvCommandeLivresListe_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            string titreColonne = dgvCommandeLivresListe.Columns[e.ColumnIndex].HeaderText;
+            List<CommandeDocument> sortedList = new List<CommandeDocument>();
+            switch (titreColonne)
+            {
+                case "Date":
+                    sortedList = lesCommandeDocument.OrderBy(o => o.DateCommande).Reverse().ToList();
+                    break;
+                case "Montant":
+                    sortedList = lesCommandeDocument.OrderBy(o => o.Montant).Reverse().ToList();
+                    break;
+                case "Exemplaires":
+                    sortedList = lesCommandeDocument.OrderBy(o => o.NbExemplaires).Reverse().ToList();
+                    break;
+                case "Etat":
+                    sortedList = lesCommandeDocument.OrderBy(o => o.IdSuivi).ToList();
+                    break;
+            }
+            RemplirCommandeLivresListe(sortedList);
+        }
+
+        /// <summary>
+        /// Evénement sélection d'une ligne dans la liste des commandes
+        /// Vérifie si une saisie est en cours avant de procéder
+        /// Demande validation d'abandon si une saisie est en cours
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dgvCommandeLivresListe_SelectionChanged(object sender, EventArgs e)
+        {
+            if (saisieCommandeLivres)
+            {
+                if (VerifAbandonSaisie())
+                {
+                    FinSaisieCommandeLivres();
+                    CommandeLivresListeSelection();
+                }
+            }
+            else
+            {
+                CommandeLivresListeSelection();
+            }
+       
+        }
+
+        /// <summary>
+        /// Affichage des infos de la commande sélectionnée dans la liste
+        /// </summary>
+        private void CommandeLivresListeSelection()
+        {
+            if (dgvCommandeLivresListe.CurrentCell != null)
+            {
+                CommandeDocument commandeDocument = (CommandeDocument)bdgCommandesLivresListe.List[bdgCommandesLivresListe.Position];
+                AfficheCommandeLivresCommande(commandeDocument);
+                ActivationModificationCommandeLivres(commandeDocument);
+            }
+            else
+            {
+                DesActivationModificationCommandeLivres();
+                VideDetailsCommandeLivres();
+            }
+        }
+
+        /// <summary>
+        /// Activation des boutons de gestion de commande en fonction de l'état de suivi
+        /// </summary>
+        /// <param name="commandeDocument"></param>
+        private void ActivationModificationCommandeLivres(CommandeDocument commandeDocument)
+        {
+            string etatSuivi = commandeDocument.LibelleSuivi;
+            switch (etatSuivi)
+            {
+                case "En cours":
+                case "Relancée":
+                    btnCommandeLivresRelancer.Enabled = true;
+                    btnCommandeLivresConfirmerLivraison.Enabled = true;
+                    btnCommandeLivresRegler.Enabled = false;
+                    btnCommandeLivresSupprimer.Enabled = true;
+                    break;
+                case "Livrée":
+                    btnCommandeLivresRelancer.Enabled = false;
+                    btnCommandeLivresConfirmerLivraison.Enabled = false;
+                    btnCommandeLivresRegler.Enabled = true;
+                    btnCommandeLivresSupprimer.Enabled = false;
+                    break;
+                case "Réglée":
+                    DesActivationModificationCommandeLivres();
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Désactivation des boutons de gestion de commande (sauf ajout)
+        /// </summary>
+        private void DesActivationModificationCommandeLivres()
+        {
+            btnCommandeLivresRelancer.Enabled = false;
+            btnCommandeLivresConfirmerLivraison.Enabled = false;
+            btnCommandeLivresRegler.Enabled = false;
+            btnCommandeLivresSupprimer.Enabled = false;
+        }                    
+
+        /// <summary>
+        /// Evénement clic sur le bouton d'ajout de commande de livre
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnCommandeLivresAjouter_Click(object sender, EventArgs e)
+        {
+            DesActivationModificationCommandeLivres();            
+            DebutSaisieCommandeLivres();           
+        }
+
+        /// <summary>
+        /// Evénement clic sur le bouton d'annulation d'une saisie de commande
+        /// Demande validation de l'utilisateur
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnCommandeLivresAnnuler_Click(object sender, EventArgs e)
+        {
+            if (VerifAbandonSaisie())
+            {
+                FinSaisieCommandeLivres();
+            }
+        }
+
+        /// <summary>
+        /// Début de saisie de commande de livre. 
+        /// Vide et active les champs et active les boutons de validation et d'annulation. 
+        /// Désactive le bouton d'ajout de commande
+        /// </summary>
+        /// <param name="actif"></param>
+        private void DebutSaisieCommandeLivres()
+        {
+            saisieCommandeLivres = true;
+            VideDetailsCommandeLivres();
+            btnCommandeLivresValider.Enabled = true;
+            btnCommandeLivresAnnuler.Enabled = true;
+            btnCommandeLivresAjouter.Enabled = false;
+            txbCommandeLivresNumeroCommande.Enabled = true;
+            dtpCommandeLivresDateCommande.Enabled = true;
+            nudCommandeLivresExemplaires.Enabled = true;
+            txbCommandeLivresMontant.Enabled = true;
+            grpCommandeLivres.Enabled = true;
+        }
+
+        /// <summary>
+        /// Fin de saisie de commande de livre
+        /// Vide et désactive les champs et désactive les boutons de validation et d'annulation
+        /// Active le bouton d'ajout de commande
+        /// Affiche les informations de la commande sélectionnée dans la liste
+        /// </summary>
+        private void FinSaisieCommandeLivres()
+        {
+            saisieCommandeLivres = false;
+            VideDetailsCommandeLivres();
+            btnCommandeLivresValider.Enabled = false;
+            btnCommandeLivresAnnuler.Enabled = false;
+            btnCommandeLivresAjouter.Enabled = true;
+            txbCommandeLivresNumeroCommande.Enabled = false;
+            dtpCommandeLivresDateCommande.Enabled = false;
+            nudCommandeLivresExemplaires.Enabled = false;
+            txbCommandeLivresMontant.Enabled = false;
+            grpCommandeLivres.Enabled = false;
+            CommandeLivresListeSelection();
+        }
+
+        /// <summary>
+        /// Evénement clic sur le bouton de validation d'une commande
+        /// Vérifie si tous les champs sont remplis et la validité du champ 'montant'
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnCommandeLivresValider_Click(object sender, EventArgs e)
+        {
+            if (txbCommandeLivresNumeroCommande.Text == "" || txbCommandeLivresMontant.Text == "")
+            {
+                MessageBox.Show("Tous les champs sont obligatoires.", "Information");
+                return;
+            }
+
+            String id = txbCommandeLivresNumeroCommande.Text;
+            DateTime dateCommande = dtpCommandeLivresDateCommande.Value;
+            int nbExemplaires = (int)nudCommandeLivresExemplaires.Value;
+            string idLivreDvd = txbCommandeLivresNumeroLivre.Text.Trim();
+            int idSuivi = lesSuivis[0].Id;
+            string libelleSuivi = lesSuivis[0].Libelle;   
+            
+            String montantSaisie = txbCommandeLivresMontant.Text.Replace(',', '.');
+            Double montant;
+            bool success = Double.TryParse(montantSaisie, out montant);
+            if (!success)
+            {
+                MessageBox.Show("La valeur saisie pour le montant doit être numérique.", "Erreur");
+                txbCommandeLivresMontant.Text = "";
+                txbCommandeLivresMontant.Focus();
+                return;
+            }
+
+            CommandeDocument laCommandeDocument = new CommandeDocument(id, dateCommande, montant, nbExemplaires, idLivreDvd, idSuivi, libelleSuivi);
+
+            String message = controle.CreerCommandeDocument(laCommandeDocument);
+            if (message.Substring(0, 7) == "Validé!")
+            {
+                MessageBox.Show(message, "Information");
+            }
+            else if (message.Substring(0, 9) == "Duplicate")
+            {
+                MessageBox.Show("Ce numéro de commande existe déjà.", "Erreur");
+                txbCommandeLivresNumeroCommande.Text = "";
+                txbCommandeLivresNumeroCommande.Focus();
+                return;
+            }
+            else
+            {
+                MessageBox.Show(message, "Erreur");
+                return;
+            }
+            FinSaisieCommandeLivres();
+            AfficheCommandeDocumentLivre();
+        }
+
+        /// <summary>
+        /// Evénement clic sur le bouton de suppression d'une CommandeDocument
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnCommandeLivresSupprimer_Click(object sender, EventArgs e)
+        {
+            if(ValidationSuppression("cette commande"))
+            {
+                CommandeDocument commandeDocument = (CommandeDocument)bdgCommandesLivresListe.List[bdgCommandesLivresListe.Position];
+                if (controle.SupprCommandeDocument(commandeDocument.Id))
+                {
+                    AfficheCommandeDocumentLivre();
+                }
+                else
+                {
+                    MessageBox.Show("Une erreur s'est produite.", "Erreur");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Modification d'état de suivi de la CommandeDocument : étape 1 "relancée"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnCommandeLivresRelancer_Click(object sender, EventArgs e)
+        {
+            CommandeDocument commandeDocument = (CommandeDocument)bdgCommandesLivresListe.List[bdgCommandesLivresListe.Position];
+            // les identifiants des états de suivi dans la bdd ne sont pas 'zero based' !
+            int nouvelEtat = commandeDocument.IdSuivi;
+            if (ValidationModifEtatSuivi(lesSuivis[nouvelEtat].Libelle))
+            {
+                if (controle.ModifSuiviCommandeDocument(commandeDocument.Id, lesSuivis[1].Id))
+                {
+                    AfficheCommandeDocumentLivre();
+                }
+                else
+                {
+                    MessageBox.Show("Une erreur s'est produite.", "Erreur");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Modification d'état de suivi de la CommandeDocument : étape 2 "livrée"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnCommandeLivresConfirmerLivraison_Click(object sender, EventArgs e)
+        {
+            CommandeDocument commandeDocument = (CommandeDocument)bdgCommandesLivresListe.List[bdgCommandesLivresListe.Position];
+            // les identifiants des états de suivi dans la bdd ne sont pas 'zero based' !
+            int nouvelEtat = commandeDocument.IdSuivi;
+            if (ValidationModifEtatSuivi(lesSuivis[nouvelEtat].Libelle))
+            {
+                if (controle.ModifSuiviCommandeDocument(commandeDocument.Id, lesSuivis[2].Id))
+                {
+                    AfficheCommandeDocumentLivre();
+                }
+                else
+                {
+                    MessageBox.Show("Une erreur s'est produite.", "Erreur");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Modification d'état de suivi de la CommandeDocument : étape 3 "réglée"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnCommandeLivresRegler_Click(object sender, EventArgs e)
+        {
+            CommandeDocument commandeDocument = (CommandeDocument)bdgCommandesLivresListe.List[bdgCommandesLivresListe.Position];
+            // les identifiants des états de suivi dans la bdd ne sont pas 'zero based' !
+            int nouvelEtat = commandeDocument.IdSuivi;
+            if (ValidationModifEtatSuivi(lesSuivis[nouvelEtat].Libelle))
+            {
+                if (controle.ModifSuiviCommandeDocument(commandeDocument.Id, lesSuivis[3].Id))
+                {
+                    AfficheCommandeDocumentLivre();
+                }
+                else
+                {
+                    MessageBox.Show("Une erreur s'est produite.", "Erreur");
+                }
+            }
+           
+        }
+    }
+}

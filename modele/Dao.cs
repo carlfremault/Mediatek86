@@ -79,6 +79,27 @@ namespace Mediatek86.modele
         }
 
         /// <summary>
+        /// Retourne tous les états de suivi à partir de la bdd
+        /// </summary>
+        /// <returns></returns>
+        public static List<Suivi> GetAllSuivis()
+        {
+            List<Suivi> lesSuivis = new List<Suivi>();
+            string req = "Select * from suivi";
+
+            BddMySql curs = BddMySql.GetInstance(connectionString);
+            curs.ReqSelect(req, null);
+
+            while (curs.Read())
+            {
+                Suivi leSuivi = new Suivi((int)curs.Field("id"), (string)curs.Field("libelle"));
+                lesSuivis.Add(leSuivi);
+            }
+            curs.Close();
+            return lesSuivis;
+        }
+
+        /// <summary>
         /// Retourne toutes les livres à partir de la BDD
         /// </summary>
         /// <returns>Liste d'objets Livre</returns>
@@ -238,11 +259,12 @@ namespace Mediatek86.modele
         /// <summary>
         /// Retourne les commandes d'un livre ou d'un DVD
         /// </summary>
+        /// <param name="idDoc">Identifiant du livre ou DVD</param>
         /// <returns>Liste d'objets CommandeDocument</returns>
         public static List<CommandeDocument> GetCommandeDocument(string idDoc)
         {
             List<CommandeDocument> lesCommandes = new List<CommandeDocument>();
-            string req = "Select c.id, c.dateCommande, c.montant, cd.nbExemplaire, scd.idSuivi, s.libelle ";
+            string req = "Select c.id, c.dateCommande, c.montant, cd.nbExemplaire, cd.idLivreDvd, scd.idSuivi, s.libelle ";
             req += "from commande c join commandedocument cd on c.id=cd.id ";
             req += "join suivicommandedoc scd on c.id=scd.idcommande ";
             req += "join suivi s on scd.idsuivi = s.id ";
@@ -262,9 +284,10 @@ namespace Mediatek86.modele
                 DateTime dateCommande = (DateTime)curs.Field("datecommande");
                 double montant = (double)curs.Field("montant");
                 int nbExemplaire = (int)curs.Field("nbExemplaire");
+                string idLivreDvd = (string)curs.Field("idLivreDvd");
                 int idSuivi = (int)curs.Field("idSuivi");
                 string libelleSuivi = (string)curs.Field("libelle");
-                CommandeDocument commandeDocument = new CommandeDocument(id, dateCommande, montant, nbExemplaire, idSuivi, libelleSuivi);
+                CommandeDocument commandeDocument = new CommandeDocument(id, dateCommande, montant, nbExemplaire, idLivreDvd, idSuivi, libelleSuivi);
                 lesCommandes.Add(commandeDocument);
             }
             curs.Close();
@@ -275,6 +298,7 @@ namespace Mediatek86.modele
         /// <summary>
         /// Retourne les abonnements à une revue
         /// </summary>
+        /// <param name="idDoc">identifiant de la revue</param>
         /// <returns>Liste d'objets CommandeDocument</returns>
         public static List<Abonnement> GetAbonnement(string idDoc)
         {
@@ -329,7 +353,9 @@ namespace Mediatek86.modele
                 curs.ReqUpdate(requetes, parameters);
                 curs.Close();
                 return true;
-            }catch{
+            }
+            catch
+            {
                 return false;
             }
         }
@@ -338,7 +364,7 @@ namespace Mediatek86.modele
         /// écriture d'un livre en base de données
         /// </summary>
         /// <param name="livre">le livre à ajouter</param>
-        /// <returns>true si l'insertion a pu se faire</returns>
+        /// <returns>Le message de confirmation ou d'erreur</returns>
         public static string CreerLivre(Livre livre)
         {
             try
@@ -437,7 +463,7 @@ namespace Mediatek86.modele
         /// écriture d'un DVD en base de données
         /// </summary>
         /// <param name="dvd">le DVD à ajouter</param>
-        /// <returns>true si l'insertion a pu se faire</returns>
+        /// <returns>Le message de confirmation ou d'erreur</returns>
         public static string CreerDvd(Dvd dvd)
         {
             try
@@ -536,7 +562,7 @@ namespace Mediatek86.modele
         /// écriture d'une revue en base de données
         /// </summary>
         /// <param name="revue">la revue à ajouter</param>
-        /// <returns>true si l'insertion a pu se faire</returns>
+        /// <returns>Le message de confirmation ou d'erreur</returns>
         public static string CreerRevue(Revue revue)
         {
             try
@@ -617,6 +643,95 @@ namespace Mediatek86.modele
                 Dictionary<string, object> parameters = new Dictionary<string, object>
                 {
                     {"@id", id },
+                };
+                BddMySql curs = BddMySql.GetInstance(connectionString);
+                curs.ReqUpdate(requetes, parameters);
+                curs.Close();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Insertion d'une CommandeDocument dans la base de données
+        /// </summary>
+        /// <param name="commandeDocument">La CommandeDocument à ajouter</param>
+        /// <returns>Le message de confirmation ou d'erreur</returns>
+        public static string CreerCommandeDocument(CommandeDocument commandeDocument)
+        {
+            try
+            {
+                List<string> requetes = new List<string>();
+                requetes.Add("insert into commande values (@id, @dateCommande, @montant) ");
+                requetes.Add("insert into commandedocument values (@id, @nbExemplaire, @idLivreDvd) ");
+                requetes.Add("insert into suivicommandedoc values (@idSuivi, @id)");
+                Dictionary<string, object> parameters = new Dictionary<string, object>
+                {
+                    {"@id", commandeDocument.Id },
+                    {"@dateCommande", commandeDocument.DateCommande },
+                    {"@montant", commandeDocument.Montant },
+                    {"@nbExemplaire", commandeDocument.NbExemplaires },
+                    {"@idLivreDvd", commandeDocument.IdLivreDvd },
+                    {"@idSuivi", commandeDocument.IdSuivi },
+                };
+                BddMySql curs = BddMySql.GetInstance(connectionString);
+                curs.ReqUpdate(requetes, parameters);
+                curs.Close();
+                return "Validé!";
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+        }
+
+        /// <summary>
+        /// Suppression d'une CommandeDocument de la bdd
+        /// </summary>
+        /// <param name="id">identifiant de la CommandeDocument à supprimer</param>
+        /// <returns>Ttrue si la suppression a réussi</returns>
+        public static bool SupprCommandeDocument(string id)
+        {
+            try
+            {
+                List<string> requetes = new List<string>();
+                requetes.Add("delete from suivicommandedoc where idcommande=@id");
+                requetes.Add("delete from commandedocument where id=@id");
+                requetes.Add("delete from commande where id=@id");
+                Dictionary<string, object> parameters = new Dictionary<string, object>
+                {
+                    {"@id", id },
+                };
+                BddMySql curs = BddMySql.GetInstance(connectionString);
+                curs.ReqUpdate(requetes, parameters);
+                curs.Close();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }        
+        }
+
+        /// <summary>
+        /// Modification d'état de suivi d'une CommandeDocument
+        /// </summary>
+        /// <param name="idCommandeDocument">identifiant de la CommandeDocument à modifier</param>
+        /// <param name="idSuivi">identifiant du nouveau état de suivi</param>
+        /// <returns>True si la modification a réussi</returns>
+        public static bool ModifSuiviCommandeDocument(string idCommandeDocument, int idSuivi)
+        {
+            try
+            {
+                List<string> requetes = new List<string>();
+                requetes.Add("update suivicommandedoc set idsuivi=@idsuivi where idcommande=@idcommande");
+                Dictionary<string, object> parameters = new Dictionary<string, object>
+                {
+                    {"@idsuivi", idSuivi },
+                    {"@idcommande", idCommandeDocument },                  
                 };
                 BddMySql curs = BddMySql.GetInstance(connectionString);
                 curs.ReqUpdate(requetes, parameters);
