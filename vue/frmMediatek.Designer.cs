@@ -29,6 +29,12 @@ namespace Mediatek86.vue
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tabOngletsApplication = new System.Windows.Forms.TabControl();
             this.tabLivres = new System.Windows.Forms.TabPage();
             this.grpGestionLivres = new System.Windows.Forms.GroupBox();
@@ -248,6 +254,9 @@ namespace Mediatek86.vue
             this.btnCommandeDvdRechercher = new System.Windows.Forms.Button();
             this.tabAbonnementRevue = new System.Windows.Forms.TabPage();
             this.grpAbonnementRevueRecherche = new System.Windows.Forms.GroupBox();
+            this.chkAbonnementRevueEmpruntable = new System.Windows.Forms.CheckBox();
+            this.label86 = new System.Windows.Forms.Label();
+            this.txbAbonnementRevueDelaiMiseADispo = new System.Windows.Forms.TextBox();
             this.pcbAbonnementRevueImage = new System.Windows.Forms.PictureBox();
             this.label77 = new System.Windows.Forms.Label();
             this.dgvAbonnementRevueListe = new System.Windows.Forms.DataGridView();
@@ -257,7 +266,7 @@ namespace Mediatek86.vue
             this.txbAbonnementRevueGenre = new System.Windows.Forms.TextBox();
             this.txbAbonnementRevuePeriodicite = new System.Windows.Forms.TextBox();
             this.txbAbonnementRevueTitre = new System.Windows.Forms.TextBox();
-            this.txbAbonnementRevueRecherche = new System.Windows.Forms.TextBox();
+            this.txbAbonnementRevueNumero = new System.Windows.Forms.TextBox();
             this.label78 = new System.Windows.Forms.Label();
             this.label79 = new System.Windows.Forms.Label();
             this.label80 = new System.Windows.Forms.Label();
@@ -267,9 +276,6 @@ namespace Mediatek86.vue
             this.label84 = new System.Windows.Forms.Label();
             this.label85 = new System.Windows.Forms.Label();
             this.btnAbonnementRevueRechercher = new System.Windows.Forms.Button();
-            this.txbAbonnementRevueDelaiMiseADispo = new System.Windows.Forms.TextBox();
-            this.chkAbonnementRevueEmpruntable = new System.Windows.Forms.CheckBox();
-            this.label86 = new System.Windows.Forms.Label();
             this.tabOngletsApplication.SuspendLayout();
             this.tabLivres.SuspendLayout();
             this.grpGestionLivres.SuspendLayout();
@@ -361,6 +367,7 @@ namespace Mediatek86.vue
             this.btnSupprLivre.Name = "btnSupprLivre";
             this.btnSupprLivre.Size = new System.Drawing.Size(278, 30);
             this.btnSupprLivre.TabIndex = 2;
+            this.btnSupprLivre.TabStop = false;
             this.btnSupprLivre.Text = "Supprimer";
             this.btnSupprLivre.UseVisualStyleBackColor = true;
             this.btnSupprLivre.Click += new System.EventHandler(this.btnSupprLivre_Click);
@@ -372,6 +379,7 @@ namespace Mediatek86.vue
             this.btnModifLivre.Name = "btnModifLivre";
             this.btnModifLivre.Size = new System.Drawing.Size(279, 30);
             this.btnModifLivre.TabIndex = 1;
+            this.btnModifLivre.TabStop = false;
             this.btnModifLivre.Text = "Modifier";
             this.btnModifLivre.UseVisualStyleBackColor = true;
             this.btnModifLivre.Click += new System.EventHandler(this.btnModifLivre_Click);
@@ -392,6 +400,7 @@ namespace Mediatek86.vue
             this.btnAjoutLivre.Name = "btnAjoutLivre";
             this.btnAjoutLivre.Size = new System.Drawing.Size(278, 30);
             this.btnAjoutLivre.TabIndex = 0;
+            this.btnAjoutLivre.TabStop = false;
             this.btnAjoutLivre.Text = "Ajouter";
             this.btnAjoutLivre.UseVisualStyleBackColor = true;
             this.btnAjoutLivre.Click += new System.EventHandler(this.btnAjoutLivre_Click);
@@ -672,7 +681,7 @@ namespace Mediatek86.vue
             this.btnLivresNumRecherche.Location = new System.Drawing.Point(314, 59);
             this.btnLivresNumRecherche.Name = "btnLivresNumRecherche";
             this.btnLivresNumRecherche.Size = new System.Drawing.Size(96, 22);
-            this.btnLivresNumRecherche.TabIndex = 14;
+            this.btnLivresNumRecherche.TabIndex = 5;
             this.btnLivresNumRecherche.Text = "Rechercher";
             this.btnLivresNumRecherche.UseVisualStyleBackColor = true;
             this.btnLivresNumRecherche.Click += new System.EventHandler(this.BtnLivresNumRecherche_Click);
@@ -692,7 +701,8 @@ namespace Mediatek86.vue
             this.txbLivresNumRecherche.Location = new System.Drawing.Point(220, 60);
             this.txbLivresNumRecherche.Name = "txbLivresNumRecherche";
             this.txbLivresNumRecherche.Size = new System.Drawing.Size(67, 20);
-            this.txbLivresNumRecherche.TabIndex = 12;
+            this.txbLivresNumRecherche.TabIndex = 4;
+            this.txbLivresNumRecherche.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txbLivresNumRecherche_KeyDown);
             // 
             // btnLivresAnnulGenres
             // 
@@ -778,7 +788,8 @@ namespace Mediatek86.vue
             this.dgvLivresListe.RowHeadersVisible = false;
             this.dgvLivresListe.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvLivresListe.Size = new System.Drawing.Size(844, 200);
-            this.dgvLivresListe.TabIndex = 4;
+            this.dgvLivresListe.TabIndex = 50;
+            this.dgvLivresListe.TabStop = false;
             this.dgvLivresListe.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DgvLivresListe_ColumnHeaderMouseClick);
             this.dgvLivresListe.SelectionChanged += new System.EventHandler(this.DgvLivresListe_SelectionChanged);
             // 
@@ -833,6 +844,7 @@ namespace Mediatek86.vue
             this.btnSupprDvd.Name = "btnSupprDvd";
             this.btnSupprDvd.Size = new System.Drawing.Size(278, 30);
             this.btnSupprDvd.TabIndex = 2;
+            this.btnSupprDvd.TabStop = false;
             this.btnSupprDvd.Text = "Supprimer";
             this.btnSupprDvd.UseVisualStyleBackColor = true;
             this.btnSupprDvd.Click += new System.EventHandler(this.btnSupprDvd_Click);
@@ -844,6 +856,7 @@ namespace Mediatek86.vue
             this.btnModifDvd.Name = "btnModifDvd";
             this.btnModifDvd.Size = new System.Drawing.Size(279, 30);
             this.btnModifDvd.TabIndex = 1;
+            this.btnModifDvd.TabStop = false;
             this.btnModifDvd.Text = "Modifier";
             this.btnModifDvd.UseVisualStyleBackColor = true;
             this.btnModifDvd.Click += new System.EventHandler(this.btnModifDvd_Click);
@@ -864,6 +877,7 @@ namespace Mediatek86.vue
             this.btnAjoutDvd.Name = "btnAjoutDvd";
             this.btnAjoutDvd.Size = new System.Drawing.Size(278, 30);
             this.btnAjoutDvd.TabIndex = 0;
+            this.btnAjoutDvd.TabStop = false;
             this.btnAjoutDvd.Text = "Ajouter";
             this.btnAjoutDvd.UseVisualStyleBackColor = true;
             this.btnAjoutDvd.Click += new System.EventHandler(this.btnAjoutDvd_Click);
@@ -1147,7 +1161,7 @@ namespace Mediatek86.vue
             this.btnDvdNumRecherche.Location = new System.Drawing.Point(314, 59);
             this.btnDvdNumRecherche.Name = "btnDvdNumRecherche";
             this.btnDvdNumRecherche.Size = new System.Drawing.Size(96, 22);
-            this.btnDvdNumRecherche.TabIndex = 14;
+            this.btnDvdNumRecherche.TabIndex = 5;
             this.btnDvdNumRecherche.Text = "Rechercher";
             this.btnDvdNumRecherche.UseVisualStyleBackColor = true;
             this.btnDvdNumRecherche.Click += new System.EventHandler(this.btnDvdNumRecherche_Click);
@@ -1167,7 +1181,8 @@ namespace Mediatek86.vue
             this.txbDvdNumRecherche.Location = new System.Drawing.Point(220, 60);
             this.txbDvdNumRecherche.Name = "txbDvdNumRecherche";
             this.txbDvdNumRecherche.Size = new System.Drawing.Size(67, 20);
-            this.txbDvdNumRecherche.TabIndex = 12;
+            this.txbDvdNumRecherche.TabIndex = 4;
+            this.txbDvdNumRecherche.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txbDvdNumRecherche_KeyDown);
             // 
             // btnDvdAnnulGenres
             // 
@@ -1253,7 +1268,8 @@ namespace Mediatek86.vue
             this.dgvDvdListe.RowHeadersVisible = false;
             this.dgvDvdListe.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvDvdListe.Size = new System.Drawing.Size(844, 200);
-            this.dgvDvdListe.TabIndex = 4;
+            this.dgvDvdListe.TabIndex = 50;
+            this.dgvDvdListe.TabStop = false;
             this.dgvDvdListe.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvDvdListe_ColumnHeaderMouseClick);
             this.dgvDvdListe.SelectionChanged += new System.EventHandler(this.dgvDvdListe_SelectionChanged);
             // 
@@ -1309,6 +1325,7 @@ namespace Mediatek86.vue
             this.btnSupprRevue.Name = "btnSupprRevue";
             this.btnSupprRevue.Size = new System.Drawing.Size(278, 30);
             this.btnSupprRevue.TabIndex = 2;
+            this.btnSupprRevue.TabStop = false;
             this.btnSupprRevue.Text = "Supprimer";
             this.btnSupprRevue.UseVisualStyleBackColor = true;
             this.btnSupprRevue.Click += new System.EventHandler(this.btnSupprRevue_Click);
@@ -1320,6 +1337,7 @@ namespace Mediatek86.vue
             this.btnModifRevue.Name = "btnModifRevue";
             this.btnModifRevue.Size = new System.Drawing.Size(279, 30);
             this.btnModifRevue.TabIndex = 1;
+            this.btnModifRevue.TabStop = false;
             this.btnModifRevue.Text = "Modifier";
             this.btnModifRevue.UseVisualStyleBackColor = true;
             this.btnModifRevue.Click += new System.EventHandler(this.btnModifRevue_Click);
@@ -1340,6 +1358,7 @@ namespace Mediatek86.vue
             this.btnAjoutRevue.Name = "btnAjoutRevue";
             this.btnAjoutRevue.Size = new System.Drawing.Size(278, 30);
             this.btnAjoutRevue.TabIndex = 0;
+            this.btnAjoutRevue.TabStop = false;
             this.btnAjoutRevue.Text = "Ajouter";
             this.btnAjoutRevue.UseVisualStyleBackColor = true;
             this.btnAjoutRevue.Click += new System.EventHandler(this.btnAjoutRevue_Click);
@@ -1623,7 +1642,7 @@ namespace Mediatek86.vue
             this.btnRevuesNumRecherche.Location = new System.Drawing.Point(314, 59);
             this.btnRevuesNumRecherche.Name = "btnRevuesNumRecherche";
             this.btnRevuesNumRecherche.Size = new System.Drawing.Size(96, 22);
-            this.btnRevuesNumRecherche.TabIndex = 14;
+            this.btnRevuesNumRecherche.TabIndex = 5;
             this.btnRevuesNumRecherche.Text = "Rechercher";
             this.btnRevuesNumRecherche.UseVisualStyleBackColor = true;
             this.btnRevuesNumRecherche.Click += new System.EventHandler(this.btnRevuesNumRecherche_Click);
@@ -1643,7 +1662,8 @@ namespace Mediatek86.vue
             this.txbRevuesNumRecherche.Location = new System.Drawing.Point(220, 60);
             this.txbRevuesNumRecherche.Name = "txbRevuesNumRecherche";
             this.txbRevuesNumRecherche.Size = new System.Drawing.Size(67, 20);
-            this.txbRevuesNumRecherche.TabIndex = 12;
+            this.txbRevuesNumRecherche.TabIndex = 4;
+            this.txbRevuesNumRecherche.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txbRevuesNumRecherche_KeyDown);
             // 
             // btnRevuesAnnulGenres
             // 
@@ -1729,7 +1749,8 @@ namespace Mediatek86.vue
             this.dgvRevuesListe.RowHeadersVisible = false;
             this.dgvRevuesListe.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvRevuesListe.Size = new System.Drawing.Size(844, 200);
-            this.dgvRevuesListe.TabIndex = 4;
+            this.dgvRevuesListe.TabIndex = 50;
+            this.dgvRevuesListe.TabStop = false;
             this.dgvRevuesListe.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvRevuesListe_ColumnHeaderMouseClick);
             this.dgvRevuesListe.SelectionChanged += new System.EventHandler(this.dgvRevuesListe_SelectionChanged);
             // 
@@ -1787,7 +1808,7 @@ namespace Mediatek86.vue
             this.btnReceptionExemplaireImage.Location = new System.Drawing.Point(446, 69);
             this.btnReceptionExemplaireImage.Name = "btnReceptionExemplaireImage";
             this.btnReceptionExemplaireImage.Size = new System.Drawing.Size(96, 22);
-            this.btnReceptionExemplaireImage.TabIndex = 43;
+            this.btnReceptionExemplaireImage.TabIndex = 14;
             this.btnReceptionExemplaireImage.Text = "Rechercher";
             this.btnReceptionExemplaireImage.UseVisualStyleBackColor = true;
             this.btnReceptionExemplaireImage.Click += new System.EventHandler(this.btnReceptionExemplaireImage_Click);
@@ -1835,7 +1856,7 @@ namespace Mediatek86.vue
             this.txbReceptionExemplaireNumero.Location = new System.Drawing.Point(150, 20);
             this.txbReceptionExemplaireNumero.Name = "txbReceptionExemplaireNumero";
             this.txbReceptionExemplaireNumero.Size = new System.Drawing.Size(100, 20);
-            this.txbReceptionExemplaireNumero.TabIndex = 3;
+            this.txbReceptionExemplaireNumero.TabIndex = 10;
             // 
             // label17
             // 
@@ -1853,7 +1874,7 @@ namespace Mediatek86.vue
             this.dtpReceptionExemplaireDate.Location = new System.Drawing.Point(150, 45);
             this.dtpReceptionExemplaireDate.Name = "dtpReceptionExemplaireDate";
             this.dtpReceptionExemplaireDate.Size = new System.Drawing.Size(100, 20);
-            this.dtpReceptionExemplaireDate.TabIndex = 1;
+            this.dtpReceptionExemplaireDate.TabIndex = 12;
             // 
             // label16
             // 
@@ -1942,6 +1963,7 @@ namespace Mediatek86.vue
             this.dgvReceptionExemplairesListe.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvReceptionExemplairesListe.Size = new System.Drawing.Size(391, 134);
             this.dgvReceptionExemplairesListe.TabIndex = 52;
+            this.dgvReceptionExemplairesListe.TabStop = false;
             this.dgvReceptionExemplairesListe.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvExemplairesListe_ColumnHeaderMouseClick);
             this.dgvReceptionExemplairesListe.SelectionChanged += new System.EventHandler(this.dgvReceptionExemplairesListe_SelectionChanged);
             // 
@@ -2016,8 +2038,9 @@ namespace Mediatek86.vue
             this.txbReceptionRevueNumero.Location = new System.Drawing.Point(150, 20);
             this.txbReceptionRevueNumero.Name = "txbReceptionRevueNumero";
             this.txbReceptionRevueNumero.Size = new System.Drawing.Size(100, 20);
-            this.txbReceptionRevueNumero.TabIndex = 43;
+            this.txbReceptionRevueNumero.TabIndex = 1;
             this.txbReceptionRevueNumero.TextChanged += new System.EventHandler(this.txbReceptionRevueNumero_TextChanged);
+            this.txbReceptionRevueNumero.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txbReceptionRevueNumero_KeyDown);
             // 
             // label3
             // 
@@ -2124,7 +2147,7 @@ namespace Mediatek86.vue
             this.btnReceptionRechercher.Location = new System.Drawing.Point(261, 19);
             this.btnReceptionRechercher.Name = "btnReceptionRechercher";
             this.btnReceptionRechercher.Size = new System.Drawing.Size(96, 22);
-            this.btnReceptionRechercher.TabIndex = 16;
+            this.btnReceptionRechercher.TabIndex = 2;
             this.btnReceptionRechercher.Text = "Rechercher";
             this.btnReceptionRechercher.UseVisualStyleBackColor = true;
             this.btnReceptionRechercher.Click += new System.EventHandler(this.btnReceptionRechercher_Click);
@@ -2205,7 +2228,23 @@ namespace Mediatek86.vue
             this.dgvCommandeLivresListe.AllowUserToDeleteRows = false;
             this.dgvCommandeLivresListe.AllowUserToResizeColumns = false;
             this.dgvCommandeLivresListe.AllowUserToResizeRows = false;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvCommandeLivresListe.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvCommandeLivresListe.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvCommandeLivresListe.DefaultCellStyle = dataGridViewCellStyle2;
             this.dgvCommandeLivresListe.Location = new System.Drawing.Point(131, 221);
             this.dgvCommandeLivresListe.MultiSelect = false;
             this.dgvCommandeLivresListe.Name = "dgvCommandeLivresListe";
@@ -2214,6 +2253,7 @@ namespace Mediatek86.vue
             this.dgvCommandeLivresListe.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvCommandeLivresListe.Size = new System.Drawing.Size(423, 134);
             this.dgvCommandeLivresListe.TabIndex = 52;
+            this.dgvCommandeLivresListe.TabStop = false;
             this.dgvCommandeLivresListe.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvCommandeLivresListe_ColumnHeaderMouseClick);
             // 
             // txbCommandeLivresImage
@@ -2277,8 +2317,9 @@ namespace Mediatek86.vue
             this.txbCommandeLivreNumero.Location = new System.Drawing.Point(131, 20);
             this.txbCommandeLivreNumero.Name = "txbCommandeLivreNumero";
             this.txbCommandeLivreNumero.Size = new System.Drawing.Size(100, 20);
-            this.txbCommandeLivreNumero.TabIndex = 43;
+            this.txbCommandeLivreNumero.TabIndex = 1;
             this.txbCommandeLivreNumero.TextChanged += new System.EventHandler(this.txbCommandeLivreNumero_TextChanged);
+            this.txbCommandeLivreNumero.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txbCommandeLivreNumero_KeyDown);
             // 
             // label59
             // 
@@ -2376,7 +2417,7 @@ namespace Mediatek86.vue
             this.btnCommandeLivreRechercher.Location = new System.Drawing.Point(242, 19);
             this.btnCommandeLivreRechercher.Name = "btnCommandeLivreRechercher";
             this.btnCommandeLivreRechercher.Size = new System.Drawing.Size(96, 22);
-            this.btnCommandeLivreRechercher.TabIndex = 16;
+            this.btnCommandeLivreRechercher.TabIndex = 2;
             this.btnCommandeLivreRechercher.Text = "Rechercher";
             this.btnCommandeLivreRechercher.UseVisualStyleBackColor = true;
             this.btnCommandeLivreRechercher.Click += new System.EventHandler(this.btnCommandeLivreRechercher_Click);
@@ -2457,7 +2498,23 @@ namespace Mediatek86.vue
             this.dgvCommandeDvdListe.AllowUserToDeleteRows = false;
             this.dgvCommandeDvdListe.AllowUserToResizeColumns = false;
             this.dgvCommandeDvdListe.AllowUserToResizeRows = false;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvCommandeDvdListe.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dgvCommandeDvdListe.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvCommandeDvdListe.DefaultCellStyle = dataGridViewCellStyle4;
             this.dgvCommandeDvdListe.Location = new System.Drawing.Point(131, 244);
             this.dgvCommandeDvdListe.MultiSelect = false;
             this.dgvCommandeDvdListe.Name = "dgvCommandeDvdListe";
@@ -2466,6 +2523,7 @@ namespace Mediatek86.vue
             this.dgvCommandeDvdListe.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvCommandeDvdListe.Size = new System.Drawing.Size(423, 134);
             this.dgvCommandeDvdListe.TabIndex = 52;
+            this.dgvCommandeDvdListe.TabStop = false;
             this.dgvCommandeDvdListe.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvCommandeDvdListe_ColumnHeaderMouseClick);
             // 
             // txbCommandeDvdImage
@@ -2530,8 +2588,9 @@ namespace Mediatek86.vue
             this.txbCommandeDvdNumero.Location = new System.Drawing.Point(131, 20);
             this.txbCommandeDvdNumero.Name = "txbCommandeDvdNumero";
             this.txbCommandeDvdNumero.Size = new System.Drawing.Size(100, 20);
-            this.txbCommandeDvdNumero.TabIndex = 43;
+            this.txbCommandeDvdNumero.TabIndex = 1;
             this.txbCommandeDvdNumero.TextChanged += new System.EventHandler(this.txbCommandeDvdNumero_TextChanged);
+            this.txbCommandeDvdNumero.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txbCommandeDvdNumero_KeyDown);
             // 
             // label68
             // 
@@ -2629,7 +2688,7 @@ namespace Mediatek86.vue
             this.btnCommandeDvdRechercher.Location = new System.Drawing.Point(242, 19);
             this.btnCommandeDvdRechercher.Name = "btnCommandeDvdRechercher";
             this.btnCommandeDvdRechercher.Size = new System.Drawing.Size(96, 22);
-            this.btnCommandeDvdRechercher.TabIndex = 16;
+            this.btnCommandeDvdRechercher.TabIndex = 2;
             this.btnCommandeDvdRechercher.Text = "Rechercher";
             this.btnCommandeDvdRechercher.UseVisualStyleBackColor = true;
             this.btnCommandeDvdRechercher.Click += new System.EventHandler(this.btnCommandeDvdRechercher_Click);
@@ -2660,7 +2719,7 @@ namespace Mediatek86.vue
             this.grpAbonnementRevueRecherche.Controls.Add(this.txbAbonnementRevueGenre);
             this.grpAbonnementRevueRecherche.Controls.Add(this.txbAbonnementRevuePeriodicite);
             this.grpAbonnementRevueRecherche.Controls.Add(this.txbAbonnementRevueTitre);
-            this.grpAbonnementRevueRecherche.Controls.Add(this.txbAbonnementRevueRecherche);
+            this.grpAbonnementRevueRecherche.Controls.Add(this.txbAbonnementRevueNumero);
             this.grpAbonnementRevueRecherche.Controls.Add(this.label78);
             this.grpAbonnementRevueRecherche.Controls.Add(this.label79);
             this.grpAbonnementRevueRecherche.Controls.Add(this.label80);
@@ -2676,6 +2735,34 @@ namespace Mediatek86.vue
             this.grpAbonnementRevueRecherche.TabIndex = 18;
             this.grpAbonnementRevueRecherche.TabStop = false;
             this.grpAbonnementRevueRecherche.Text = "Recherche Revue";
+            // 
+            // chkAbonnementRevueEmpruntable
+            // 
+            this.chkAbonnementRevueEmpruntable.AutoSize = true;
+            this.chkAbonnementRevueEmpruntable.Enabled = false;
+            this.chkAbonnementRevueEmpruntable.Location = new System.Drawing.Point(472, 73);
+            this.chkAbonnementRevueEmpruntable.Name = "chkAbonnementRevueEmpruntable";
+            this.chkAbonnementRevueEmpruntable.Size = new System.Drawing.Size(15, 14);
+            this.chkAbonnementRevueEmpruntable.TabIndex = 59;
+            this.chkAbonnementRevueEmpruntable.UseVisualStyleBackColor = true;
+            // 
+            // label86
+            // 
+            this.label86.AutoSize = true;
+            this.label86.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label86.Location = new System.Drawing.Point(381, 73);
+            this.label86.Name = "label86";
+            this.label86.Size = new System.Drawing.Size(85, 13);
+            this.label86.TabIndex = 58;
+            this.label86.Text = "Empruntable :";
+            // 
+            // txbAbonnementRevueDelaiMiseADispo
+            // 
+            this.txbAbonnementRevueDelaiMiseADispo.Location = new System.Drawing.Point(131, 96);
+            this.txbAbonnementRevueDelaiMiseADispo.Name = "txbAbonnementRevueDelaiMiseADispo";
+            this.txbAbonnementRevueDelaiMiseADispo.ReadOnly = true;
+            this.txbAbonnementRevueDelaiMiseADispo.Size = new System.Drawing.Size(207, 20);
+            this.txbAbonnementRevueDelaiMiseADispo.TabIndex = 57;
             // 
             // pcbAbonnementRevueImage
             // 
@@ -2702,7 +2789,23 @@ namespace Mediatek86.vue
             this.dgvAbonnementRevueListe.AllowUserToDeleteRows = false;
             this.dgvAbonnementRevueListe.AllowUserToResizeColumns = false;
             this.dgvAbonnementRevueListe.AllowUserToResizeRows = false;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvAbonnementRevueListe.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             this.dgvAbonnementRevueListe.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvAbonnementRevueListe.DefaultCellStyle = dataGridViewCellStyle6;
             this.dgvAbonnementRevueListe.Location = new System.Drawing.Point(131, 223);
             this.dgvAbonnementRevueListe.MultiSelect = false;
             this.dgvAbonnementRevueListe.Name = "dgvAbonnementRevueListe";
@@ -2711,6 +2814,8 @@ namespace Mediatek86.vue
             this.dgvAbonnementRevueListe.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvAbonnementRevueListe.Size = new System.Drawing.Size(423, 134);
             this.dgvAbonnementRevueListe.TabIndex = 52;
+            this.dgvAbonnementRevueListe.TabStop = false;
+            this.dgvAbonnementRevueListe.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvAbonnementRevueListe_ColumnHeaderMouseClick);
             // 
             // txbAbonnementRevueImage
             // 
@@ -2760,12 +2865,14 @@ namespace Mediatek86.vue
             this.txbAbonnementRevueTitre.Size = new System.Drawing.Size(423, 20);
             this.txbAbonnementRevueTitre.TabIndex = 44;
             // 
-            // txbAbonnementRevueRecherche
+            // txbAbonnementRevueNumero
             // 
-            this.txbAbonnementRevueRecherche.Location = new System.Drawing.Point(131, 20);
-            this.txbAbonnementRevueRecherche.Name = "txbAbonnementRevueRecherche";
-            this.txbAbonnementRevueRecherche.Size = new System.Drawing.Size(100, 20);
-            this.txbAbonnementRevueRecherche.TabIndex = 43;
+            this.txbAbonnementRevueNumero.Location = new System.Drawing.Point(131, 20);
+            this.txbAbonnementRevueNumero.Name = "txbAbonnementRevueNumero";
+            this.txbAbonnementRevueNumero.Size = new System.Drawing.Size(100, 20);
+            this.txbAbonnementRevueNumero.TabIndex = 1;
+            this.txbAbonnementRevueNumero.TextChanged += new System.EventHandler(this.txbAbonnementRevueRecherche_TextChanged);
+            this.txbAbonnementRevueNumero.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txbAbonnementRevueNumero_KeyDown);
             // 
             // label78
             // 
@@ -2853,37 +2960,10 @@ namespace Mediatek86.vue
             this.btnAbonnementRevueRechercher.Location = new System.Drawing.Point(242, 19);
             this.btnAbonnementRevueRechercher.Name = "btnAbonnementRevueRechercher";
             this.btnAbonnementRevueRechercher.Size = new System.Drawing.Size(96, 22);
-            this.btnAbonnementRevueRechercher.TabIndex = 16;
+            this.btnAbonnementRevueRechercher.TabIndex = 2;
             this.btnAbonnementRevueRechercher.Text = "Rechercher";
             this.btnAbonnementRevueRechercher.UseVisualStyleBackColor = true;
-            // 
-            // txbAbonnementRevueDelaiMiseADispo
-            // 
-            this.txbAbonnementRevueDelaiMiseADispo.Location = new System.Drawing.Point(131, 96);
-            this.txbAbonnementRevueDelaiMiseADispo.Name = "txbAbonnementRevueDelaiMiseADispo";
-            this.txbAbonnementRevueDelaiMiseADispo.ReadOnly = true;
-            this.txbAbonnementRevueDelaiMiseADispo.Size = new System.Drawing.Size(207, 20);
-            this.txbAbonnementRevueDelaiMiseADispo.TabIndex = 57;
-            // 
-            // chkAbonnementRevueEmpruntable
-            // 
-            this.chkAbonnementRevueEmpruntable.AutoSize = true;
-            this.chkAbonnementRevueEmpruntable.Enabled = false;
-            this.chkAbonnementRevueEmpruntable.Location = new System.Drawing.Point(472, 73);
-            this.chkAbonnementRevueEmpruntable.Name = "chkAbonnementRevueEmpruntable";
-            this.chkAbonnementRevueEmpruntable.Size = new System.Drawing.Size(15, 14);
-            this.chkAbonnementRevueEmpruntable.TabIndex = 59;
-            this.chkAbonnementRevueEmpruntable.UseVisualStyleBackColor = true;
-            // 
-            // label86
-            // 
-            this.label86.AutoSize = true;
-            this.label86.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label86.Location = new System.Drawing.Point(381, 73);
-            this.label86.Name = "label86";
-            this.label86.Size = new System.Drawing.Size(85, 13);
-            this.label86.TabIndex = 58;
-            this.label86.Text = "Empruntable :";
+            this.btnAbonnementRevueRechercher.Click += new System.EventHandler(this.btnAbonnementRevueRechercher_Click);
             // 
             // FrmMediatek
             // 
@@ -3179,7 +3259,7 @@ namespace Mediatek86.vue
         private System.Windows.Forms.TextBox txbAbonnementRevueGenre;
         private System.Windows.Forms.TextBox txbAbonnementRevuePeriodicite;
         private System.Windows.Forms.TextBox txbAbonnementRevueTitre;
-        private System.Windows.Forms.TextBox txbAbonnementRevueRecherche;
+        private System.Windows.Forms.TextBox txbAbonnementRevueNumero;
         private System.Windows.Forms.Label label78;
         private System.Windows.Forms.Label label79;
         private System.Windows.Forms.Label label80;

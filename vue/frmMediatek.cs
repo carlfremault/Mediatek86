@@ -28,6 +28,7 @@ namespace Mediatek86.vue
         private readonly BindingSource bdgExemplairesListe = new BindingSource();
         private readonly BindingSource bdgCommandesLivresListe = new BindingSource();
         private readonly BindingSource bdgCommandesDvdListe = new BindingSource();
+        private readonly BindingSource bdgAbonnementRevueListe = new BindingSource();
         private List<Livre> lesLivres = new List<Livre>();
         private List<Dvd> lesDvd = new List<Dvd>();
         private List<Revue> lesRevues = new List<Revue>();
@@ -195,6 +196,19 @@ namespace Mediatek86.vue
             else // On n'est pas en train de saisir
             {
                 RevuesNumRecherche();
+            }
+        }
+
+        /// <summary>
+        /// Entrée dans champ recherche déclenche la recherche aussi
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void txbRevuesNumRecherche_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btnRevuesNumRecherche_Click(sender, e);
             }
         }
 
@@ -977,6 +991,19 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
+        /// Entrée dans champ recherche déclenche la recherche aussi
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void txbLivresNumRecherche_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                BtnLivresNumRecherche_Click(sender, e);
+            }
+        }
+
+        /// <summary>
         /// Recherche et affichage du livre dont on a saisi le numéro.
         /// Si non trouvé, affichage d'un MessageBox.
         /// </summary>
@@ -1743,6 +1770,19 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
+        /// Entrée dans champ recherche déclenche la recherche aussi
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void txbDvdNumRecherche_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btnDvdNumRecherche_Click(sender, e);
+            }
+        }
+
+        /// <summary>
         /// Recherche et affichage du DVD dont on a saisi le numéro.
         /// Si non trouvé, affichage d'un MessageBox.
         /// </summary>
@@ -2498,6 +2538,19 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
+        /// Entrée dans champ de recherche déclenche recherche aussi
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void txbReceptionRevueNumero_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Enter)
+            {
+                btnReceptionRechercher_Click(sender, e);
+            }
+        }
+
+        /// <summary>
         /// Si le numéro de revue est modifié, la zone de l'exemplaire est vidée et inactive
         /// les informations de la revue son aussi effacées
         /// </summary>
@@ -2768,6 +2821,19 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
+        /// Entrée dans champ de recherche déclenche la recherche aussi
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void txbCommandeLivreNumero_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Enter)
+            {
+                btnCommandeLivreRechercher_Click(sender, e);
+            }
+        }
+
+        /// <summary>
         /// Si le numéro de livre est modifié, la zone de commande est vidée et inactive
         /// les informations du livre son aussi effacées
         /// </summary>
@@ -2804,7 +2870,7 @@ namespace Mediatek86.vue
                 pcbCommandeLivresImage.Image = null;
             }
             // affiche la liste des commandes du livre
-            AfficheCommandeLivresLivre();
+            AfficheCommandeDocumentLivre();
 
             // accès à la zone d'ajout d'une commande
             // accesCommandeLivresGroupBox(true);
@@ -2813,7 +2879,7 @@ namespace Mediatek86.vue
         /// <summary>
         /// Récupération de la liste de commandes d'un livre puis affichage dans la liste
         /// </summary>
-        private void AfficheCommandeLivresLivre()
+        private void AfficheCommandeDocumentLivre()
         {
             string idDocument = txbCommandeLivreNumero.Text.Trim();
             lesCommandeDocument = controle.GetCommandeDocument(idDocument);
@@ -3062,6 +3128,20 @@ namespace Mediatek86.vue
             }
         }
 
+
+        /// <summary>
+        /// Entrée dans champ de recherche déclence la recherche aussi
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void txbCommandeDvdNumero_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btnCommandeDvdRechercher_Click(sender, e);
+            }
+        }
+
         /// <summary>
         /// Si le numéro de DVD est modifié, la zone de commande est vidée et inactive
         /// les informations du DVD son aussi effacées
@@ -3080,7 +3160,7 @@ namespace Mediatek86.vue
         /// <param name="revue"></param>
         private void AfficheCommandeDvdInfos(Dvd dvd)
         {
-            // informations sur le livre
+            // informations sur le DVD
             txbCommandeDvdTitre.Text = dvd.Titre;
             txbCommandeDvdRealisateur.Text = dvd.Realisateur;
             txbCommandeDvdSynopsis.Text = dvd.Synopsis;
@@ -3088,7 +3168,6 @@ namespace Mediatek86.vue
             txbCommandeDvdPublic.Text = dvd.Public;
             txbCommandeDvdRayon.Text = dvd.Rayon;
             txbCommandeDvdImage.Text = dvd.Image;
-            pcbCommandeDvdImage.Image = null;
             txbCommandeDvdDuree.Text = dvd.Duree.ToString();
             string image = dvd.Image;
             try
@@ -3100,7 +3179,7 @@ namespace Mediatek86.vue
                 pcbCommandeDvdImage.Image = null;
             }
             // affiche la liste des commandes du DVD
-            AfficheCommandeDvdDvd();
+            AfficheCommandeDocumentDvd();
 
             // accès à la zone d'ajout d'un exemplaire
             // accesCommandeDvdGroupBox(true);
@@ -3109,7 +3188,7 @@ namespace Mediatek86.vue
         /// <summary>
         /// Récupération de la liste de commandes d'un DVD puis affichage dans la liste
         /// </summary>
-        private void AfficheCommandeDvdDvd()
+        private void AfficheCommandeDocumentDvd()
         {
             string idDocument = txbCommandeDvdNumero.Text.Trim();
             lesCommandeDocument = controle.GetCommandeDocument(idDocument);
@@ -3129,6 +3208,7 @@ namespace Mediatek86.vue
             txbCommandeDvdRayon.Text = "";
             txbCommandeDvdImage.Text = "";
             txbCommandeDvdDuree.Text = "";
+            pcbCommandeDvdImage.Image = null;
             lesCommandeDocument = new List<CommandeDocument>();
             RemplirCommandeDvdListe(lesCommandeDocument);
             // accesCommandeDvdGroupBox(false);
@@ -3312,125 +3392,137 @@ namespace Mediatek86.vue
         private void tabAbonnementRevue_Enter(object sender, EventArgs e)
         {
             CancelAllSaisies();
-            lesDvd = controle.GetAllDvd();
+            lesRevues = controle.GetAllRevues();
             // accesCommandeDvdGroupBox(false);
         }
 
         /// <summary>
         /// Remplit le dategrid avec la liste reçue en paramètre
         /// </summary>
-        private void RemplirCommandeDvdListe(List<CommandeDocument> lesCommandeDocument)
+        private void RemplirAbonnementRevueListe(List<Abonnement> lesAbonnements)
         {
-
-            bdgCommandesDvdListe.DataSource = lesCommandeDocument;
-            dgvCommandeDvdListe.DataSource = bdgCommandesDvdListe;
-            dgvCommandeDvdListe.Columns["id"].Visible = false;
-            dgvCommandeDvdListe.Columns["idSuivi"].Visible = false;
-            dgvCommandeDvdListe.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-            dgvCommandeDvdListe.Columns["dateCommande"].DisplayIndex = 0;
-            dgvCommandeDvdListe.Columns["montant"].DisplayIndex = 1;
-            dgvCommandeDvdListe.Columns[4].HeaderCell.Value = "Date";
-            dgvCommandeDvdListe.Columns[0].HeaderCell.Value = "Exemplaires";
-            dgvCommandeDvdListe.Columns[2].HeaderCell.Value = "Etat";
+            bdgAbonnementRevueListe.DataSource = lesAbonnements;
+            dgvAbonnementRevueListe.DataSource = bdgAbonnementRevueListe;
+            dgvAbonnementRevueListe.Columns["id"].Visible = false;
+            dgvAbonnementRevueListe.Columns["idRevue"].Visible = false;
+            dgvAbonnementRevueListe.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dgvAbonnementRevueListe.Columns["dateCommande"].DisplayIndex = 0;
+            dgvAbonnementRevueListe.Columns["montant"].DisplayIndex = 1;
+            dgvAbonnementRevueListe.Columns[3].HeaderCell.Value = "Date commande";
+            dgvAbonnementRevueListe.Columns[0].HeaderCell.Value = "Date fin abonnement";
         }
 
         /// <summary>
-        /// Recherche d'un numéro de DVD et affiche ses informations
+        /// Recherche d'un numéro de revue et affiche ses informations
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void btnCommandeDvdRechercher_Click(object sender, EventArgs e)
+        private void btnAbonnementRevueRechercher_Click(object sender, EventArgs e)
         {
-            if (!txbCommandeDvdNumero.Text.Equals(""))
+            if (!txbAbonnementRevueNumero.Text.Equals(""))
             {
-                Dvd dvd = lesDvd.Find(x => x.Id.Equals(txbCommandeDvdNumero.Text.Trim()));
-                if (dvd != null)
+                Revue revue = lesRevues.Find(x => x.Id.Equals(txbAbonnementRevueNumero.Text.Trim()));
+                if (revue != null)
                 {
-                    AfficheCommandeDvdInfos(dvd);
+                    AfficheAbonnementRevueInfos(revue);
                 }
                 else
                 {
                     MessageBox.Show("numéro introuvable");
-                    VideCommandeDvdInfos();
+                    VideAbonnementRevueInfos();
                 }
             }
             else
             {
-                VideCommandeDvdInfos();
+                VideAbonnementRevueInfos();
             }
         }
 
         /// <summary>
-        /// Si le numéro de DVD est modifié, la zone de commande est vidée et inactive
-        /// les informations du DVD son aussi effacées
+        /// Entrée dans champ de recherche déclenche la recherche aussi
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void txbCommandeDvdNumero_TextChanged(object sender, EventArgs e)
+        private void txbAbonnementRevueNumero_KeyDown(object sender, KeyEventArgs e)
         {
-            // accesCommandeDvdGroupBox(false);
-            VideCommandeDvdInfos();
+            if (e.KeyCode == Keys.Enter)
+            {
+                btnAbonnementRevueRechercher_Click(sender, e);
+            }
+        }
+
+        /// <summary>
+        /// Si le numéro de revue est modifié, la zone d'abonnements est vidée et inactive
+        /// les informations de la revue sont aussi effacées
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void txbAbonnementRevueRecherche_TextChanged(object sender, EventArgs e)
+        {
+            // accesAbonnementRevueGroupBox(false);
+            VideAbonnementRevueInfos();
         }
 
         /// <summary>
         /// Affichage des informations de la revue sélectionnée et les exemplaires
         /// </summary>
         /// <param name="revue"></param>
-        private void AfficheCommandeDvdInfos(Dvd dvd)
+        private void AfficheAbonnementRevueInfos(Revue revue)
         {
-            // informations sur le livre
-            txbCommandeDvdTitre.Text = dvd.Titre;
-            txbCommandeDvdRealisateur.Text = dvd.Realisateur;
-            txbCommandeDvdSynopsis.Text = dvd.Synopsis;
-            txbCommandeDvdGenre.Text = dvd.Genre;
-            txbCommandeDvdPublic.Text = dvd.Public;
-            txbCommandeDvdRayon.Text = dvd.Rayon;
-            txbCommandeDvdImage.Text = dvd.Image;
-            pcbCommandeDvdImage.Image = null;
-            txbCommandeDvdDuree.Text = dvd.Duree.ToString();
-            string image = dvd.Image;
+            // informations sur l'abonnement
+            txbAbonnementRevueTitre.Text = revue.Titre;
+            txbAbonnementRevuePeriodicite.Text = revue.Periodicite;
+            txbAbonnementRevueDelaiMiseADispo.Text = revue.DelaiMiseADispo.ToString();
+            txbAbonnementRevueGenre.Text = revue.Genre;
+            txbAbonnementRevuePublic.Text = revue.Public;
+            txbAbonnementRevueRayon.Text = revue.Rayon;
+            txbAbonnementRevueImage.Text = revue.Image;
+            chkAbonnementRevueEmpruntable.Checked = revue.Empruntable;
+            string image = revue.Image;
             try
             {
-                pcbCommandeDvdImage.Image = Image.FromFile(image);
+                pcbAbonnementRevueImage.Image = Image.FromFile(image);
             }
             catch
             {
-                pcbCommandeDvdImage.Image = null;
+                pcbAbonnementRevueImage.Image = null;
             }
-            // affiche la liste des commandes du DVD
-            AfficheCommandeDvdDvd();
+            // affiche la liste des abonnements de la revue
+            AfficheAbonnementsRevue();
 
-            // accès à la zone d'ajout d'un exemplaire
-            // accesCommandeDvdGroupBox(true);
+            // accès à la zone d'ajout d'abonnement
+            // accesAbonnementRevueGroupBox(true);
         }
 
         /// <summary>
-        /// Récupération de la liste de commandes d'un DVD puis affichage dans la liste
+        /// Récupération de la liste des abonnements à une revue puis affichage dans la liste
         /// </summary>
-        private void AfficheCommandeDvdDvd()
+        private void AfficheAbonnementsRevue()
         {
-            string idDocument = txbCommandeDvdNumero.Text.Trim();
-            lesCommandeDocument = controle.GetCommandeDocument(idDocument);
-            RemplirCommandeDvdListe(lesCommandeDocument);
+            string idDocument = txbAbonnementRevueNumero.Text.Trim();
+            lesAbonnements = controle.GetAbonnement(idDocument);
+            RemplirAbonnementRevueListe(lesAbonnements);
         }
 
         /// <summary>
-        /// Vide les zones d'affchage des informations du DVD
+        /// Vide les zones d'affchage des informations de la revue
         /// </summary>
-        private void VideCommandeDvdInfos()
-        {
-            txbCommandeDvdTitre.Text = "";
-            txbCommandeDvdRealisateur.Text = "";
-            txbCommandeDvdSynopsis.Text = "";
-            txbCommandeDvdGenre.Text = "";
-            txbCommandeDvdPublic.Text = "";
-            txbCommandeDvdRayon.Text = "";
-            txbCommandeDvdImage.Text = "";
-            txbCommandeDvdDuree.Text = "";
-            lesCommandeDocument = new List<CommandeDocument>();
-            RemplirCommandeDvdListe(lesCommandeDocument);
-            // accesCommandeDvdGroupBox(false);
+        private void VideAbonnementRevueInfos()
+        {           
+            txbAbonnementRevueTitre.Text = "";
+            txbAbonnementRevuePeriodicite.Text = "";
+            txbAbonnementRevueDelaiMiseADispo.Text = "";
+            txbAbonnementRevueGenre.Text = "";
+            txbAbonnementRevuePublic.Text = "";
+            txbAbonnementRevueRayon.Text = "";
+            txbAbonnementRevueImage.Text = "";
+            chkAbonnementRevueEmpruntable.Checked = false;
+            pcbAbonnementRevueImage.Image = null;
+            lesAbonnements = new List<Abonnement>();
+            RemplirAbonnementRevueListe(lesAbonnements);
+            // accesAbonnementRevueGroupBox(false);
         }
+
 
 
         /// <summary>
@@ -3526,28 +3618,9 @@ namespace Mediatek86.vue
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        /*        private void dgvExemplairesListe_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-                {
-                    string titreColonne = dgvReceptionExemplairesListe.Columns[e.ColumnIndex].HeaderText;
-                    List<Exemplaire> sortedList = new List<Exemplaire>();
-                    switch (titreColonne)
-                    {
-                        case "Numero":
-                            sortedList = lesExemplaires.OrderBy(o => o.Numero).Reverse().ToList();
-                            break;
-                        case "DateAchat":
-                            sortedList = lesExemplaires.OrderBy(o => o.DateAchat).Reverse().ToList();
-                            break;
-                        case "Photo":
-                            sortedList = lesExemplaires.OrderBy(o => o.Photo).ToList();
-                            break;
-                    }
-                    RemplirReceptionExemplairesListe(sortedList);
-                }*/
-
-        private void dgvCommandeDvdListe_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        private void dgvAbonnementRevueListe_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            /*            string titreColonne = dgvCommandeLivresListe.Columns[e.ColumnIndex].HeaderText;
+/*            string titreColonne = dgvCommandeLivresListe.Columns[e.ColumnIndex].HeaderText;
             List<Commande> sortedList = new List<Commande>();
             switch (titreColonne)
             {
@@ -3563,6 +3636,8 @@ namespace Mediatek86.vue
             }
             RemplirCommandeLivresListe(sortedList);*/
         }
+
+
 
 
 
@@ -3594,10 +3669,7 @@ namespace Mediatek86.vue
                     }
                 }*/
 
-
-
         #endregion
-
 
     }
 }

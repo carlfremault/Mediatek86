@@ -273,17 +273,15 @@ namespace Mediatek86.modele
         }
 
         /// <summary>
-        /// Retourne les commandes d'un livre ou d'un DVD
+        /// Retourne les abonnements à une revue
         /// </summary>
         /// <returns>Liste d'objets CommandeDocument</returns>
-        public static List<CommandeDocument> GetAbonnement(string idDoc)
+        public static List<Abonnement> GetAbonnement(string idDoc)
         {
-            List<CommandeDocument> lesCommandes = new List<CommandeDocument>();
-            string req = "Select c.id, c.dateCommande, c.montant, cd.nbExemplaire, scd.idSuivi, s.libelle ";
-            req += "from commande c join commandedocument cd on c.id=cd.id ";
-            req += "join suivicommandedoc scd on c.id=scd.idcommande ";
-            req += "join suivi s on scd.idsuivi = s.id ";
-            req += "where cd.idLivreDvd = @id ";
+            List<Abonnement> lesAbonnements = new List<Abonnement>();
+            string req = "Select c.id, c.dateCommande, c.montant, a.dateFinAbonnement, a.idRevue ";
+            req += "from commande c join abonnement a on c.id=a.id ";
+            req += "where a.idRevue = @id ";
             req += "order by c.dateCommande DESC";
             Dictionary<string, object> parameters = new Dictionary<string, object>
                 {
@@ -298,15 +296,14 @@ namespace Mediatek86.modele
                 string id = (string)curs.Field("id");
                 DateTime dateCommande = (DateTime)curs.Field("datecommande");
                 double montant = (double)curs.Field("montant");
-                int nbExemplaire = (int)curs.Field("nbExemplaire");
-                int idSuivi = (int)curs.Field("idSuivi");
-                string libelleSuivi = (string)curs.Field("libelle");
-                CommandeDocument commandeDocument = new CommandeDocument(id, dateCommande, montant, nbExemplaire, idSuivi, libelleSuivi);
-                lesCommandes.Add(commandeDocument);
+                DateTime dateFinAbonnement = (DateTime)curs.Field("dateFinAbonnement");
+                string idRevue = (string)curs.Field("idRevue");
+                Abonnement abonnement = new Abonnement(id, dateCommande, montant, dateFinAbonnement, idRevue);
+                lesAbonnements.Add(abonnement);
             }
             curs.Close();
 
-            return lesCommandes;
+            return lesAbonnements;
         }
 
         /// <summary>
