@@ -2,11 +2,11 @@
 using Mediatek86.modele;
 using Mediatek86.metier;
 using Mediatek86.vue;
-
+using System;
 
 namespace Mediatek86.controleur
 {
-    internal class Controle
+    public class Controle
     {
         private List<Livre> lesLivres;
         private List<Dvd> lesDvd;
@@ -249,7 +249,7 @@ namespace Mediatek86.controleur
         }
 
         /// <summary>
-        /// Crée une CommandeDocument dans la bss
+        /// Crée une CommandeDocument dans la bdd
         /// </summary>
         /// <param name="commandeDocument">L'objet CommandeDocument concerné</param>
         /// <returns>Le message de confirmation ou d'erreur</returns>
@@ -277,6 +277,58 @@ namespace Mediatek86.controleur
         public bool ModifSuiviCommandeDocument(string idCommandeDocument, int idSuivi)
         {
             return Dao.ModifSuiviCommandeDocument(idCommandeDocument, idSuivi);
+        }
+
+        /// <summary>
+        /// Crée un abonnement dans la bdd
+        /// </summary>
+        /// <param name="abonnement">L'objet Abonnement concerné</param>
+        /// <returns>Le message de confirmation ou d'erreur</returns>
+        public string CreerAbonnement(Abonnement abonnement)
+        {
+            return Dao.CreerAbonnement(abonnement);
+        }
+
+        /// <summary>
+        /// Récupère les exemplaires rattachés à la revue concerné par un abonnement
+        /// puis demande vérification s'ils font partie de l'abonnement
+        /// </summary>
+        /// <param name="abonnement"></param>
+        /// <returns>True si un exemplaire est rattaché à l'abonnement</returns>
+        public bool VerifSuppressionAbonnement(Abonnement abonnement)
+        {
+            List<Exemplaire> lesExemplaires = GetExemplairesRevue(abonnement.IdRevue);
+            bool parution = false;
+            foreach(Exemplaire exemplaire in lesExemplaires)
+            {
+                if(ParutionDansAbonnement(abonnement.DateCommande, abonnement.DateFinAbonnement, exemplaire.DateAchat))
+                {
+                    parution = true;
+                }
+            }
+            return parution;
+        }
+
+        /// <summary>
+        /// Vérifie si la dateParution est comprise entre dateCommande et dateFinAbonnement
+        /// </summary>
+        /// <param name="dateCommande"></param>
+        /// <param name="dateFinAbonnement"></param>
+        /// <param name="dateParution"></param>
+        /// <returns>True si la date est comprise</returns>
+        public bool ParutionDansAbonnement(DateTime dateCommande, DateTime dateFinAbonnement, DateTime dateParution)
+        {
+            return (DateTime.Compare(dateCommande, dateParution) < 0 && DateTime.Compare(dateParution, dateFinAbonnement) < 0);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="idAbonnement"></param>
+        /// <returns></returns>
+        public bool SupprAbonnement(string idAbonnement)
+        {
+            return Dao.SupprAbonnement(idAbonnement);
         }
     }
 

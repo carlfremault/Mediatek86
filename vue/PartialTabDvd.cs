@@ -29,6 +29,8 @@ namespace Mediatek86.vue
         /// <summary>
         /// Ouverture de l'onglet Dvds : 
         /// appel des méthodes pour remplir le datagrid des dvd et des combos (genre, rayon, public)
+        /// Active la protection 'readonly' des champs d'information et désactive boutons 'enregistrer' et 'annuler' qui ne doivent être actifs qu'en cas de modification/ajout d'un DVD. 
+        /// Tous les booléens concernant une saisie sont mis en false (validation d'abandon a été demandé avant changement d'onglet)
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -43,8 +45,6 @@ namespace Mediatek86.vue
             RemplirComboCategorie(controle.GetAllRayons(), bdgInfosRayons, cbxInfosDvdRayons);
             RemplirDvdListeComplete();
             DvdListeSelection();
-            ActiverBoutonEnregDvd(false);
-            ActiverBoutonAnnulerSaisieDvd(false);
             AutoriserModifDvd(false);
             AutoriserModifDvdId(false);
             CancelAllSaisies();

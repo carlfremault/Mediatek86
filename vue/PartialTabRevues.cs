@@ -29,8 +29,8 @@ namespace Mediatek86.vue
         /// <summary>
         /// Ouverture de l'onglet Revues : 
         /// appel des méthodes pour remplir le datagrid des revues et des combos (genre, rayon, public)
-        /// Désactive boutons 'enregistrer' et 'annuler' qui ne doivent être actifs qu'en cas de modification/ajout d'une revue. 
-        /// Met le booleen 'saisieRevue' en 'false'
+        /// Active la protection 'readonly' des champs d'information et désactive boutons 'enregistrer' et 'annuler' qui ne doivent être actifs qu'en cas de modification/ajout d'une Revue.
+        /// Tous les booléens concernant une saisie sont mis en false (validation d'abandon a été demandé avant changement d'onglet)
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -45,8 +45,6 @@ namespace Mediatek86.vue
             RemplirComboCategorie(controle.GetAllRayons(), bdgInfosRayons, cbxInfosRevuesRayons);
             RemplirRevuesListeComplete();
             RevuesListeSelection();
-            ActiverBoutonEnregRevue(false);
-            ActiverBoutonAnnulerSaisieRevue(false);
             AutoriserModifRevue(false);
             AutoriserModifRevueId(false);
             CancelAllSaisies();

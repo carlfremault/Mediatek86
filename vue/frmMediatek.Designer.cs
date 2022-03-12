@@ -29,12 +29,12 @@ namespace Mediatek86.vue
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tabOngletsApplication = new System.Windows.Forms.TabControl();
             this.tabLivres = new System.Windows.Forms.TabPage();
             this.grpGestionLivres = new System.Windows.Forms.GroupBox();
@@ -287,6 +287,20 @@ namespace Mediatek86.vue
             this.label76 = new System.Windows.Forms.Label();
             this.btnCommandeDvdRechercher = new System.Windows.Forms.Button();
             this.tabAbonnementRevue = new System.Windows.Forms.TabPage();
+            this.grpGestionAbonnementRevue = new System.Windows.Forms.GroupBox();
+            this.btnAbonnementRevueSupprimer = new System.Windows.Forms.Button();
+            this.btnAbonnementRevueAjouter = new System.Windows.Forms.Button();
+            this.grpAbonnementRevue = new System.Windows.Forms.GroupBox();
+            this.dtpAbonnementRevueFinAbonnement = new System.Windows.Forms.DateTimePicker();
+            this.txbAbonnementRevueMontant = new System.Windows.Forms.TextBox();
+            this.label95 = new System.Windows.Forms.Label();
+            this.btnAbonnementRevueAnnuler = new System.Windows.Forms.Button();
+            this.btnAbonnementRevueValider = new System.Windows.Forms.Button();
+            this.label96 = new System.Windows.Forms.Label();
+            this.txbAbonnementRevueNumeroAbonnement = new System.Windows.Forms.TextBox();
+            this.label97 = new System.Windows.Forms.Label();
+            this.dtpAbonnementRevueDateCommande = new System.Windows.Forms.DateTimePicker();
+            this.label98 = new System.Windows.Forms.Label();
             this.grpAbonnementRevueRecherche = new System.Windows.Forms.GroupBox();
             this.chkAbonnementRevueEmpruntable = new System.Windows.Forms.CheckBox();
             this.label86 = new System.Windows.Forms.Label();
@@ -351,6 +365,8 @@ namespace Mediatek86.vue
             ((System.ComponentModel.ISupportInitialize)(this.pcbCommandeDvdImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCommandeDvdListe)).BeginInit();
             this.tabAbonnementRevue.SuspendLayout();
+            this.grpGestionAbonnementRevue.SuspendLayout();
+            this.grpAbonnementRevue.SuspendLayout();
             this.grpAbonnementRevueRecherche.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pcbAbonnementRevueImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAbonnementRevueListe)).BeginInit();
@@ -2477,23 +2493,23 @@ namespace Mediatek86.vue
             this.dgvCommandeLivresListe.AllowUserToDeleteRows = false;
             this.dgvCommandeLivresListe.AllowUserToResizeColumns = false;
             this.dgvCommandeLivresListe.AllowUserToResizeRows = false;
-            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle13.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle13.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle13.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvCommandeLivresListe.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle13;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvCommandeLivresListe.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvCommandeLivresListe.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle14.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle14.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle14.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle14.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvCommandeLivresListe.DefaultCellStyle = dataGridViewCellStyle14;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvCommandeLivresListe.DefaultCellStyle = dataGridViewCellStyle2;
             this.dgvCommandeLivresListe.Location = new System.Drawing.Point(140, 221);
             this.dgvCommandeLivresListe.MultiSelect = false;
             this.dgvCommandeLivresListe.Name = "dgvCommandeLivresListe";
@@ -2963,23 +2979,23 @@ namespace Mediatek86.vue
             this.dgvCommandeDvdListe.AllowUserToDeleteRows = false;
             this.dgvCommandeDvdListe.AllowUserToResizeColumns = false;
             this.dgvCommandeDvdListe.AllowUserToResizeRows = false;
-            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle15.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle15.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle15.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle15.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvCommandeDvdListe.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle15;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvCommandeDvdListe.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dgvCommandeDvdListe.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle16.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle16.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle16.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle16.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvCommandeDvdListe.DefaultCellStyle = dataGridViewCellStyle16;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvCommandeDvdListe.DefaultCellStyle = dataGridViewCellStyle4;
             this.dgvCommandeDvdListe.Location = new System.Drawing.Point(131, 244);
             this.dgvCommandeDvdListe.MultiSelect = false;
             this.dgvCommandeDvdListe.Name = "dgvCommandeDvdListe";
@@ -3161,6 +3177,8 @@ namespace Mediatek86.vue
             // 
             // tabAbonnementRevue
             // 
+            this.tabAbonnementRevue.Controls.Add(this.grpGestionAbonnementRevue);
+            this.tabAbonnementRevue.Controls.Add(this.grpAbonnementRevue);
             this.tabAbonnementRevue.Controls.Add(this.grpAbonnementRevueRecherche);
             this.tabAbonnementRevue.Location = new System.Drawing.Point(4, 22);
             this.tabAbonnementRevue.Name = "tabAbonnementRevue";
@@ -3170,6 +3188,161 @@ namespace Mediatek86.vue
             this.tabAbonnementRevue.Text = "Abonnement Revue";
             this.tabAbonnementRevue.UseVisualStyleBackColor = true;
             this.tabAbonnementRevue.Enter += new System.EventHandler(this.tabAbonnementRevue_Enter);
+            // 
+            // grpGestionAbonnementRevue
+            // 
+            this.grpGestionAbonnementRevue.Controls.Add(this.btnAbonnementRevueSupprimer);
+            this.grpGestionAbonnementRevue.Controls.Add(this.btnAbonnementRevueAjouter);
+            this.grpGestionAbonnementRevue.Location = new System.Drawing.Point(6, 506);
+            this.grpGestionAbonnementRevue.Name = "grpGestionAbonnementRevue";
+            this.grpGestionAbonnementRevue.Size = new System.Drawing.Size(859, 63);
+            this.grpGestionAbonnementRevue.TabIndex = 23;
+            this.grpGestionAbonnementRevue.TabStop = false;
+            this.grpGestionAbonnementRevue.Text = "Gestion des abonnements";
+            // 
+            // btnAbonnementRevueSupprimer
+            // 
+            this.btnAbonnementRevueSupprimer.Enabled = false;
+            this.btnAbonnementRevueSupprimer.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAbonnementRevueSupprimer.Location = new System.Drawing.Point(433, 19);
+            this.btnAbonnementRevueSupprimer.Name = "btnAbonnementRevueSupprimer";
+            this.btnAbonnementRevueSupprimer.Size = new System.Drawing.Size(420, 30);
+            this.btnAbonnementRevueSupprimer.TabIndex = 2;
+            this.btnAbonnementRevueSupprimer.TabStop = false;
+            this.btnAbonnementRevueSupprimer.Text = "Supprimer";
+            this.btnAbonnementRevueSupprimer.UseVisualStyleBackColor = true;
+            this.btnAbonnementRevueSupprimer.Click += new System.EventHandler(this.btnAbonnementRevueSupprimer_Click);
+            // 
+            // btnAbonnementRevueAjouter
+            // 
+            this.btnAbonnementRevueAjouter.Enabled = false;
+            this.btnAbonnementRevueAjouter.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAbonnementRevueAjouter.Location = new System.Drawing.Point(6, 19);
+            this.btnAbonnementRevueAjouter.Name = "btnAbonnementRevueAjouter";
+            this.btnAbonnementRevueAjouter.Size = new System.Drawing.Size(420, 30);
+            this.btnAbonnementRevueAjouter.TabIndex = 0;
+            this.btnAbonnementRevueAjouter.TabStop = false;
+            this.btnAbonnementRevueAjouter.Text = "Ajouter";
+            this.btnAbonnementRevueAjouter.UseVisualStyleBackColor = true;
+            this.btnAbonnementRevueAjouter.Click += new System.EventHandler(this.btnAbonnementRevueAjouter_Click);
+            // 
+            // grpAbonnementRevue
+            // 
+            this.grpAbonnementRevue.Controls.Add(this.dtpAbonnementRevueFinAbonnement);
+            this.grpAbonnementRevue.Controls.Add(this.txbAbonnementRevueMontant);
+            this.grpAbonnementRevue.Controls.Add(this.label95);
+            this.grpAbonnementRevue.Controls.Add(this.btnAbonnementRevueAnnuler);
+            this.grpAbonnementRevue.Controls.Add(this.btnAbonnementRevueValider);
+            this.grpAbonnementRevue.Controls.Add(this.label96);
+            this.grpAbonnementRevue.Controls.Add(this.txbAbonnementRevueNumeroAbonnement);
+            this.grpAbonnementRevue.Controls.Add(this.label97);
+            this.grpAbonnementRevue.Controls.Add(this.dtpAbonnementRevueDateCommande);
+            this.grpAbonnementRevue.Controls.Add(this.label98);
+            this.grpAbonnementRevue.Enabled = false;
+            this.grpAbonnementRevue.Location = new System.Drawing.Point(6, 383);
+            this.grpAbonnementRevue.Name = "grpAbonnementRevue";
+            this.grpAbonnementRevue.Size = new System.Drawing.Size(859, 117);
+            this.grpAbonnementRevue.TabIndex = 19;
+            this.grpAbonnementRevue.TabStop = false;
+            this.grpAbonnementRevue.Text = "Détails abonnement";
+            // 
+            // dtpAbonnementRevueFinAbonnement
+            // 
+            this.dtpAbonnementRevueFinAbonnement.Enabled = false;
+            this.dtpAbonnementRevueFinAbonnement.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtpAbonnementRevueFinAbonnement.Location = new System.Drawing.Point(463, 46);
+            this.dtpAbonnementRevueFinAbonnement.Name = "dtpAbonnementRevueFinAbonnement";
+            this.dtpAbonnementRevueFinAbonnement.Size = new System.Drawing.Size(100, 20);
+            this.dtpAbonnementRevueFinAbonnement.TabIndex = 46;
+            // 
+            // txbAbonnementRevueMontant
+            // 
+            this.txbAbonnementRevueMontant.Enabled = false;
+            this.txbAbonnementRevueMontant.Location = new System.Drawing.Point(463, 20);
+            this.txbAbonnementRevueMontant.Name = "txbAbonnementRevueMontant";
+            this.txbAbonnementRevueMontant.Size = new System.Drawing.Size(100, 20);
+            this.txbAbonnementRevueMontant.TabIndex = 16;
+            // 
+            // label95
+            // 
+            this.label95.AutoSize = true;
+            this.label95.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label95.Location = new System.Drawing.Point(350, 49);
+            this.label95.Name = "label95";
+            this.label95.Size = new System.Drawing.Size(105, 13);
+            this.label95.TabIndex = 45;
+            this.label95.Text = "Fin abonnement :";
+            // 
+            // btnAbonnementRevueAnnuler
+            // 
+            this.btnAbonnementRevueAnnuler.Enabled = false;
+            this.btnAbonnementRevueAnnuler.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAbonnementRevueAnnuler.Location = new System.Drawing.Point(353, 72);
+            this.btnAbonnementRevueAnnuler.Name = "btnAbonnementRevueAnnuler";
+            this.btnAbonnementRevueAnnuler.Size = new System.Drawing.Size(210, 33);
+            this.btnAbonnementRevueAnnuler.TabIndex = 22;
+            this.btnAbonnementRevueAnnuler.Text = "Annuler";
+            this.btnAbonnementRevueAnnuler.UseVisualStyleBackColor = true;
+            this.btnAbonnementRevueAnnuler.Click += new System.EventHandler(this.btnAbonnementRevueAnnuler_Click);
+            // 
+            // btnAbonnementRevueValider
+            // 
+            this.btnAbonnementRevueValider.Enabled = false;
+            this.btnAbonnementRevueValider.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAbonnementRevueValider.Location = new System.Drawing.Point(140, 72);
+            this.btnAbonnementRevueValider.Name = "btnAbonnementRevueValider";
+            this.btnAbonnementRevueValider.Size = new System.Drawing.Size(210, 33);
+            this.btnAbonnementRevueValider.TabIndex = 20;
+            this.btnAbonnementRevueValider.Text = "Valider";
+            this.btnAbonnementRevueValider.UseVisualStyleBackColor = true;
+            this.btnAbonnementRevueValider.Click += new System.EventHandler(this.btnAbonnementRevueValider_Click);
+            // 
+            // label96
+            // 
+            this.label96.AutoSize = true;
+            this.label96.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label96.Location = new System.Drawing.Point(350, 23);
+            this.label96.Name = "label96";
+            this.label96.Size = new System.Drawing.Size(65, 13);
+            this.label96.TabIndex = 4;
+            this.label96.Text = "Montant  :";
+            // 
+            // txbAbonnementRevueNumeroAbonnement
+            // 
+            this.txbAbonnementRevueNumeroAbonnement.Enabled = false;
+            this.txbAbonnementRevueNumeroAbonnement.Location = new System.Drawing.Point(140, 20);
+            this.txbAbonnementRevueNumeroAbonnement.Name = "txbAbonnementRevueNumeroAbonnement";
+            this.txbAbonnementRevueNumeroAbonnement.Size = new System.Drawing.Size(100, 20);
+            this.txbAbonnementRevueNumeroAbonnement.TabIndex = 10;
+            // 
+            // label97
+            // 
+            this.label97.AutoSize = true;
+            this.label97.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label97.Location = new System.Drawing.Point(6, 49);
+            this.label97.Name = "label97";
+            this.label97.Size = new System.Drawing.Size(124, 13);
+            this.label97.TabIndex = 2;
+            this.label97.Text = "Date de commande :";
+            // 
+            // dtpAbonnementRevueDateCommande
+            // 
+            this.dtpAbonnementRevueDateCommande.Enabled = false;
+            this.dtpAbonnementRevueDateCommande.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtpAbonnementRevueDateCommande.Location = new System.Drawing.Point(140, 46);
+            this.dtpAbonnementRevueDateCommande.Name = "dtpAbonnementRevueDateCommande";
+            this.dtpAbonnementRevueDateCommande.Size = new System.Drawing.Size(100, 20);
+            this.dtpAbonnementRevueDateCommande.TabIndex = 12;
+            // 
+            // label98
+            // 
+            this.label98.AutoSize = true;
+            this.label98.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label98.Location = new System.Drawing.Point(6, 23);
+            this.label98.Name = "label98";
+            this.label98.Size = new System.Drawing.Size(131, 13);
+            this.label98.TabIndex = 0;
+            this.label98.Text = "Numéro abonnement :";
             // 
             // grpAbonnementRevueRecherche
             // 
@@ -3255,23 +3428,23 @@ namespace Mediatek86.vue
             this.dgvAbonnementRevueListe.AllowUserToDeleteRows = false;
             this.dgvAbonnementRevueListe.AllowUserToResizeColumns = false;
             this.dgvAbonnementRevueListe.AllowUserToResizeRows = false;
-            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle17.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle17.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle17.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle17.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvAbonnementRevueListe.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle17;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvAbonnementRevueListe.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             this.dgvAbonnementRevueListe.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle18.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle18.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle18.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle18.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle18.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle18.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvAbonnementRevueListe.DefaultCellStyle = dataGridViewCellStyle18;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvAbonnementRevueListe.DefaultCellStyle = dataGridViewCellStyle6;
             this.dgvAbonnementRevueListe.Location = new System.Drawing.Point(131, 223);
             this.dgvAbonnementRevueListe.MultiSelect = false;
             this.dgvAbonnementRevueListe.Name = "dgvAbonnementRevueListe";
@@ -3282,6 +3455,7 @@ namespace Mediatek86.vue
             this.dgvAbonnementRevueListe.TabIndex = 52;
             this.dgvAbonnementRevueListe.TabStop = false;
             this.dgvAbonnementRevueListe.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvAbonnementRevueListe_ColumnHeaderMouseClick);
+            this.dgvAbonnementRevueListe.SelectionChanged += new System.EventHandler(this.dgvAbonnementRevueListe_SelectionChanged);
             // 
             // txbAbonnementRevueImage
             // 
@@ -3492,6 +3666,9 @@ namespace Mediatek86.vue
             ((System.ComponentModel.ISupportInitialize)(this.pcbCommandeDvdImage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCommandeDvdListe)).EndInit();
             this.tabAbonnementRevue.ResumeLayout(false);
+            this.grpGestionAbonnementRevue.ResumeLayout(false);
+            this.grpAbonnementRevue.ResumeLayout(false);
+            this.grpAbonnementRevue.PerformLayout();
             this.grpAbonnementRevueRecherche.ResumeLayout(false);
             this.grpAbonnementRevueRecherche.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pcbAbonnementRevueImage)).EndInit();
@@ -3777,6 +3954,20 @@ namespace Mediatek86.vue
         private System.Windows.Forms.Label label93;
         private System.Windows.Forms.DateTimePicker dtpCommandeDvdDateCommande;
         private System.Windows.Forms.Label label94;
+        private System.Windows.Forms.GroupBox grpGestionAbonnementRevue;
+        private System.Windows.Forms.Button btnAbonnementRevueSupprimer;
+        private System.Windows.Forms.Button btnAbonnementRevueAjouter;
+        private System.Windows.Forms.GroupBox grpAbonnementRevue;
+        private System.Windows.Forms.TextBox txbAbonnementRevueMontant;
+        private System.Windows.Forms.Label label95;
+        private System.Windows.Forms.Button btnAbonnementRevueAnnuler;
+        private System.Windows.Forms.Button btnAbonnementRevueValider;
+        private System.Windows.Forms.Label label96;
+        private System.Windows.Forms.TextBox txbAbonnementRevueNumeroAbonnement;
+        private System.Windows.Forms.Label label97;
+        private System.Windows.Forms.DateTimePicker dtpAbonnementRevueDateCommande;
+        private System.Windows.Forms.Label label98;
+        private System.Windows.Forms.DateTimePicker dtpAbonnementRevueFinAbonnement;
     }
 }
 

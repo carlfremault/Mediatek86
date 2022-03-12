@@ -125,6 +125,9 @@ namespace Mediatek86.vue
             accesReceptionExemplaireGroupBox(true);
         }
 
+        /// <summary>
+        /// Réceptionne et affiche les exemplaires d'une revue
+        /// </summary>
         private void afficheReceptionExemplairesRevue()
         {
             string idDocument = txbReceptionRevueNumero.Text.Trim();

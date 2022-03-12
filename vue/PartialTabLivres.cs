@@ -29,8 +29,8 @@ namespace Mediatek86.vue
         /// <summary>
         /// Ouverture de l'onglet Livres : 
         /// appel des méthodes pour remplir le datagrid des livres et des combos (genre, rayon, public)
-        /// Désactive boutons 'enregistrer' et 'annuler' qui ne doivent être actifs qu'en cas de modification/ajout d'un livre. 
-        /// Met le booleen 'saisieLivre' en 'false'
+        /// Active la protection 'readonly' des champs d'information et désactive boutons 'enregistrer' et 'annuler' qui ne doivent être actifs qu'en cas de modification/ajout d'un Livre.
+        /// Tous les booléens concernant une saisie sont mis en false (validation d'abandon a été demandé avant changement d'onglet)
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -45,8 +45,6 @@ namespace Mediatek86.vue
             RemplirComboCategorie(controle.GetAllRayons(), bdgInfosRayons, cbxInfosLivresRayons);
             RemplirLivresListeComplete();
             LivresListeSelection();
-            ActiverBoutonEnregLivre(false);
-            ActiverBoutonAnnulerSaisieLivre(false);
             AutoriserModifLivre(false);
             AutoriserModifLivreId(false);
             CancelAllSaisies();

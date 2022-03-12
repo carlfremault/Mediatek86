@@ -83,6 +83,24 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
+        /// Affichage d'un MessageBox pour demander validation de suppression d'un abonnement
+        /// </summary>
+        /// <returns></returns>
+        private bool ValidationSuppressionAbonnement()
+        {
+            return (MessageBox.Show("Etes-vous sûr de vouloir supprimer cet abonnement ?", "Confirmation de suppression", MessageBoxButtons.YesNo) == DialogResult.Yes);
+        }
+
+        /// <summary>
+        /// Affichage d'un MessageBox pour demander validation de suppression d'une commande
+        /// </summary>
+        /// <returns></returns>
+        private bool ValidationSuppressionCommande()
+        {
+            return (MessageBox.Show("Etes-vous sûr de vouloir supprimer cette commande ?", "Confirmation de suppression", MessageBoxButtons.YesNo) == DialogResult.Yes);
+        }
+
+        /// <summary>
         /// Affichage d'un MessageBox pour demander validation de changement d'état de suivi
         /// </summary>
         /// <param name="libelleSuivi"></param>
@@ -104,6 +122,8 @@ namespace Mediatek86.vue
             saisieLivre = false;
             saisieRevue = false;
             saisieCommandeLivres = false;
+            saisieCommandeDvd = false;
+            saisieAbonnementRevue = false;
         }
 
         /// <summary>
@@ -151,5 +171,7 @@ namespace Mediatek86.vue
         }
 
         #endregion
+
+
     }
 }

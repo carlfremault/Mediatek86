@@ -224,7 +224,7 @@ namespace Mediatek86.modele
 
         /// <summary>
         /// Retourne les exemplaires d'une revue
-        /// </summary>
+        /// <param name="idDoc"></param>
         /// <returns>Liste d'objets Exemplaire</returns>
         public static List<Exemplaire> GetExemplairesRevue(string idDoc)
         {
@@ -732,6 +732,64 @@ namespace Mediatek86.modele
                 {
                     {"@idsuivi", idSuivi },
                     {"@idcommande", idCommandeDocument },                  
+                };
+                BddMySql curs = BddMySql.GetInstance(connectionString);
+                curs.ReqUpdate(requetes, parameters);
+                curs.Close();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Insertion d'un abonnement dans la base de données
+        /// </summary>
+        /// <param name="abonnement">L'abonnement à ajouter</param>
+        /// <returns>Le message de confirmation ou d'erreur</returns>
+        public static string CreerAbonnement(Abonnement abonnement)
+        {
+            try
+            {
+                List<string> requetes = new List<string>();
+                requetes.Add("insert into commande values (@id, @dateCommande, @montant) ");
+                requetes.Add("insert into abonnement values (@id, @dateFinAbonnement, @idRevue) ");
+                Dictionary<string, object> parameters = new Dictionary<string, object>
+                {
+                    {"@id", abonnement.Id },
+                    {"@dateCommande", abonnement.DateCommande },
+                    {"@montant", abonnement.Montant },
+                    {"@dateFinAbonnement", abonnement.DateFinAbonnement },
+                    {"@idRevue", abonnement.IdRevue }
+                };
+                BddMySql curs = BddMySql.GetInstance(connectionString);
+                curs.ReqUpdate(requetes, parameters);
+                curs.Close();
+                return "OK";
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+        }
+
+        /// <summary>
+        /// Suppression d'un abonnement de la base de données
+        /// </summary>
+        /// <param name="id">identifiant de l'abonnement à supprimer</param>
+        /// <returns>true si la modification a pu se faire</returns>
+        public static bool SupprAbonnement(string id)
+        {
+            try
+            {
+                List<string> requetes = new List<string>();
+                requetes.Add("delete from abonnement where id=@id");
+                requetes.Add("delete from commande where id=@id");
+                Dictionary<string, object> parameters = new Dictionary<string, object>
+                {
+                    {"@id", id },
                 };
                 BddMySql curs = BddMySql.GetInstance(connectionString);
                 curs.ReqUpdate(requetes, parameters);
