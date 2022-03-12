@@ -124,7 +124,31 @@ namespace Mediatek86.vue
             }            
         }
 
-
+        /// <summary>
+        /// Tri sur une colonne pour les listes CommandeDocument
+        /// </summary>
+        /// <param name="titreColonne"></param>
+        /// <returns></returns>
+        private List<CommandeDocument> SortCommandeDocumentList(string titreColonne)
+        {
+            List<CommandeDocument> sortedList = new List<CommandeDocument>();
+            switch (titreColonne)
+            {
+                case "Date":
+                    sortedList = lesCommandeDocument.OrderBy(o => o.DateCommande).Reverse().ToList();
+                    break;
+                case "Montant":
+                    sortedList = lesCommandeDocument.OrderBy(o => o.Montant).Reverse().ToList();
+                    break;
+                case "Exemplaires":
+                    sortedList = lesCommandeDocument.OrderBy(o => o.NbExemplaires).Reverse().ToList();
+                    break;
+                case "Etat":
+                    sortedList = lesCommandeDocument.OrderBy(o => o.IdSuivi).ToList();
+                    break;
+            }
+            return sortedList;
+        }
 
         #endregion
     }

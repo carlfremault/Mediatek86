@@ -17,6 +17,9 @@ namespace Mediatek86.vue
         // ONGLET "COMMANDE DE LIVRES"
         //-----------------------------------------------------------
 
+        /// <summary>
+        /// Boolean true si on est en train de faire une saisie de commande de livre
+        /// </summary>
         private bool saisieCommandeLivres = false;
 
         /// <summary>
@@ -79,7 +82,7 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// Recherche d'un numéro de livre et affiche ses informations
+        /// Recherche d'un numéro de livre et affichage des informations
         /// </summary>
         private void CommandeLivresRechercher()
         {
@@ -92,7 +95,7 @@ namespace Mediatek86.vue
                 }
                 else
                 {
-                    MessageBox.Show("numéro introuvable");
+                    MessageBox.Show("Numéro introuvable");
                     VideCommandeLivresInfos();
                 }
             }
@@ -128,8 +131,7 @@ namespace Mediatek86.vue
             {
                 accesGestionCommandeLivresGroupBox(false);
                 VideCommandeLivresInfos();
-            }
-           
+            }           
         }
 
         /// <summary>
@@ -164,7 +166,7 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// Affichage des détails d'une commande
+        /// Affichage des détails d'une commande de livre
         /// </summary>
         /// <param name="commandeDocument"></param>
         private void AfficheCommandeLivresCommande(CommandeDocument commandeDocument)
@@ -235,22 +237,7 @@ namespace Mediatek86.vue
         private void dgvCommandeLivresListe_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             string titreColonne = dgvCommandeLivresListe.Columns[e.ColumnIndex].HeaderText;
-            List<CommandeDocument> sortedList = new List<CommandeDocument>();
-            switch (titreColonne)
-            {
-                case "Date":
-                    sortedList = lesCommandeDocument.OrderBy(o => o.DateCommande).Reverse().ToList();
-                    break;
-                case "Montant":
-                    sortedList = lesCommandeDocument.OrderBy(o => o.Montant).Reverse().ToList();
-                    break;
-                case "Exemplaires":
-                    sortedList = lesCommandeDocument.OrderBy(o => o.NbExemplaires).Reverse().ToList();
-                    break;
-                case "Etat":
-                    sortedList = lesCommandeDocument.OrderBy(o => o.IdSuivi).ToList();
-                    break;
-            }
+            List<CommandeDocument> sortedList = SortCommandeDocumentList(titreColonne);
             RemplirCommandeLivresListe(sortedList);
         }
 
@@ -274,8 +261,7 @@ namespace Mediatek86.vue
             else
             {
                 CommandeLivresListeSelection();
-            }
-       
+            }       
         }
 
         /// <summary>
@@ -436,9 +422,9 @@ namespace Mediatek86.vue
             CommandeDocument laCommandeDocument = new CommandeDocument(id, dateCommande, montant, nbExemplaires, idLivreDvd, idSuivi, libelleSuivi);
 
             String message = controle.CreerCommandeDocument(laCommandeDocument);
-            if (message.Substring(0, 7) == "Validé!")
+            if (message.Substring(0, 2) == "OK")
             {
-                MessageBox.Show(message, "Information");
+                MessageBox.Show("Commande validée!", "Information");
             }
             else if (message.Substring(0, 9) == "Duplicate")
             {
@@ -457,7 +443,7 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// Evénement clic sur le bouton de suppression d'une CommandeDocument
+        /// Evénement clic sur le bouton de suppression d'une commande de livre
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -478,64 +464,51 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// Modification d'état de suivi de la CommandeDocument : étape 1 "relancée"
+        /// Modification d'état de suivi d'une commande livre : étape 1 "relancée"
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void btnCommandeLivresRelancer_Click(object sender, EventArgs e)
         {
             CommandeDocument commandeDocument = (CommandeDocument)bdgCommandesLivresListe.List[bdgCommandesLivresListe.Position];
-            // les identifiants des états de suivi dans la bdd ne sont pas 'zero based' !
-            int nouvelEtat = commandeDocument.IdSuivi;
-            if (ValidationModifEtatSuivi(lesSuivis[nouvelEtat].Libelle))
-            {
-                if (controle.ModifSuiviCommandeDocument(commandeDocument.Id, lesSuivis[1].Id))
-                {
-                    AfficheCommandeDocumentLivre();
-                }
-                else
-                {
-                    MessageBox.Show("Une erreur s'est produite.", "Erreur");
-                }
-            }
+            Suivi nouveauSuivi = lesSuivis.Find(suivi => suivi.Libelle == "Relancée");
+            ModifEtatSuiviCommandeDocumentLivre(commandeDocument.Id, nouveauSuivi);
         }
 
         /// <summary>
-        /// Modification d'état de suivi de la CommandeDocument : étape 2 "livrée"
+        /// Modification d'état de suivi d'une commande livre  : étape 2 "livrée"
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void btnCommandeLivresConfirmerLivraison_Click(object sender, EventArgs e)
         {
             CommandeDocument commandeDocument = (CommandeDocument)bdgCommandesLivresListe.List[bdgCommandesLivresListe.Position];
-            // les identifiants des états de suivi dans la bdd ne sont pas 'zero based' !
-            int nouvelEtat = commandeDocument.IdSuivi;
-            if (ValidationModifEtatSuivi(lesSuivis[nouvelEtat].Libelle))
-            {
-                if (controle.ModifSuiviCommandeDocument(commandeDocument.Id, lesSuivis[2].Id))
-                {
-                    AfficheCommandeDocumentLivre();
-                }
-                else
-                {
-                    MessageBox.Show("Une erreur s'est produite.", "Erreur");
-                }
-            }
+            Suivi nouveauSuivi = lesSuivis.Find(suivi => suivi.Libelle == "Livrée");
+            ModifEtatSuiviCommandeDocumentLivre(commandeDocument.Id, nouveauSuivi);
         }
 
         /// <summary>
-        /// Modification d'état de suivi de la CommandeDocument : étape 3 "réglée"
+        /// Modification d'état de suivi d'une commande livre  : étape 3 "réglée"
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void btnCommandeLivresRegler_Click(object sender, EventArgs e)
         {
             CommandeDocument commandeDocument = (CommandeDocument)bdgCommandesLivresListe.List[bdgCommandesLivresListe.Position];
-            // les identifiants des états de suivi dans la bdd ne sont pas 'zero based' !
-            int nouvelEtat = commandeDocument.IdSuivi;
-            if (ValidationModifEtatSuivi(lesSuivis[nouvelEtat].Libelle))
+            Suivi nouveauSuivi = lesSuivis.Find(suivi => suivi.Libelle == "Réglée");
+            ModifEtatSuiviCommandeDocumentLivre(commandeDocument.Id, nouveauSuivi);
+        }
+
+        /// <summary>
+        /// Demande de modification de l'état de suivi au contrôleur après validation utilisateur
+        /// </summary>
+        /// <param name="idCommandeDocument"></param>
+        /// <param name="nouveauSuivi"></param>
+        private void ModifEtatSuiviCommandeDocumentLivre(string idCommandeDocument, Suivi nouveauSuivi)
+        {
+            if (ValidationModifEtatSuivi(nouveauSuivi.Libelle))
             {
-                if (controle.ModifSuiviCommandeDocument(commandeDocument.Id, lesSuivis[3].Id))
+                if (controle.ModifSuiviCommandeDocument(idCommandeDocument, nouveauSuivi.Id))
                 {
                     AfficheCommandeDocumentLivre();
                 }
@@ -544,7 +517,6 @@ namespace Mediatek86.vue
                     MessageBox.Show("Une erreur s'est produite.", "Erreur");
                 }
             }
-           
         }
     }
 }

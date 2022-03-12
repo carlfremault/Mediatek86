@@ -680,7 +680,7 @@ namespace Mediatek86.modele
                 BddMySql curs = BddMySql.GetInstance(connectionString);
                 curs.ReqUpdate(requetes, parameters);
                 curs.Close();
-                return "Validé!";
+                return "OK";
             }
             catch (Exception e)
             {
