@@ -93,11 +93,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="controleur\Controle.cs" />
+    <Compile Include="metier\Abonnement.cs" />
+    <Compile Include="metier\Commande.cs" />
+    <Compile Include="metier\CommandeDocument.cs" />
     <Compile Include="metier\Dvd.cs" />
     <Compile Include="metier\Etat.cs" />
+    <Compile Include="metier\FinAbonnement.cs" />
     <Compile Include="metier\LivreDvd.cs" />
     <Compile Include="metier\Public.cs" />
     <Compile Include="metier\Rayon.cs" />
+    <Compile Include="metier\Suivi.cs" />
     <Compile Include="modele\Dao.cs" />
     <Compile Include="bdd\BddMySql.cs" />
     <Compile Include="metier\Categorie.cs" />
@@ -105,6 +110,12 @@
     <Compile Include="metier\Livre.cs" />
     <Compile Include="metier\Exemplaire.cs" />
     <Compile Include="metier\Revue.cs" />
+    <Compile Include="vue\AlerteFinAbonnements.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="vue\AlerteFinAbonnements.Designer.cs">
+      <DependentUpon>AlerteFinAbonnements.cs</DependentUpon>
+    </Compile>
     <Compile Include="vue\FrmMediatek.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -114,6 +125,27 @@
     <Compile Include="metier\Genre.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="vue\PartialTabAbonnementsRevue.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="vue\PartialTabCommandeDVD.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="vue\PartialTabCommandeLivres.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="vue\PartialTabDvd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="vue\PartialTabLivres.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="vue\PartialTabReceptionExemplaire.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="vue\PartialTabRevues.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -123,6 +155,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="vue\AlerteFinAbonnements.resx">
+      <DependentUpon>AlerteFinAbonnements.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="vue\FrmMediatek.resx">
       <DependentUpon>FrmMediatek.cs</DependentUpon>
     </EmbeddedResource>
