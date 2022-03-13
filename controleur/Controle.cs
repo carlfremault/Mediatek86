@@ -3,6 +3,7 @@ using Mediatek86.modele;
 using Mediatek86.metier;
 using Mediatek86.vue;
 using System;
+using System.Linq;
 
 namespace Mediatek86.controleur
 {
@@ -304,12 +305,9 @@ namespace Mediatek86.controleur
         {
             List<Exemplaire> lesExemplaires = GetExemplairesRevue(abonnement.IdRevue);
             bool parution = false;
-            foreach(Exemplaire exemplaire in lesExemplaires)
+            foreach (Exemplaire exemplaire in lesExemplaires.Where(ex => ParutionDansAbonnement(abonnement.DateCommande, abonnement.DateFinAbonnement, ex.DateAchat)))
             {
-                if(ParutionDansAbonnement(abonnement.DateCommande, abonnement.DateFinAbonnement, exemplaire.DateAchat))
-                {
                     parution = true;
-                }
             }
             return parution;
         }

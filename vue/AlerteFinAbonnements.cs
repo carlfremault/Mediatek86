@@ -9,7 +9,7 @@ namespace Mediatek86.vue
     public partial class AlerteFinAbonnements : Form
     {
         private readonly BindingSource bdgAlerteAbonnements = new BindingSource();
-        private List<FinAbonnement> lesFinAbonnement = new List<FinAbonnement>();
+        private List<FinAbonnement> lesFinAbonnement;
 
         /// <summary>
         /// Constructeur. Remplit le tableau des abonnements
