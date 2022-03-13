@@ -1,0 +1,6 @@
+﻿C:\Users\carlf\source\repos\Mediatek86Tests\controleur\ControleTests.cs
+C:\Users\carlf\source\repos\Mediatek86Tests\Properties\AssemblyInfo.cs
+C:\Users\carlf\source\repos\Mediatek86gestion\packages\MSTest.TestAdapter.2.1.2\build\_common\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll
+C:\Users\carlf\source\repos\Mediatek86gestion\packages\MSTest.TestAdapter.2.1.2\build\_common\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll
+C:\Users\carlf\source\repos\Mediatek86gestion\packages\MSTest.TestAdapter.2.1.2\build\_common\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll
+C:\Users\carlf\source\repos\Mediatek86Tests\packages.config
