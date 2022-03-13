@@ -29,7 +29,7 @@ namespace Mediatek86.controleur
             lesPublics = Dao.GetAllPublics();
             lesSuivis = Dao.GetAllSuivis();
             FrmMediatek frmMediatek = new FrmMediatek(this);
-            frmMediatek.ShowDialog();
+            frmMediatek.ShowDialog();         
         }
 
         /// <summary>
@@ -146,6 +146,11 @@ namespace Mediatek86.controleur
         public List<Abonnement> GetAbonnement(string idDocument)
         {
             return Dao.GetAbonnement(idDocument);
+        }
+
+        public List<FinAbonnement> GetFinAbonnement()
+        {
+            return Dao.GetFinAbonnement();
         }
 
         /// <summary>

@@ -3207,8 +3207,7 @@ namespace Mediatek86.vue
             this.btnAbonnementRevueSupprimer.Location = new System.Drawing.Point(433, 19);
             this.btnAbonnementRevueSupprimer.Name = "btnAbonnementRevueSupprimer";
             this.btnAbonnementRevueSupprimer.Size = new System.Drawing.Size(420, 30);
-            this.btnAbonnementRevueSupprimer.TabIndex = 2;
-            this.btnAbonnementRevueSupprimer.TabStop = false;
+            this.btnAbonnementRevueSupprimer.TabIndex = 6;
             this.btnAbonnementRevueSupprimer.Text = "Supprimer";
             this.btnAbonnementRevueSupprimer.UseVisualStyleBackColor = true;
             this.btnAbonnementRevueSupprimer.Click += new System.EventHandler(this.btnAbonnementRevueSupprimer_Click);
@@ -3220,8 +3219,7 @@ namespace Mediatek86.vue
             this.btnAbonnementRevueAjouter.Location = new System.Drawing.Point(6, 19);
             this.btnAbonnementRevueAjouter.Name = "btnAbonnementRevueAjouter";
             this.btnAbonnementRevueAjouter.Size = new System.Drawing.Size(420, 30);
-            this.btnAbonnementRevueAjouter.TabIndex = 0;
-            this.btnAbonnementRevueAjouter.TabStop = false;
+            this.btnAbonnementRevueAjouter.TabIndex = 5;
             this.btnAbonnementRevueAjouter.Text = "Ajouter";
             this.btnAbonnementRevueAjouter.UseVisualStyleBackColor = true;
             this.btnAbonnementRevueAjouter.Click += new System.EventHandler(this.btnAbonnementRevueAjouter_Click);
@@ -3253,7 +3251,7 @@ namespace Mediatek86.vue
             this.dtpAbonnementRevueFinAbonnement.Location = new System.Drawing.Point(463, 46);
             this.dtpAbonnementRevueFinAbonnement.Name = "dtpAbonnementRevueFinAbonnement";
             this.dtpAbonnementRevueFinAbonnement.Size = new System.Drawing.Size(100, 20);
-            this.dtpAbonnementRevueFinAbonnement.TabIndex = 46;
+            this.dtpAbonnementRevueFinAbonnement.TabIndex = 16;
             // 
             // txbAbonnementRevueMontant
             // 
@@ -3261,7 +3259,7 @@ namespace Mediatek86.vue
             this.txbAbonnementRevueMontant.Location = new System.Drawing.Point(463, 20);
             this.txbAbonnementRevueMontant.Name = "txbAbonnementRevueMontant";
             this.txbAbonnementRevueMontant.Size = new System.Drawing.Size(100, 20);
-            this.txbAbonnementRevueMontant.TabIndex = 16;
+            this.txbAbonnementRevueMontant.TabIndex = 14;
             // 
             // label95
             // 
@@ -3383,6 +3381,7 @@ namespace Mediatek86.vue
             this.chkAbonnementRevueEmpruntable.Name = "chkAbonnementRevueEmpruntable";
             this.chkAbonnementRevueEmpruntable.Size = new System.Drawing.Size(15, 14);
             this.chkAbonnementRevueEmpruntable.TabIndex = 59;
+            this.chkAbonnementRevueEmpruntable.TabStop = false;
             this.chkAbonnementRevueEmpruntable.UseVisualStyleBackColor = true;
             // 
             // label86
@@ -3402,6 +3401,7 @@ namespace Mediatek86.vue
             this.txbAbonnementRevueDelaiMiseADispo.ReadOnly = true;
             this.txbAbonnementRevueDelaiMiseADispo.Size = new System.Drawing.Size(207, 20);
             this.txbAbonnementRevueDelaiMiseADispo.TabIndex = 57;
+            this.txbAbonnementRevueDelaiMiseADispo.TabStop = false;
             // 
             // pcbAbonnementRevueImage
             // 
@@ -3464,6 +3464,7 @@ namespace Mediatek86.vue
             this.txbAbonnementRevueImage.ReadOnly = true;
             this.txbAbonnementRevueImage.Size = new System.Drawing.Size(423, 20);
             this.txbAbonnementRevueImage.TabIndex = 50;
+            this.txbAbonnementRevueImage.TabStop = false;
             // 
             // txbAbonnementRevueRayon
             // 
@@ -3472,6 +3473,7 @@ namespace Mediatek86.vue
             this.txbAbonnementRevueRayon.ReadOnly = true;
             this.txbAbonnementRevueRayon.Size = new System.Drawing.Size(207, 20);
             this.txbAbonnementRevueRayon.TabIndex = 49;
+            this.txbAbonnementRevueRayon.TabStop = false;
             // 
             // txbAbonnementRevuePublic
             // 
@@ -3480,6 +3482,7 @@ namespace Mediatek86.vue
             this.txbAbonnementRevuePublic.ReadOnly = true;
             this.txbAbonnementRevuePublic.Size = new System.Drawing.Size(207, 20);
             this.txbAbonnementRevuePublic.TabIndex = 48;
+            this.txbAbonnementRevuePublic.TabStop = false;
             // 
             // txbAbonnementRevueGenre
             // 
@@ -3488,6 +3491,7 @@ namespace Mediatek86.vue
             this.txbAbonnementRevueGenre.ReadOnly = true;
             this.txbAbonnementRevueGenre.Size = new System.Drawing.Size(207, 20);
             this.txbAbonnementRevueGenre.TabIndex = 47;
+            this.txbAbonnementRevueGenre.TabStop = false;
             // 
             // txbAbonnementRevuePeriodicite
             // 
@@ -3496,6 +3500,7 @@ namespace Mediatek86.vue
             this.txbAbonnementRevuePeriodicite.ReadOnly = true;
             this.txbAbonnementRevuePeriodicite.Size = new System.Drawing.Size(207, 20);
             this.txbAbonnementRevuePeriodicite.TabIndex = 45;
+            this.txbAbonnementRevuePeriodicite.TabStop = false;
             // 
             // txbAbonnementRevueTitre
             // 
@@ -3504,6 +3509,7 @@ namespace Mediatek86.vue
             this.txbAbonnementRevueTitre.ReadOnly = true;
             this.txbAbonnementRevueTitre.Size = new System.Drawing.Size(423, 20);
             this.txbAbonnementRevueTitre.TabIndex = 44;
+            this.txbAbonnementRevueTitre.TabStop = false;
             // 
             // txbAbonnementRevueNumeroRevue
             // 
@@ -3613,6 +3619,7 @@ namespace Mediatek86.vue
             this.Controls.Add(this.tabOngletsApplication);
             this.Name = "FrmMediatek";
             this.Text = "Gestion Médiathèque";
+            this.Shown += new System.EventHandler(this.FrmMediatek_Shown);
             this.tabOngletsApplication.ResumeLayout(false);
             this.tabLivres.ResumeLayout(false);
             this.grpGestionLivres.ResumeLayout(false);

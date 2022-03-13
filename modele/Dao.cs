@@ -330,6 +330,28 @@ namespace Mediatek86.modele
             return lesAbonnements;
         }
 
+        public static List<FinAbonnement> GetFinAbonnement()
+        {
+            List<FinAbonnement> lesFinAbonnement = new List<FinAbonnement>();
+            string req = "call  abonnementsFin30()";
+            
+            BddMySql curs = BddMySql.GetInstance(connectionString);
+            curs.ReqSelect(req, null);
+
+            while (curs.Read())
+            {
+                DateTime dateFinAbonnement = (DateTime)curs.Field("dateFinAbonnement");
+                string idRevue = (string)curs.Field("idRevue");
+                string titreRevue = (string)curs.Field("titre");
+
+                FinAbonnement finAbonnement = new FinAbonnement(dateFinAbonnement, idRevue, titreRevue);
+                lesFinAbonnement.Add(finAbonnement);
+            }
+            curs.Close();
+
+            return lesFinAbonnement;
+        }
+
         /// <summary>
         /// ecriture d'un exemplaire en base de données
         /// </summary>
