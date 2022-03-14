@@ -4,6 +4,9 @@ using Mediatek86.metier;
 using Mediatek86.vue;
 using System;
 using System.Linq;
+using System.Windows.Forms;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace Mediatek86.controleur
 {
@@ -18,7 +21,13 @@ namespace Mediatek86.controleur
         private readonly List<Suivi> lesSuivis;
 
         /// <summary>
-        /// Ouverture de la fenêtre
+        /// Le service dont dépend l'utilisateur connecté
+        /// </summary>
+        public Service leService { get; private set; }
+
+        /// <summary>
+        /// Ouverture de la fenêtre d'authentification
+        /// Si l'authentification a réussi, ouverture de l'application
         /// </summary>
         public Controle()
         {
@@ -28,9 +37,14 @@ namespace Mediatek86.controleur
             lesGenres = Dao.GetAllGenres();
             lesRayons = Dao.GetAllRayons();
             lesPublics = Dao.GetAllPublics();
-            lesSuivis = Dao.GetAllSuivis();
-            FrmMediatek frmMediatek = new FrmMediatek(this);
-            frmMediatek.ShowDialog();         
+            lesSuivis = Dao.GetAllSuivis();            
+            Authentification authentification = new Authentification(this);
+            Application.Run(authentification);
+            if (authentification.authentificationSucces)
+            {
+                FrmMediatek frmMediatek = new FrmMediatek(this);
+                Application.Run(frmMediatek);
+            }
         }
 
         /// <summary>
@@ -149,6 +163,10 @@ namespace Mediatek86.controleur
             return Dao.GetAbonnement(idDocument);
         }
 
+        /// <summary>
+        /// récupère les abonnements avec date d'expiration à moins de 30 jours
+        /// </summary>
+        /// <returns></returns>
         public List<FinAbonnement> GetFinAbonnement()
         {
             return Dao.GetFinAbonnement();
@@ -325,13 +343,50 @@ namespace Mediatek86.controleur
         }
 
         /// <summary>
-        /// 
+        /// Demande la suppression d'un abonnement de la bdd
         /// </summary>
-        /// <param name="idAbonnement"></param>
-        /// <returns></returns>
+        /// <param name="idAbonnement">L'identifiant de l'abonnement à supprimer</param>
+        /// <returns>True si l'opération a réussi, sinon false</returns>
         public bool SupprAbonnement(string idAbonnement)
         {
             return Dao.SupprAbonnement(idAbonnement);
+        }
+
+        /// <summary>
+        /// Calcul du hash MD5 d'une chaîne de caractères
+        /// </summary>
+        /// <param name="mdp">la chaîne d'entrée</param>
+        /// <returns>Le hash calculé</returns>
+        public string CreateMD5(string mdp)
+        {
+            // Utilisation du string mdp pour calculer MD5 hash
+            using (MD5 md5 = MD5.Create())
+            {
+                byte[] inputBytes = Encoding.ASCII.GetBytes(mdp);
+                byte[] hashBytes = md5.ComputeHash(inputBytes);
+
+                // Conversion du vecteur vers un string hexadecimal
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < hashBytes.Length; i++)
+                {
+                    sb.Append(hashBytes[i].ToString("X2"));
+                }
+                return sb.ToString();
+            }
+        }
+
+        /// <summary>
+        /// Récupère le service de l'utilisateur qui essaye de se connecter depuis la bdd
+        /// Valorise la propriété 'service'
+        /// </summary>
+        /// <param name="utilisateur">L'identifiant de l'utilisateur</param>
+        /// <param name="mdp">Le mot de passe de l'utilisateur</param>
+        /// <returns>Le service de l'utilisateur s'il est trouvé dans la bdd, et le mdp est correct. Sinon retourne null</returns>
+        public Service Authentification(string utilisateur, string mdp)
+        {
+            Service service = Dao.Authentification(utilisateur, CreateMD5(mdp));
+            leService = service;
+            return service;
         }
     }
 

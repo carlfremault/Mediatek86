@@ -50,6 +50,8 @@ namespace Mediatek86.vue
             CancelAllSaisies();
         }
 
+        #region dataGridView + fonctions et événements associées
+
         /// <summary>
         /// Remplit le datagrid avec la liste reçue en paramètre
         /// </summary>
@@ -66,6 +68,190 @@ namespace Mediatek86.vue
             dgvRevuesListe.Columns["id"].DisplayIndex = 0;
             dgvRevuesListe.Columns["titre"].DisplayIndex = 1;
         }
+
+        /// <summary>
+        /// Sur la sélection d'une ligne ou cellule dans le grid
+        /// Vérifie si on est en train de faire une saisie
+        /// Si non, affiche infos livre sélectionné
+        /// Si oui, vérifie si l'utilisateur veut abandonner la saisie d'abord
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dgvRevuesListe_SelectionChanged(object sender, EventArgs e)
+        {
+            if (saisieRevue)
+            {
+                if (VerifAbandonSaisie())
+                {
+                    StopSaisieRevue();
+                    RevuesListeSelection();
+                }
+            }
+            else
+            {
+                RevuesListeSelection();
+            }
+        }
+
+        /// <summary>
+        /// Affichage des informations de la revue sélectionnée dans le grid
+        /// Désactive saisie et verouille les champs infos
+        /// </summary>
+        private void RevuesListeSelection()
+        {
+            if (dgvRevuesListe.CurrentCell != null)
+            {
+                try
+                {
+                    Revue revue = (Revue)bdgRevuesListe.List[bdgRevuesListe.Position];
+                    AfficheRevuesInfos(revue);
+                    ActiverBoutonModifRevue(true);
+                    ActiverBoutonSupprRevue(true);
+                    AutoriserModifRevue(false);
+                    saisieRevue = false;
+                }
+                catch
+                {
+                    VideRevuesZones();
+                }
+            }
+            else
+            {
+                VideRevuesInfos();
+                ActiverBoutonModifRevue(false);
+                ActiverBoutonSupprRevue(false);
+            }
+        }
+
+        /// <summary>
+        /// Affichage de la liste complète des revues
+        /// et annulation de toutes les recherches et filtres
+        /// </summary>
+        private void RemplirRevuesListeComplete()
+        {
+            RemplirRevuesListe(lesRevues);
+            VideRevuesZones();
+        }
+
+        /// <summary>
+        /// vide les zones de recherche et de filtre
+        /// </summary>
+        private void VideRevuesZones()
+        {
+            cbxRevuesGenres.SelectedIndex = -1;
+            cbxRevuesRayons.SelectedIndex = -1;
+            cbxRevuesPublics.SelectedIndex = -1;
+            txbRevuesNumRecherche.Text = "";
+            txbRevuesTitreRecherche.Text = "";
+        }
+
+        /// <summary>
+        /// Tri sur les colonnes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dgvRevuesListe_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (saisieRevue)
+            {
+                if (VerifAbandonSaisie())
+                {
+                    StopSaisieRevue();
+                    RevuesListeSortColumns(e);
+                }
+            }
+            else
+            {
+                RevuesListeSortColumns(e);
+            }
+        }
+
+        /// <summary>
+        /// Tri sur les colonnes.
+        /// </summary>
+        /// <param name="e"></param>
+        private void RevuesListeSortColumns(DataGridViewCellMouseEventArgs e)
+        {
+            VideRevuesZones();
+            string titreColonne = dgvRevuesListe.Columns[e.ColumnIndex].HeaderText;
+            List<Revue> sortedList = new List<Revue>();
+            switch (titreColonne)
+            {
+                case "Id":
+                    sortedList = lesRevues.OrderBy(o => o.Id).ToList();
+                    break;
+                case "Titre":
+                    sortedList = lesRevues.OrderBy(o => o.Titre).ToList();
+                    break;
+                case "Periodicite":
+                    sortedList = lesRevues.OrderBy(o => o.Periodicite).ToList();
+                    break;
+                case "DelaiMiseADispo":
+                    sortedList = lesRevues.OrderBy(o => o.DelaiMiseADispo).ToList();
+                    break;
+                case "Genre":
+                    sortedList = lesRevues.OrderBy(o => o.Genre).ToList();
+                    break;
+                case "Public":
+                    sortedList = lesRevues.OrderBy(o => o.Public).ToList();
+                    break;
+                case "Rayon":
+                    sortedList = lesRevues.OrderBy(o => o.Rayon).ToList();
+                    break;
+            }
+            RemplirRevuesListe(sortedList);
+        }
+
+        #endregion
+
+        #region infos revue
+
+        /// <summary>
+        /// Affichage des informations de la revue sélectionné
+        /// </summary>
+        /// <param name="revue"></param>
+        private void AfficheRevuesInfos(Revue revue)
+        {
+            txbRevuesPeriodicite.Text = revue.Periodicite;
+            chkRevuesEmpruntable.Checked = revue.Empruntable;
+            txbRevuesImage.Text = revue.Image;
+            txbRevuesDateMiseADispo.Text = revue.DelaiMiseADispo.ToString();
+            txbRevuesNumero.Text = revue.Id;
+            cbxInfosRevuesGenres.SelectedIndex = cbxInfosRevuesGenres.FindStringExact(revue.Genre);
+            cbxInfosRevuesPublics.SelectedIndex = cbxInfosRevuesPublics.FindStringExact(revue.Public);
+            cbxInfosRevuesRayons.SelectedIndex = cbxInfosRevuesRayons.FindStringExact(revue.Rayon);
+            txbRevuesTitre.Text = revue.Titre;
+            string image = revue.Image;
+            try
+            {
+                pcbRevuesImage.Image = Image.FromFile(image);
+            }
+            catch
+            {
+                pcbRevuesImage.Image = null;
+            }
+        }
+
+        /// <summary>
+        /// Vide les zones d'affichage des informations de la reuve
+        /// </summary>
+        private void VideRevuesInfos()
+        {
+            txbRevuesPeriodicite.Text = "";
+            chkRevuesEmpruntable.Checked = false;
+            txbRevuesImage.Text = "";
+            txbRevuesDateMiseADispo.Text = "";
+            txbRevuesNumero.Text = "";
+            cbxInfosRevuesGenres.SelectedIndex = -1;
+            cbxInfosRevuesPublics.SelectedIndex = -1;
+            cbxInfosRevuesRayons.SelectedIndex = -1;
+            txbRevuesTitre.Text = "";
+            pcbRevuesImage.Image = null;
+        }
+
+        #endregion
+
+        #region événements et fonctions associées
 
         /// <summary>
         /// Evénement clic sur le bouton 'Rechercher'. Vérifie si on est en train de faire une saisie (ajout ou modif de revue)
@@ -187,49 +373,6 @@ namespace Mediatek86.vue
                     RemplirRevuesListeComplete();
                 }
             }
-        }
-
-        /// <summary>
-        /// Affichage des informations de la revue sélectionné
-        /// </summary>
-        /// <param name="revue"></param>
-        private void AfficheRevuesInfos(Revue revue)
-        {
-            txbRevuesPeriodicite.Text = revue.Periodicite;
-            chkRevuesEmpruntable.Checked = revue.Empruntable;
-            txbRevuesImage.Text = revue.Image;
-            txbRevuesDateMiseADispo.Text = revue.DelaiMiseADispo.ToString();
-            txbRevuesNumero.Text = revue.Id;
-            cbxInfosRevuesGenres.SelectedIndex = cbxInfosRevuesGenres.FindStringExact(revue.Genre);
-            cbxInfosRevuesPublics.SelectedIndex = cbxInfosRevuesPublics.FindStringExact(revue.Public);
-            cbxInfosRevuesRayons.SelectedIndex = cbxInfosRevuesRayons.FindStringExact(revue.Rayon);
-            txbRevuesTitre.Text = revue.Titre;
-            string image = revue.Image;
-            try
-            {
-                pcbRevuesImage.Image = Image.FromFile(image);
-            }
-            catch
-            {
-                pcbRevuesImage.Image = null;
-            }
-        }
-
-        /// <summary>
-        /// Vide les zones d'affichage des informations de la reuve
-        /// </summary>
-        private void VideRevuesInfos()
-        {
-            txbRevuesPeriodicite.Text = "";
-            chkRevuesEmpruntable.Checked = false;
-            txbRevuesImage.Text = "";
-            txbRevuesDateMiseADispo.Text = "";
-            txbRevuesNumero.Text = "";
-            cbxInfosRevuesGenres.SelectedIndex = -1;
-            cbxInfosRevuesPublics.SelectedIndex = -1;
-            cbxInfosRevuesRayons.SelectedIndex = -1;
-            txbRevuesTitre.Text = "";
-            pcbRevuesImage.Image = null;
         }
 
         /// <summary>
@@ -371,60 +514,6 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// Sur la sélection d'une ligne ou cellule dans le grid
-        /// Vérifie si on est en train de faire une saisie
-        /// Si non, affiche infos livre sélectionné
-        /// Si oui, vérifie si l'utilisateur veut abandonner la saisie d'abord
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void dgvRevuesListe_SelectionChanged(object sender, EventArgs e)
-        {
-            if (saisieRevue)
-            {
-                if (VerifAbandonSaisie())
-                {
-                    StopSaisieRevue();
-                    RevuesListeSelection();
-                }
-            }
-            else
-            {
-                RevuesListeSelection();
-            }
-        }
-
-        /// <summary>
-        /// Affichage des informations de la revue sélectionnée dans le grid
-        /// Désactive saisie et verouille les champs infos
-        /// </summary>
-        private void RevuesListeSelection()
-        {
-            if (dgvRevuesListe.CurrentCell != null)
-            {
-                try
-                {
-                    Revue revue = (Revue)bdgRevuesListe.List[bdgRevuesListe.Position];
-                    AfficheRevuesInfos(revue);
-                    ActiverBoutonModifRevue(true);
-                    ActiverBoutonSupprRevue(true);
-                    AutoriserModifRevue(false);
-                    saisieRevue = false;
-                }
-                catch
-                {
-                    VideRevuesZones();
-                }
-            }
-            else
-            {
-                VideRevuesInfos();
-                ActiverBoutonModifRevue(false);
-                ActiverBoutonSupprRevue(false);
-            }
-        }
-
-        /// <summary>
         /// Sur le clic du bouton d'annulation,  appel de la fonction AnnulFiltreCboRevues
         /// </summary>
         /// <param name="sender"></param>
@@ -474,130 +563,6 @@ namespace Mediatek86.vue
             {
                 RemplirRevuesListeComplete();
             }
-        }
-
-        /// <summary>
-        /// Affichage de la liste complète des revues
-        /// et annulation de toutes les recherches et filtres
-        /// </summary>
-        private void RemplirRevuesListeComplete()
-        {
-            RemplirRevuesListe(lesRevues);
-            VideRevuesZones();
-        }
-
-        /// <summary>
-        /// vide les zones de recherche et de filtre
-        /// </summary>
-        private void VideRevuesZones()
-        {
-            cbxRevuesGenres.SelectedIndex = -1;
-            cbxRevuesRayons.SelectedIndex = -1;
-            cbxRevuesPublics.SelectedIndex = -1;
-            txbRevuesNumRecherche.Text = "";
-            txbRevuesTitreRecherche.Text = "";
-        }
-
-        /// <summary>
-        /// Tri sur les colonnes
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void dgvRevuesListe_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            if (saisieRevue)
-            {
-                if (VerifAbandonSaisie())
-                {
-                    StopSaisieRevue();
-                    RevuesListeSortColumns(e);
-                }
-            }
-            else
-            {
-                RevuesListeSortColumns(e);
-            }
-        }
-
-        /// <summary>
-        /// Tri sur les colonnes.
-        /// </summary>
-        /// <param name="e"></param>
-        private void RevuesListeSortColumns(DataGridViewCellMouseEventArgs e)
-        {
-            VideRevuesZones();
-            string titreColonne = dgvRevuesListe.Columns[e.ColumnIndex].HeaderText;
-            List<Revue> sortedList = new List<Revue>();
-            switch (titreColonne)
-            {
-                case "Id":
-                    sortedList = lesRevues.OrderBy(o => o.Id).ToList();
-                    break;
-                case "Titre":
-                    sortedList = lesRevues.OrderBy(o => o.Titre).ToList();
-                    break;
-                case "Periodicite":
-                    sortedList = lesRevues.OrderBy(o => o.Periodicite).ToList();
-                    break;
-                case "DelaiMiseADispo":
-                    sortedList = lesRevues.OrderBy(o => o.DelaiMiseADispo).ToList();
-                    break;
-                case "Genre":
-                    sortedList = lesRevues.OrderBy(o => o.Genre).ToList();
-                    break;
-                case "Public":
-                    sortedList = lesRevues.OrderBy(o => o.Public).ToList();
-                    break;
-                case "Rayon":
-                    sortedList = lesRevues.OrderBy(o => o.Rayon).ToList();
-                    break;
-            }
-            RemplirRevuesListe(sortedList);
-        }
-
-        /// <summary>
-        /// (Dés)Activer le bouton qui permet d'ajouter une revue
-        /// </summary>
-        /// <param name="actif"></param>
-        private void ActiverBoutonAjoutRevue(Boolean actif)
-        {
-            btnAjoutRevue.Enabled = actif;
-        }
-
-        /// <summary>
-        /// (Dés)Activer le bouton qui permet de modifier une revue
-        /// </summary>
-        /// <param name="actif"></param>
-        private void ActiverBoutonModifRevue(Boolean actif)
-        {
-            btnModifRevue.Enabled = actif;
-        }
-
-        /// <summary>
-        /// (Dés)Activer le bouton qui permet de supprimer une revue
-        /// </summary>
-        /// <param name="actif"></param>
-        private void ActiverBoutonSupprRevue(Boolean actif)
-        {
-            btnSupprRevue.Enabled = actif;
-        }
-
-        /// <summary>
-        /// (Dés)Activer le bouton qui permet d'enregistrer une revue
-        /// </summary>
-        /// <param name="actif"></param>
-        private void ActiverBoutonEnregRevue(Boolean actif)
-        {
-            btnEnregistrerRevue.Enabled = actif;
-        }
-
-        /// <summary>
-        /// (Dés)Activer le bouton qui permet d'annuler une saisie d'une revue
-        /// </summary>
-        /// <param name="actif"></param>
-        private void ActiverBoutonAnnulerSaisieRevue(Boolean actif)
-        {
-            btnAnnulerSaisieRevue.Enabled = actif;
         }
 
         /// <summary>
@@ -743,6 +708,55 @@ namespace Mediatek86.vue
             }
         }
 
+        #endregion
+
+        #region sécurisation
+
+        /// <summary>
+        /// (Dés)Activer le bouton qui permet d'ajouter une revue
+        /// </summary>
+        /// <param name="actif"></param>
+        private void ActiverBoutonAjoutRevue(Boolean actif)
+        {
+            btnAjoutRevue.Enabled = actif;
+        }
+
+        /// <summary>
+        /// (Dés)Activer le bouton qui permet de modifier une revue
+        /// </summary>
+        /// <param name="actif"></param>
+        private void ActiverBoutonModifRevue(Boolean actif)
+        {
+            btnModifRevue.Enabled = actif;
+        }
+
+        /// <summary>
+        /// (Dés)Activer le bouton qui permet de supprimer une revue
+        /// </summary>
+        /// <param name="actif"></param>
+        private void ActiverBoutonSupprRevue(Boolean actif)
+        {
+            btnSupprRevue.Enabled = actif;
+        }
+
+        /// <summary>
+        /// (Dés)Activer le bouton qui permet d'enregistrer une revue
+        /// </summary>
+        /// <param name="actif"></param>
+        private void ActiverBoutonEnregRevue(Boolean actif)
+        {
+            btnEnregistrerRevue.Enabled = actif;
+        }
+
+        /// <summary>
+        /// (Dés)Activer le bouton qui permet d'annuler une saisie d'une revue
+        /// </summary>
+        /// <param name="actif"></param>
+        private void ActiverBoutonAnnulerSaisieRevue(Boolean actif)
+        {
+            btnAnnulerSaisieRevue.Enabled = actif;
+        }
+
         /// <summary>
         /// Démarre la saisie d'une revue, déverouille les champs 'infos'
         /// </summary>
@@ -793,5 +807,7 @@ namespace Mediatek86.vue
         {
             txbRevuesNumero.ReadOnly = !actif;
         }
+
+        #endregion     
     }
 }

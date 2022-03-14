@@ -2707,7 +2707,7 @@ namespace Mediatek86.vue
             this.tabCommandeDVD.TabIndex = 6;
             this.tabCommandeDVD.Text = "Commande de DVD";
             this.tabCommandeDVD.UseVisualStyleBackColor = true;
-            this.tabCommandeDVD.Enter += new System.EventHandler(this.tabCommandeDVD_Enter_1);
+            this.tabCommandeDVD.Enter += new System.EventHandler(this.tabCommandeDVD_Enter);
             // 
             // grpGestionCommandeDvd
             // 
@@ -3618,6 +3618,7 @@ namespace Mediatek86.vue
             this.ClientSize = new System.Drawing.Size(883, 767);
             this.Controls.Add(this.tabOngletsApplication);
             this.Name = "FrmMediatek";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Gestion Médiathèque";
             this.Shown += new System.EventHandler(this.FrmMediatek_Shown);
             this.tabOngletsApplication.ResumeLayout(false);

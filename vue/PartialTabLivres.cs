@@ -50,6 +50,8 @@ namespace Mediatek86.vue
             CancelAllSaisies();
         }
 
+        #region dataGridView + fonctions et événements associées
+
         /// <summary>
         /// Remplit le dategrid avec la liste reçue en paramètre
         /// </summary>
@@ -66,6 +68,192 @@ namespace Mediatek86.vue
             dgvLivresListe.Columns["id"].DisplayIndex = 0;
             dgvLivresListe.Columns["titre"].DisplayIndex = 1;
         }
+
+        /// <summary>
+        /// Sur la sélection d'une ligne ou cellule dans le grid
+        /// Vérifie si on est en train de faire une saisie
+        /// Si non, affiche infos livre sélectionné
+        /// Si oui, vérifie si l'utilisateur veut abandonner la saisie d'abord
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DgvLivresListe_SelectionChanged(object sender, EventArgs e)
+        {
+            if (saisieLivre)
+            {
+                if (VerifAbandonSaisie())
+                {
+                    StopSaisieLivre();
+                    LivresListeSelection();
+                }
+            }
+            else
+            {
+                LivresListeSelection();
+            }
+        }
+
+        /// <summary>
+        /// Affichage des informations du livre sélectionné dans le grid
+        /// Désactive saisie et verouille les champs infos
+        /// </summary>
+        private void LivresListeSelection()
+        {
+            if (dgvLivresListe.CurrentCell != null)
+            {
+                try
+                {
+                    Livre livre = (Livre)bdgLivresListe.List[bdgLivresListe.Position];
+                    AfficheLivresInfos(livre);
+                    ActiverBoutonModifLivre(true);
+                    ActiverBoutonSupprLivre(true);
+                    AutoriserModifLivre(false);
+                    saisieLivre = false;
+                }
+                catch
+                {
+                    VideLivresZones();
+                }
+            }
+            else
+            {
+                VideLivresInfos();
+                ActiverBoutonModifLivre(false);
+                ActiverBoutonSupprLivre(false);
+            }
+        }
+
+        /// <summary>
+        /// Affichage de la liste complète des livres
+        /// et annulation de toutes les recherches et filtres
+        /// </summary>
+        private void RemplirLivresListeComplete()
+        {
+            RemplirLivresListe(lesLivres);
+            VideLivresZones();
+        }
+
+        /// <summary>
+        /// vide les zones de recherche et de filtre
+        /// </summary>
+        private void VideLivresZones()
+        {
+            cbxLivresGenres.SelectedIndex = -1;
+            cbxLivresRayons.SelectedIndex = -1;
+            cbxLivresPublics.SelectedIndex = -1;
+            txbLivresNumRecherche.Text = "";
+            txbLivresTitreRecherche.Text = "";
+        }
+
+        /// <summary>
+        /// Vérification si on est en train de saisir. 
+        /// Si non lance le tri sur les colonnes.
+        /// Si oui demande confirmation d'abandonner saisie d'abord.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DgvLivresListe_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (saisieLivre)
+            {
+                if (VerifAbandonSaisie())
+                {
+                    StopSaisieLivre();
+                    LivresListeSortColumns(e);
+                }
+            }
+            else
+            {
+                LivresListeSortColumns(e);
+            }
+        }
+
+        /// <summary>
+        /// Tri sur les colonnes.
+        /// </summary>
+        /// <param name="e"></param>
+        private void LivresListeSortColumns(DataGridViewCellMouseEventArgs e)
+        {
+            VideLivresZones();
+            string titreColonne = dgvLivresListe.Columns[e.ColumnIndex].HeaderText;
+            List<Livre> sortedList = new List<Livre>();
+            switch (titreColonne)
+            {
+                case "Id":
+                    sortedList = lesLivres.OrderBy(o => o.Id).ToList();
+                    break;
+                case "Titre":
+                    sortedList = lesLivres.OrderBy(o => o.Titre).ToList();
+                    break;
+                case "Collection":
+                    sortedList = lesLivres.OrderBy(o => o.Collection).ToList();
+                    break;
+                case "Auteur":
+                    sortedList = lesLivres.OrderBy(o => o.Auteur).ToList();
+                    break;
+                case "Genre":
+                    sortedList = lesLivres.OrderBy(o => o.Genre).ToList();
+                    break;
+                case "Public":
+                    sortedList = lesLivres.OrderBy(o => o.Public).ToList();
+                    break;
+                case "Rayon":
+                    sortedList = lesLivres.OrderBy(o => o.Rayon).ToList();
+                    break;
+            }
+            RemplirLivresListe(sortedList);
+        }
+
+        #endregion
+
+        #region infos livre
+
+        /// <summary>
+        /// Affichage des informations du livre sélectionné
+        /// </summary>
+        /// <param name="livre"></param>
+        private void AfficheLivresInfos(Livre livre)
+        {
+            txbLivresAuteur.Text = livre.Auteur;
+            txbLivresCollection.Text = livre.Collection;
+            txbLivresImage.Text = livre.Image;
+            txbLivresIsbn.Text = livre.Isbn;
+            txbLivresNumero.Text = livre.Id;
+            cbxInfosLivresGenres.SelectedIndex = cbxInfosLivresGenres.FindStringExact(livre.Genre);
+            cbxInfosLivresPublics.SelectedIndex = cbxInfosLivresPublics.FindStringExact(livre.Public);
+            cbxInfosLivresRayons.SelectedIndex = cbxInfosLivresRayons.FindStringExact(livre.Rayon);
+            txbLivresTitre.Text = livre.Titre;
+            string image = livre.Image;
+            try
+            {
+                pcbLivresImage.Image = Image.FromFile(image);
+            }
+            catch
+            {
+                pcbLivresImage.Image = null;
+            }
+        }
+
+        /// <summary>
+        /// Vide les zones d'affichage des informations du livre
+        /// </summary>
+        private void VideLivresInfos()
+        {
+            txbLivresAuteur.Text = "";
+            txbLivresCollection.Text = "";
+            txbLivresImage.Text = "";
+            txbLivresIsbn.Text = "";
+            txbLivresNumero.Text = "";
+            cbxInfosLivresGenres.SelectedIndex = -1;
+            cbxInfosLivresPublics.SelectedIndex = -1;
+            cbxInfosLivresRayons.SelectedIndex = -1;
+            txbLivresTitre.Text = "";
+            pcbLivresImage.Image = null;
+        }
+
+        #endregion
+
+        #region événements et fonctions associées
 
         /// <summary>
         /// Evénement clic sur le bouton 'Rechercher'. Vérifie si on est en train de faire une saisie (ajout ou modif de livre)
@@ -189,50 +377,7 @@ namespace Mediatek86.vue
                 }
             }
         }
-
-        /// <summary>
-        /// Affichage des informations du livre sélectionné
-        /// </summary>
-        /// <param name="livre"></param>
-        private void AfficheLivresInfos(Livre livre)
-        {
-            txbLivresAuteur.Text = livre.Auteur;
-            txbLivresCollection.Text = livre.Collection;
-            txbLivresImage.Text = livre.Image;
-            txbLivresIsbn.Text = livre.Isbn;
-            txbLivresNumero.Text = livre.Id;
-            cbxInfosLivresGenres.SelectedIndex = cbxInfosLivresGenres.FindStringExact(livre.Genre);
-            cbxInfosLivresPublics.SelectedIndex = cbxInfosLivresPublics.FindStringExact(livre.Public);
-            cbxInfosLivresRayons.SelectedIndex = cbxInfosLivresRayons.FindStringExact(livre.Rayon);
-            txbLivresTitre.Text = livre.Titre;
-            string image = livre.Image;
-            try
-            {
-                pcbLivresImage.Image = Image.FromFile(image);
-            }
-            catch
-            {
-                pcbLivresImage.Image = null;
-            }
-        }
-
-        /// <summary>
-        /// Vide les zones d'affichage des informations du livre
-        /// </summary>
-        private void VideLivresInfos()
-        {
-            txbLivresAuteur.Text = "";
-            txbLivresCollection.Text = "";
-            txbLivresImage.Text = "";
-            txbLivresIsbn.Text = "";
-            txbLivresNumero.Text = "";
-            cbxInfosLivresGenres.SelectedIndex = -1;
-            cbxInfosLivresPublics.SelectedIndex = -1;
-            cbxInfosLivresRayons.SelectedIndex = -1;
-            txbLivresTitre.Text = "";
-            pcbLivresImage.Image = null;
-        }
-
+        
         /// <summary>
         /// Evénement changement de sélection combobox Genres
         /// On vérifie si l'utilisateur est en train de faire une saisie
@@ -374,60 +519,6 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// Sur la sélection d'une ligne ou cellule dans le grid
-        /// Vérifie si on est en train de faire une saisie
-        /// Si non, affiche infos livre sélectionné
-        /// Si oui, vérifie si l'utilisateur veut abandonner la saisie d'abord
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void DgvLivresListe_SelectionChanged(object sender, EventArgs e)
-        {
-            if (saisieLivre)
-            {
-                if (VerifAbandonSaisie())
-                {
-                    StopSaisieLivre();
-                    LivresListeSelection();
-                }
-            }
-            else
-            {
-                LivresListeSelection();
-            }
-        }
-
-        /// <summary>
-        /// Affichage des informations du livre sélectionné dans le grid
-        /// Désactive saisie et verouille les champs infos
-        /// </summary>
-        private void LivresListeSelection()
-        {
-            if (dgvLivresListe.CurrentCell != null)
-            {
-                try
-                {
-                    Livre livre = (Livre)bdgLivresListe.List[bdgLivresListe.Position];
-                    AfficheLivresInfos(livre);
-                    ActiverBoutonModifLivre(true);
-                    ActiverBoutonSupprLivre(true);
-                    AutoriserModifLivre(false);
-                    saisieLivre = false;
-                }
-                catch
-                {
-                    VideLivresZones();
-                }
-            }
-            else
-            {
-                VideLivresInfos();
-                ActiverBoutonModifLivre(false);
-                ActiverBoutonSupprLivre(false);
-            }
-        }
-
-        /// <summary>
         /// Sur le clic du bouton d'annulation, appel de la fonction AnnulFiltreCboLivres
         /// </summary>
         /// <param name="sender"></param>
@@ -477,132 +568,6 @@ namespace Mediatek86.vue
             {
                 RemplirLivresListeComplete();
             }
-        }
-
-        /// <summary>
-        /// Affichage de la liste complète des livres
-        /// et annulation de toutes les recherches et filtres
-        /// </summary>
-        private void RemplirLivresListeComplete()
-        {
-            RemplirLivresListe(lesLivres);
-            VideLivresZones();
-        }
-
-        /// <summary>
-        /// vide les zones de recherche et de filtre
-        /// </summary>
-        private void VideLivresZones()
-        {
-            cbxLivresGenres.SelectedIndex = -1;
-            cbxLivresRayons.SelectedIndex = -1;
-            cbxLivresPublics.SelectedIndex = -1;
-            txbLivresNumRecherche.Text = "";
-            txbLivresTitreRecherche.Text = "";
-        }
-
-        /// <summary>
-        /// Vérification si on est en train de saisir. 
-        /// Si non lance le tri sur les colonnes.
-        /// Si oui demande confirmation d'abandonner saisie d'abord.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void DgvLivresListe_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            if (saisieLivre)
-            {
-                if (VerifAbandonSaisie())
-                {
-                    StopSaisieLivre();
-                    LivresListeSortColumns(e);
-                }
-            }
-            else
-            {
-                LivresListeSortColumns(e);
-            }
-        }
-
-        /// <summary>
-        /// Tri sur les colonnes.
-        /// </summary>
-        /// <param name="e"></param>
-        private void LivresListeSortColumns(DataGridViewCellMouseEventArgs e)
-        {
-            VideLivresZones();
-            string titreColonne = dgvLivresListe.Columns[e.ColumnIndex].HeaderText;
-            List<Livre> sortedList = new List<Livre>();
-            switch (titreColonne)
-            {
-                case "Id":
-                    sortedList = lesLivres.OrderBy(o => o.Id).ToList();
-                    break;
-                case "Titre":
-                    sortedList = lesLivres.OrderBy(o => o.Titre).ToList();
-                    break;
-                case "Collection":
-                    sortedList = lesLivres.OrderBy(o => o.Collection).ToList();
-                    break;
-                case "Auteur":
-                    sortedList = lesLivres.OrderBy(o => o.Auteur).ToList();
-                    break;
-                case "Genre":
-                    sortedList = lesLivres.OrderBy(o => o.Genre).ToList();
-                    break;
-                case "Public":
-                    sortedList = lesLivres.OrderBy(o => o.Public).ToList();
-                    break;
-                case "Rayon":
-                    sortedList = lesLivres.OrderBy(o => o.Rayon).ToList();
-                    break;
-            }
-            RemplirLivresListe(sortedList);
-        }
-
-        /// <summary>
-        /// (Dés)Activer le bouton qui permet d'ajouter un livre
-        /// </summary>
-        /// <param name="actif"></param>
-        private void ActiverBoutonAjoutLivre(Boolean actif)
-        {
-            btnAjoutLivre.Enabled = actif;
-        }
-
-        /// <summary>
-        /// (Dés)Activer le bouton qui permet de modifier un livre
-        /// </summary>
-        /// <param name="actif"></param>
-        private void ActiverBoutonModifLivre(Boolean actif)
-        {
-            btnModifLivre.Enabled = actif;
-        }
-
-        /// <summary>
-        /// (Dés)Activer le bouton qui permet de supprimer un livre
-        /// </summary>
-        /// <param name="actif"></param>
-        private void ActiverBoutonSupprLivre(Boolean actif)
-        {
-            btnSupprLivre.Enabled = actif;
-        }
-
-        /// <summary>
-        /// (Dés)Activer le bouton qui permet d'enregistrer un livre
-        /// </summary>
-        /// <param name="actif"></param>
-        private void ActiverBoutonEnregLivre(Boolean actif)
-        {
-            btnEnregistrerLivre.Enabled = actif;
-        }
-
-        /// <summary>
-        /// (Dés)Activer le bouton qui permet d'annuler une saisie d'un livre
-        /// </summary>
-        /// <param name="actif"></param>
-        private void ActiverBoutonAnnulerSaisieLivre(Boolean actif)
-        {
-            btnAnnulerSaisieLivre.Enabled = actif;
         }
 
         /// <summary>
@@ -735,6 +700,55 @@ namespace Mediatek86.vue
             }
         }
 
+        #endregion
+
+        #region sécurisation
+
+        /// <summary>
+        /// (Dés)Activer le bouton qui permet d'ajouter un livre
+        /// </summary>
+        /// <param name="actif"></param>
+        private void ActiverBoutonAjoutLivre(Boolean actif)
+        {
+            btnAjoutLivre.Enabled = actif;
+        }
+
+        /// <summary>
+        /// (Dés)Activer le bouton qui permet de modifier un livre
+        /// </summary>
+        /// <param name="actif"></param>
+        private void ActiverBoutonModifLivre(Boolean actif)
+        {
+            btnModifLivre.Enabled = actif;
+        }
+
+        /// <summary>
+        /// (Dés)Activer le bouton qui permet de supprimer un livre
+        /// </summary>
+        /// <param name="actif"></param>
+        private void ActiverBoutonSupprLivre(Boolean actif)
+        {
+            btnSupprLivre.Enabled = actif;
+        }
+
+        /// <summary>
+        /// (Dés)Activer le bouton qui permet d'enregistrer un livre
+        /// </summary>
+        /// <param name="actif"></param>
+        private void ActiverBoutonEnregLivre(Boolean actif)
+        {
+            btnEnregistrerLivre.Enabled = actif;
+        }
+
+        /// <summary>
+        /// (Dés)Activer le bouton qui permet d'annuler une saisie d'un livre
+        /// </summary>
+        /// <param name="actif"></param>
+        private void ActiverBoutonAnnulerSaisieLivre(Boolean actif)
+        {
+            btnAnnulerSaisieLivre.Enabled = actif;
+        }
+
         /// <summary>
         /// Démarre la saisie d'un livre, déverouille les champs 'infos'
         /// </summary>
@@ -785,5 +799,7 @@ namespace Mediatek86.vue
         {
             txbLivresNumero.ReadOnly = !actif;
         }
+
+        #endregion
     }
 }

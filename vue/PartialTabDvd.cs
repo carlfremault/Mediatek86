@@ -50,6 +50,8 @@ namespace Mediatek86.vue
             CancelAllSaisies();
         }
 
+        #region dataGridView + fonctions et événements associées
+
         /// <summary>
         /// Remplit le dategrid avec la liste reçue en paramètre
         /// </summary>
@@ -66,6 +68,192 @@ namespace Mediatek86.vue
             dgvDvdListe.Columns["id"].DisplayIndex = 0;
             dgvDvdListe.Columns["titre"].DisplayIndex = 1;
         }
+
+        /// <summary>
+        /// Sur la sélection d'une ligne ou cellule dans le grid
+        /// Vérifie si on est en train de faire une saisie
+        /// Si non, affiche infos livre sélectionné
+        /// Si oui, vérifie si l'utilisateur veut abandonner la saisie d'abord
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dgvDvdListe_SelectionChanged(object sender, EventArgs e)
+        {
+            if (saisieDvd)
+            {
+                if (VerifAbandonSaisie())
+                {
+                    StopSaisieDvd();
+                    DvdListeSelection();
+                }
+            }
+            else
+            {
+                DvdListeSelection();
+            }
+        }
+
+        /// <summary>
+        /// Affichage des informations du DVD sélectionné dans le grid
+        /// Désactive saisie et verouille les champs infos
+        /// </summary>
+        private void DvdListeSelection()
+        {
+            if (dgvDvdListe.CurrentCell != null)
+            {
+                try
+                {
+                    Dvd dvd = (Dvd)bdgDvdListe.List[bdgDvdListe.Position];
+                    AfficheDvdInfos(dvd);
+                    ActiverBoutonModifDvd(true);
+                    ActiverBoutonSupprDvd(true);
+                    AutoriserModifDvd(false);
+                    saisieDvd = false;
+                }
+                catch
+                {
+                    VideDvdZones();
+                }
+            }
+            else
+            {
+                VideDvdInfos();
+                ActiverBoutonModifDvd(false);
+                ActiverBoutonSupprDvd(false);
+            }
+        }
+
+        /// <summary>
+        /// Affichage de la liste complète des Dvd
+        /// et annulation de toutes les recherches et filtres
+        /// </summary>
+        private void RemplirDvdListeComplete()
+        {
+            RemplirDvdListe(lesDvd);
+            VideDvdZones();
+        }
+
+        /// <summary>
+        /// vide les zones de recherche et de filtre
+        /// </summary>
+        private void VideDvdZones()
+        {
+            cbxDvdGenres.SelectedIndex = -1;
+            cbxDvdRayons.SelectedIndex = -1;
+            cbxDvdPublics.SelectedIndex = -1;
+            txbDvdNumRecherche.Text = "";
+            txbDvdTitreRecherche.Text = "";
+        }
+
+        /// <summary>
+        /// Vérification si on est en train de saisir. 
+        /// Si non lance le tri sur les colonnes.
+        /// Si oui demande confirmation d'abandonner saisie d'abord.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dgvDvdListe_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (saisieDvd)
+            {
+                if (VerifAbandonSaisie())
+                {
+                    StopSaisieDvd();
+                    DvdListeSortColumns(e);
+                }
+            }
+            else
+            {
+                DvdListeSortColumns(e);
+            }
+        }
+
+        /// <summary>
+        /// Tri sur les colonnes.
+        /// </summary>
+        /// <param name="e"></param>
+        private void DvdListeSortColumns(DataGridViewCellMouseEventArgs e)
+        {
+            VideDvdZones();
+            string titreColonne = dgvDvdListe.Columns[e.ColumnIndex].HeaderText;
+            List<Dvd> sortedList = new List<Dvd>();
+            switch (titreColonne)
+            {
+                case "Id":
+                    sortedList = lesDvd.OrderBy(o => o.Id).ToList();
+                    break;
+                case "Titre":
+                    sortedList = lesDvd.OrderBy(o => o.Titre).ToList();
+                    break;
+                case "Duree":
+                    sortedList = lesDvd.OrderBy(o => o.Duree).ToList();
+                    break;
+                case "Realisateur":
+                    sortedList = lesDvd.OrderBy(o => o.Realisateur).ToList();
+                    break;
+                case "Genre":
+                    sortedList = lesDvd.OrderBy(o => o.Genre).ToList();
+                    break;
+                case "Public":
+                    sortedList = lesDvd.OrderBy(o => o.Public).ToList();
+                    break;
+                case "Rayon":
+                    sortedList = lesDvd.OrderBy(o => o.Rayon).ToList();
+                    break;
+            }
+            RemplirDvdListe(sortedList);
+        }
+
+        #endregion
+
+        #region infos DVD
+
+        /// <summary>
+        /// Affichage des informations du dvd sélectionné
+        /// </summary>
+        /// <param name="dvd"></param>
+        private void AfficheDvdInfos(Dvd dvd)
+        {
+            txbDvdRealisateur.Text = dvd.Realisateur;
+            txbDvdSynopsis.Text = dvd.Synopsis;
+            txbDvdImage.Text = dvd.Image;
+            txbDvdDuree.Text = dvd.Duree.ToString();
+            txbDvdNumero.Text = dvd.Id;
+            cbxInfosDvdGenres.SelectedIndex = cbxInfosDvdGenres.FindStringExact(dvd.Genre);
+            cbxInfosDvdPublics.SelectedIndex = cbxInfosDvdPublics.FindStringExact(dvd.Public);
+            cbxInfosDvdRayons.SelectedIndex = cbxInfosDvdRayons.FindStringExact(dvd.Rayon);
+            txbDvdTitre.Text = dvd.Titre;
+            string image = dvd.Image;
+            try
+            {
+                pcbDvdImage.Image = Image.FromFile(image);
+            }
+            catch
+            {
+                pcbDvdImage.Image = null;
+            }
+        }
+
+        /// <summary>
+        /// Vide les zones d'affichage des informations du dvd
+        /// </summary>
+        private void VideDvdInfos()
+        {
+            txbDvdRealisateur.Text = "";
+            txbDvdSynopsis.Text = "";
+            txbDvdImage.Text = "";
+            txbDvdDuree.Text = "";
+            txbDvdNumero.Text = "";
+            cbxInfosDvdGenres.SelectedIndex = -1;
+            cbxInfosDvdPublics.SelectedIndex = -1;
+            cbxInfosDvdRayons.SelectedIndex = -1;
+            txbDvdTitre.Text = "";
+            pcbDvdImage.Image = null;
+        }
+
+        #endregion
+
+        #region événements et fonctions associées
 
         /// <summary>
         /// Evénement clic sur le bouton 'Rechercher'. Vérifie si on est en train de faire une saisie (ajout ou modif de DVD)
@@ -188,49 +376,6 @@ namespace Mediatek86.vue
                     RemplirDvdListeComplete();
                 }
             }
-        }
-
-        /// <summary>
-        /// Affichage des informations du dvd sélectionné
-        /// </summary>
-        /// <param name="dvd"></param>
-        private void AfficheDvdInfos(Dvd dvd)
-        {
-            txbDvdRealisateur.Text = dvd.Realisateur;
-            txbDvdSynopsis.Text = dvd.Synopsis;
-            txbDvdImage.Text = dvd.Image;
-            txbDvdDuree.Text = dvd.Duree.ToString();
-            txbDvdNumero.Text = dvd.Id;
-            cbxInfosDvdGenres.SelectedIndex = cbxInfosDvdGenres.FindStringExact(dvd.Genre);
-            cbxInfosDvdPublics.SelectedIndex = cbxInfosDvdPublics.FindStringExact(dvd.Public);
-            cbxInfosDvdRayons.SelectedIndex = cbxInfosDvdRayons.FindStringExact(dvd.Rayon);
-            txbDvdTitre.Text = dvd.Titre;
-            string image = dvd.Image;
-            try
-            {
-                pcbDvdImage.Image = Image.FromFile(image);
-            }
-            catch
-            {
-                pcbDvdImage.Image = null;
-            }
-        }
-
-        /// <summary>
-        /// Vide les zones d'affichage des informations du dvd
-        /// </summary>
-        private void VideDvdInfos()
-        {
-            txbDvdRealisateur.Text = "";
-            txbDvdSynopsis.Text = "";
-            txbDvdImage.Text = "";
-            txbDvdDuree.Text = "";
-            txbDvdNumero.Text = "";
-            cbxInfosDvdGenres.SelectedIndex = -1;
-            cbxInfosDvdPublics.SelectedIndex = -1;
-            cbxInfosDvdRayons.SelectedIndex = -1;
-            txbDvdTitre.Text = "";
-            pcbDvdImage.Image = null;
         }
 
         /// <summary>
@@ -374,60 +519,6 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// Sur la sélection d'une ligne ou cellule dans le grid
-        /// Vérifie si on est en train de faire une saisie
-        /// Si non, affiche infos livre sélectionné
-        /// Si oui, vérifie si l'utilisateur veut abandonner la saisie d'abord
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void dgvDvdListe_SelectionChanged(object sender, EventArgs e)
-        {
-            if (saisieDvd)
-            {
-                if (VerifAbandonSaisie())
-                {
-                    StopSaisieDvd();
-                    DvdListeSelection();
-                }
-            }
-            else
-            {
-                DvdListeSelection();
-            }
-        }
-
-        /// <summary>
-        /// Affichage des informations du DVD sélectionné dans le grid
-        /// Désactive saisie et verouille les champs infos
-        /// </summary>
-        private void DvdListeSelection()
-        {
-            if (dgvDvdListe.CurrentCell != null)
-            {
-                try
-                {
-                    Dvd dvd = (Dvd)bdgDvdListe.List[bdgDvdListe.Position];
-                    AfficheDvdInfos(dvd);
-                    ActiverBoutonModifDvd(true);
-                    ActiverBoutonSupprDvd(true);
-                    AutoriserModifDvd(false);
-                    saisieDvd = false;
-                }
-                catch
-                {
-                    VideDvdZones();
-                }
-            }
-            else
-            {
-                VideDvdInfos();
-                ActiverBoutonModifDvd(false);
-                ActiverBoutonSupprDvd(false);
-            }
-        }
-
-        /// <summary>
         /// Sur le clic du bouton d'annulation, appel de la fonction AnnulFiltreCboDvd
         /// </summary>
         /// <param name="sender"></param>
@@ -477,132 +568,6 @@ namespace Mediatek86.vue
             {
                 RemplirDvdListeComplete();
             }
-        }
-
-        /// <summary>
-        /// Affichage de la liste complète des Dvd
-        /// et annulation de toutes les recherches et filtres
-        /// </summary>
-        private void RemplirDvdListeComplete()
-        {
-            RemplirDvdListe(lesDvd);
-            VideDvdZones();
-        }
-
-        /// <summary>
-        /// vide les zones de recherche et de filtre
-        /// </summary>
-        private void VideDvdZones()
-        {
-            cbxDvdGenres.SelectedIndex = -1;
-            cbxDvdRayons.SelectedIndex = -1;
-            cbxDvdPublics.SelectedIndex = -1;
-            txbDvdNumRecherche.Text = "";
-            txbDvdTitreRecherche.Text = "";
-        }
-
-        /// <summary>
-        /// Vérification si on est en train de saisir. 
-        /// Si non lance le tri sur les colonnes.
-        /// Si oui demande confirmation d'abandonner saisie d'abord.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void dgvDvdListe_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            if (saisieDvd)
-            {
-                if (VerifAbandonSaisie())
-                {
-                    StopSaisieDvd();
-                    DvdListeSortColumns(e);
-                }
-            }
-            else
-            {
-                DvdListeSortColumns(e);
-            }
-        }
-
-        /// <summary>
-        /// Tri sur les colonnes.
-        /// </summary>
-        /// <param name="e"></param>
-        private void DvdListeSortColumns(DataGridViewCellMouseEventArgs e)
-        {
-            VideDvdZones();
-            string titreColonne = dgvDvdListe.Columns[e.ColumnIndex].HeaderText;
-            List<Dvd> sortedList = new List<Dvd>();
-            switch (titreColonne)
-            {
-                case "Id":
-                    sortedList = lesDvd.OrderBy(o => o.Id).ToList();
-                    break;
-                case "Titre":
-                    sortedList = lesDvd.OrderBy(o => o.Titre).ToList();
-                    break;
-                case "Duree":
-                    sortedList = lesDvd.OrderBy(o => o.Duree).ToList();
-                    break;
-                case "Realisateur":
-                    sortedList = lesDvd.OrderBy(o => o.Realisateur).ToList();
-                    break;
-                case "Genre":
-                    sortedList = lesDvd.OrderBy(o => o.Genre).ToList();
-                    break;
-                case "Public":
-                    sortedList = lesDvd.OrderBy(o => o.Public).ToList();
-                    break;
-                case "Rayon":
-                    sortedList = lesDvd.OrderBy(o => o.Rayon).ToList();
-                    break;
-            }
-            RemplirDvdListe(sortedList);
-        }
-
-        /// <summary>
-        /// (Dés)Activer le bouton qui permet d'ajouter un DVD
-        /// </summary>
-        /// <param name="actif"></param>
-        private void ActiverBoutonAjoutDvd(Boolean actif)
-        {
-            btnAjoutDvd.Enabled = actif;
-        }
-
-        /// <summary>
-        /// (Dés)Activer le bouton qui permet de modifier un DVD
-        /// </summary>
-        /// <param name="actif"></param>
-        private void ActiverBoutonModifDvd(Boolean actif)
-        {
-            btnModifDvd.Enabled = actif;
-        }
-
-        /// <summary>
-        /// (Dés)Activer le bouton qui permet de supprimer un DVD
-        /// </summary>
-        /// <param name="actif"></param>
-        private void ActiverBoutonSupprDvd(Boolean actif)
-        {
-            btnSupprDvd.Enabled = actif;
-        }
-
-        /// <summary>
-        /// (Dés)Activer le bouton qui permet d'enregistrer un DVD
-        /// </summary>
-        /// <param name="actif"></param>
-        private void ActiverBoutonEnregDvd(Boolean actif)
-        {
-            btnEnregistrerDvd.Enabled = actif;
-        }
-
-        /// <summary>
-        /// (Dés)Activer le bouton qui permet d'annuler une saisie d'un DVD
-        /// </summary>
-        /// <param name="actif"></param>
-        private void ActiverBoutonAnnulerSaisieDvd(Boolean actif)
-        {
-            btnAnnulerSaisieDvd.Enabled = actif;
         }
 
         /// <summary>
@@ -749,6 +714,55 @@ namespace Mediatek86.vue
             }
         }
 
+        #endregion
+
+        #region sécurisation
+
+        /// <summary>
+        /// (Dés)Activer le bouton qui permet d'ajouter un DVD
+        /// </summary>
+        /// <param name="actif"></param>
+        private void ActiverBoutonAjoutDvd(Boolean actif)
+        {
+            btnAjoutDvd.Enabled = actif;
+        }
+
+        /// <summary>
+        /// (Dés)Activer le bouton qui permet de modifier un DVD
+        /// </summary>
+        /// <param name="actif"></param>
+        private void ActiverBoutonModifDvd(Boolean actif)
+        {
+            btnModifDvd.Enabled = actif;
+        }
+
+        /// <summary>
+        /// (Dés)Activer le bouton qui permet de supprimer un DVD
+        /// </summary>
+        /// <param name="actif"></param>
+        private void ActiverBoutonSupprDvd(Boolean actif)
+        {
+            btnSupprDvd.Enabled = actif;
+        }
+
+        /// <summary>
+        /// (Dés)Activer le bouton qui permet d'enregistrer un DVD
+        /// </summary>
+        /// <param name="actif"></param>
+        private void ActiverBoutonEnregDvd(Boolean actif)
+        {
+            btnEnregistrerDvd.Enabled = actif;
+        }
+
+        /// <summary>
+        /// (Dés)Activer le bouton qui permet d'annuler une saisie d'un DVD
+        /// </summary>
+        /// <param name="actif"></param>
+        private void ActiverBoutonAnnulerSaisieDvd(Boolean actif)
+        {
+            btnAnnulerSaisieDvd.Enabled = actif;
+        }        
+
         /// <summary>
         /// Démarre la saisie d'un DVD, déverouille les champs 'infos'
         /// </summary>
@@ -799,5 +813,7 @@ namespace Mediatek86.vue
         {
             txbDvdNumero.ReadOnly = !actif;
         }
+
+        #endregion
     }
 }

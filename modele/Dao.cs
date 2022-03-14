@@ -16,6 +16,32 @@ namespace Mediatek86.modele
         private static readonly string connectionString = "server="+server+";user id="+userid+";password="+password+";database="+database+";SslMode=none";
 
         /// <summary>
+        /// Retourne le service d'un utilisateur
+        /// </summary>
+        /// <param name="utilisateur">Le nom d'utilisateur concerné</param>
+        /// <param name="mdp">Le mot de passe de l'utilisateur</param>
+        /// <returns>Le service si l'utilisateur est trouvé dans la bdd, sinon null</returns>
+        public static Service Authentification(string utilisateur, string mdp)
+        {
+            Service service = null;
+            string req = "select s.ID, s.LIBELLE from utilisateur u join service s on u.ID = s.ID where u.NOM = @utilisateur and u.MDP = @mdp;";
+            Dictionary<string, object> parameters = new Dictionary<string, object>
+                {
+                    { "@utilisateur", utilisateur},
+                    {"@mdp", mdp }
+                };
+            BddMySql curs = BddMySql.GetInstance(connectionString);
+            curs.ReqSelect(req, parameters);
+
+            while (curs.Read())
+            {
+                service = new Service((int)curs.Field("ID"), (string)curs.Field("LIBELLE"));
+            }
+            curs.Close();
+            return service;
+        }
+
+        /// <summary>
         /// Retourne tous les genres à partir de la BDD
         /// </summary>
         /// <returns>Liste d'objets Genre</returns>
