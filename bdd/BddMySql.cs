@@ -1,7 +1,7 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
 
 namespace Mediatek86.bdd
 {
@@ -134,34 +134,34 @@ namespace Mediatek86.bdd
         {
             MySqlCommand command;
             MySqlTransaction transaction = connection.BeginTransaction();
-                try
+            try
+            {
+                foreach (string stringQuery in queries)
                 {
-                    foreach (string stringQuery in queries)
+                    command = new MySqlCommand(stringQuery, connection, transaction);
+                    if (!(parameters is null))
                     {
-                        command = new MySqlCommand(stringQuery, connection, transaction);
-                        if (!(parameters is null))
+                        foreach (KeyValuePair<string, object> parameter in parameters)
                         {
-                            foreach (KeyValuePair<string, object> parameter in parameters)
-                            {
-                                command.Parameters.Add(new MySqlParameter(parameter.Key, parameter.Value));
-                            }
+                            command.Parameters.Add(new MySqlParameter(parameter.Key, parameter.Value));
                         }
-                        command.Prepare();
-                        command.ExecuteNonQuery();
                     }
+                    command.Prepare();
+                    command.ExecuteNonQuery();
+                }
 
-                    transaction.Commit();
-                }
-                catch (MySqlException e)
-                {
-                    transaction.Rollback();
-                    Console.WriteLine(e.Message);
-                    throw;
-                }
-                catch (InvalidOperationException e)
-                {
-                    ErreurGraveBddNonAccessible(e);
-                }
+                transaction.Commit();
+            }
+            catch (MySqlException e)
+            {
+                transaction.Rollback();
+                Console.WriteLine(e.Message);
+                throw;
+            }
+            catch (InvalidOperationException e)
+            {
+                ErreurGraveBddNonAccessible(e);
+            }
         }
 
         /// <summary>

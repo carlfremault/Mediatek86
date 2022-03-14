@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Mediatek86.controleur;
+﻿using Mediatek86.controleur;
 using Mediatek86.metier;
+using System;
+using System.Windows.Forms;
 
 namespace Mediatek86.vue
 {
@@ -19,12 +12,12 @@ namespace Mediatek86.vue
         /// <summary>
         /// Booléen, true si l'authentification a réussi
         /// </summary>
-        public  bool authentificationSucces { get; private set; }
+        public bool AuthentificationSucces { get; private set; }
 
         internal Authentification(Controle controle)
         {
             InitializeComponent();
-            this.controle = controle;            
+            this.controle = controle;
         }
 
         /// <summary>
@@ -47,16 +40,16 @@ namespace Mediatek86.vue
                 }
                 else
                 {
-                    authentificationSucces = true;
+                    AuthentificationSucces = true;
                     Close();
                 }
-            } 
+            }
             else
             {
                 MessageBox.Show("Nom d'utilisateur et/ou mot de passe incorrecte(s)", "Erreur");
                 ViderChamps();
             }
-            
+
         }
 
         /// <summary>

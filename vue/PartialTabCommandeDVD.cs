@@ -1,13 +1,9 @@
-﻿using System;
+﻿using Mediatek86.metier;
+using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
-using Mediatek86.metier;
-using Mediatek86.controleur;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Globalization;
+using System.Windows.Forms;
 
 namespace Mediatek86.vue
 {
@@ -411,8 +407,7 @@ namespace Mediatek86.vue
             string libelleSuivi = lesSuivis[0].Libelle;
 
             String montantSaisie = txbCommandeDvdMontant.Text.Replace(',', '.');
-            Double montant;
-            bool success = Double.TryParse(montantSaisie, out montant);
+            bool success = Double.TryParse(montantSaisie, out double montant);
             if (!success)
             {
                 MessageBox.Show("La valeur saisie pour le montant doit être numérique.", "Erreur");

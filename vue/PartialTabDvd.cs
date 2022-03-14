@@ -1,12 +1,9 @@
-﻿using System;
+﻿using Mediatek86.metier;
+using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
-using Mediatek86.metier;
-using Mediatek86.controleur;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Mediatek86.vue
 {
@@ -308,8 +305,10 @@ namespace Mediatek86.vue
                 Dvd dvd = lesDvd.Find(x => x.Id.Equals(txbDvdNumRecherche.Text.Trim()));
                 if (dvd != null)
                 {
-                    List<Dvd> Dvd = new List<Dvd>();
-                    Dvd.Add(dvd);
+                    List<Dvd> Dvd = new List<Dvd>
+                    {
+                        dvd
+                    };
                     RemplirDvdListe(Dvd);
                 }
                 else
@@ -618,6 +617,34 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
+        /// Recherche image du DVD sur disque
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnDvdRechercheImage_Click(object sender, EventArgs e)
+        {
+            string filePath = "";
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                InitialDirectory = DOSSIERINITIALRECHERCHEIMAGE,
+                Filter = "Files|*.jpg;*.bmp;*.jpeg;*.png;*.gif"
+            };
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                filePath = openFileDialog.FileName;
+            }
+            txbDvdImage.Text = filePath;
+            try
+            {
+                pcbDvdImage.Image = Image.FromFile(filePath);
+            }
+            catch
+            {
+                pcbDvdImage.Image = null;
+            }
+        }
+
+        /// <summary>
         /// Evénement clic sur le bouton 'Enregistrer'
         /// Vérifie si les champs requis (numéro, genre, public, rayon) sont saisies.
         /// Si oui procède à l'ajout ou modification du DVD
@@ -746,24 +773,6 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// (Dés)Activer le bouton qui permet d'enregistrer un DVD
-        /// </summary>
-        /// <param name="actif"></param>
-        private void ActiverBoutonEnregDvd(Boolean actif)
-        {
-            btnEnregistrerDvd.Enabled = actif;
-        }
-
-        /// <summary>
-        /// (Dés)Activer le bouton qui permet d'annuler une saisie d'un DVD
-        /// </summary>
-        /// <param name="actif"></param>
-        private void ActiverBoutonAnnulerSaisieDvd(Boolean actif)
-        {
-            btnAnnulerSaisieDvd.Enabled = actif;
-        }        
-
-        /// <summary>
         /// Démarre la saisie d'un DVD, déverouille les champs 'infos'
         /// </summary>
         private void StartSaisieDvd()
@@ -801,8 +810,9 @@ namespace Mediatek86.vue
             cbxInfosDvdGenres.Enabled = actif;
             cbxInfosDvdPublics.Enabled = actif;
             cbxInfosDvdRayons.Enabled = actif;
-            ActiverBoutonEnregDvd(actif);
-            ActiverBoutonAnnulerSaisieDvd(actif);
+            btnEnregistrerDvd.Enabled = actif;
+            btnAnnulerSaisieDvd.Enabled = actif;
+            btnDvdRechercheImage.Enabled = actif;
         }
 
         /// <summary>

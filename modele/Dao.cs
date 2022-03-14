@@ -1,8 +1,7 @@
-﻿using Mediatek86.metier;
-using System.Collections.Generic;
-using Mediatek86.bdd;
+﻿using Mediatek86.bdd;
+using Mediatek86.metier;
 using System;
-using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace Mediatek86.modele
 {
@@ -13,7 +12,7 @@ namespace Mediatek86.modele
         private static readonly string userid = "root";
         private static readonly string password = "";
         private static readonly string database = "mediatek86";
-        private static readonly string connectionString = "server="+server+";user id="+userid+";password="+password+";database="+database+";SslMode=none";
+        private static readonly string connectionString = "server=" + server + ";user id=" + userid + ";password=" + password + ";database=" + database + ";SslMode=none";
 
         /// <summary>
         /// Retourne le service d'un utilisateur
@@ -157,7 +156,7 @@ namespace Mediatek86.modele
                 string genre = (string)curs.Field("genre");
                 string lepublic = (string)curs.Field("public");
                 string rayon = (string)curs.Field("rayon");
-                Livre livre = new Livre(id, titre, image, isbn, auteur, collection, idgenre, genre, 
+                Livre livre = new Livre(id, titre, image, isbn, auteur, collection, idgenre, genre,
                     idpublic, lepublic, idrayon, rayon);
                 lesLivres.Add(livre);
             }
@@ -360,7 +359,7 @@ namespace Mediatek86.modele
         {
             List<FinAbonnement> lesFinAbonnement = new List<FinAbonnement>();
             string req = "call  abonnementsFin30()";
-            
+
             BddMySql curs = BddMySql.GetInstance(connectionString);
             curs.ReqSelect(req, null);
 
@@ -387,8 +386,10 @@ namespace Mediatek86.modele
         {
             try
             {
-                List<string> requetes = new List<string>();
-                requetes.Add("insert into exemplaire values (@idDocument,@numero,@dateAchat,@photo,@idEtat)");
+                List<string> requetes = new List<string>
+                {
+                    "insert into exemplaire values (@idDocument,@numero,@dateAchat,@photo,@idEtat)"
+                };
                 Dictionary<string, object> parameters = new Dictionary<string, object>
                 {
                     { "@idDocument", exemplaire.IdDocument},
@@ -417,10 +418,12 @@ namespace Mediatek86.modele
         {
             try
             {
-                List<string> requetes = new List<string>();
-                requetes.Add("insert into document values (@id, @titre, @image, @idRayon, @idPublic, @idGenre)");
-                requetes.Add("insert into livres_dvd values (@id)");
-                requetes.Add("insert into livre values (@id, @isbn, @auteur, @collection)");
+                List<string> requetes = new List<string>
+                {
+                    "insert into document values (@id, @titre, @image, @idRayon, @idPublic, @idGenre)",
+                    "insert into livres_dvd values (@id)",
+                    "insert into livre values (@id, @isbn, @auteur, @collection)"
+                };
                 Dictionary<string, object> parameters = new Dictionary<string, object>
                 {
                     {"@id", livre.Id },
@@ -433,7 +436,7 @@ namespace Mediatek86.modele
                     {"@auteur", livre.Auteur },
                     {"@collection", livre.Collection },
                 };
-                BddMySql curs = BddMySql.GetInstance(connectionString);              
+                BddMySql curs = BddMySql.GetInstance(connectionString);
                 curs.ReqUpdate(requetes, parameters);
                 curs.Close();
                 return "Ajout de livre réussi!";
@@ -441,7 +444,7 @@ namespace Mediatek86.modele
             catch (Exception e)
             {
                 return e.Message;
-            }           
+            }
         }
 
         /// <summary>
@@ -453,9 +456,11 @@ namespace Mediatek86.modele
         {
             try
             {
-                List<string> requetes = new List<string>();
-                requetes.Add("update document set titre=@titre, image=@image, idRayon=@idRayon, idPublic=@idPublic, idGenre=@idGenre where id=@id");
-                requetes.Add("update livre set isbn=@isbn, auteur=@auteur, collection=@collection where id=@id");
+                List<string> requetes = new List<string>
+                {
+                    "update document set titre=@titre, image=@image, idRayon=@idRayon, idPublic=@idPublic, idGenre=@idGenre where id=@id",
+                    "update livre set isbn=@isbn, auteur=@auteur, collection=@collection where id=@id"
+                };
                 Dictionary<string, object> parameters = new Dictionary<string, object>
                 {
                     {"@id", livre.Id },
@@ -476,7 +481,7 @@ namespace Mediatek86.modele
             catch
             {
                 return false;
-            }            
+            }
         }
 
         /// <summary>
@@ -488,10 +493,12 @@ namespace Mediatek86.modele
         {
             try
             {
-                List<string> requetes = new List<string>();
-                requetes.Add("delete from livre  where id=@id");
-                requetes.Add("delete from livres_dvd  where id=@id");
-                requetes.Add("delete from document  where id=@id");
+                List<string> requetes = new List<string>
+                {
+                    "delete from livre  where id=@id",
+                    "delete from livres_dvd  where id=@id",
+                    "delete from document  where id=@id"
+                };
                 Dictionary<string, object> parameters = new Dictionary<string, object>
                 {
                     {"@id", id },
@@ -516,10 +523,12 @@ namespace Mediatek86.modele
         {
             try
             {
-                List<string> requetes = new List<string>();
-                requetes.Add("insert into document values (@id, @titre, @image, @idRayon, @idPublic, @idGenre)");
-                requetes.Add("insert into livres_dvd values (@id)");
-                requetes.Add("insert into dvd values (@id, @synopsis, @realisateur, @duree)");
+                List<string> requetes = new List<string>
+                {
+                    "insert into document values (@id, @titre, @image, @idRayon, @idPublic, @idGenre)",
+                    "insert into livres_dvd values (@id)",
+                    "insert into dvd values (@id, @synopsis, @realisateur, @duree)"
+                };
                 Dictionary<string, object> parameters = new Dictionary<string, object>
                 {
                     {"@id", dvd.Id },
@@ -552,9 +561,11 @@ namespace Mediatek86.modele
         {
             try
             {
-                List<string> requetes = new List<string>();
-                requetes.Add("update document set titre=@titre, image=@image, idRayon=@idRayon, idPublic=@idPublic, idGenre=@idGenre where id=@id");
-                requetes.Add("update dvd set synopsis=@synopsis, realisateur=@realisateur, duree=@duree where id=@id");
+                List<string> requetes = new List<string>
+                {
+                    "update document set titre=@titre, image=@image, idRayon=@idRayon, idPublic=@idPublic, idGenre=@idGenre where id=@id",
+                    "update dvd set synopsis=@synopsis, realisateur=@realisateur, duree=@duree where id=@id"
+                };
                 Dictionary<string, object> parameters = new Dictionary<string, object>
                 {
                     {"@id", dvd.Id },
@@ -587,10 +598,12 @@ namespace Mediatek86.modele
         {
             try
             {
-                List<string> requetes = new List<string>();
-                requetes.Add("delete from dvd  where id=@id");
-                requetes.Add("delete from livres_dvd  where id=@id");
-                requetes.Add("delete from document  where id=@id");
+                List<string> requetes = new List<string>
+                {
+                    "delete from dvd  where id=@id",
+                    "delete from livres_dvd  where id=@id",
+                    "delete from document  where id=@id"
+                };
                 Dictionary<string, object> parameters = new Dictionary<string, object>
                 {
                     {"@id", id },
@@ -615,9 +628,11 @@ namespace Mediatek86.modele
         {
             try
             {
-                List<string> requetes = new List<string>();
-                requetes.Add("insert into document values (@id, @titre, @image, @idRayon, @idPublic, @idGenre)");
-                requetes.Add("insert into revue values (@id, @empruntable, @periodicite, @delaiMiseADispo)");
+                List<string> requetes = new List<string>
+                {
+                    "insert into document values (@id, @titre, @image, @idRayon, @idPublic, @idGenre)",
+                    "insert into revue values (@id, @empruntable, @periodicite, @delaiMiseADispo)"
+                };
                 Dictionary<string, object> parameters = new Dictionary<string, object>
                 {
                     {"@id", revue.Id },
@@ -650,9 +665,11 @@ namespace Mediatek86.modele
         {
             try
             {
-                List<string> requetes = new List<string>();
-                requetes.Add("update document set titre=@titre, image=@image, idRayon=@idRayon, idPublic=@idPublic, idGenre=@idGenre where id=@id");
-                requetes.Add("update revue set empruntable=@empruntable, periodicite=@periodicite, delaiMiseADispo=@delaiMiseADispo where id=@id");
+                List<string> requetes = new List<string>
+                {
+                    "update document set titre=@titre, image=@image, idRayon=@idRayon, idPublic=@idPublic, idGenre=@idGenre where id=@id",
+                    "update revue set empruntable=@empruntable, periodicite=@periodicite, delaiMiseADispo=@delaiMiseADispo where id=@id"
+                };
                 Dictionary<string, object> parameters = new Dictionary<string, object>
                 {
                     {"@id", revue.Id },
@@ -685,9 +702,11 @@ namespace Mediatek86.modele
         {
             try
             {
-                List<string> requetes = new List<string>();
-                requetes.Add("delete from revue  where id=@id");
-                requetes.Add("delete from document  where id=@id");
+                List<string> requetes = new List<string>
+                {
+                    "delete from revue  where id=@id",
+                    "delete from document  where id=@id"
+                };
                 Dictionary<string, object> parameters = new Dictionary<string, object>
                 {
                     {"@id", id },
@@ -712,10 +731,12 @@ namespace Mediatek86.modele
         {
             try
             {
-                List<string> requetes = new List<string>();
-                requetes.Add("insert into commande values (@id, @dateCommande, @montant) ");
-                requetes.Add("insert into commandedocument values (@id, @nbExemplaire, @idLivreDvd) ");
-                requetes.Add("insert into suivicommandedoc values (@idSuivi, @id)");
+                List<string> requetes = new List<string>
+                {
+                    "insert into commande values (@id, @dateCommande, @montant) ",
+                    "insert into commandedocument values (@id, @nbExemplaire, @idLivreDvd) ",
+                    "insert into suivicommandedoc values (@idSuivi, @id)"
+                };
                 Dictionary<string, object> parameters = new Dictionary<string, object>
                 {
                     {"@id", commandeDocument.Id },
@@ -745,10 +766,12 @@ namespace Mediatek86.modele
         {
             try
             {
-                List<string> requetes = new List<string>();
-                requetes.Add("delete from suivicommandedoc where idcommande=@id");
-                requetes.Add("delete from commandedocument where id=@id");
-                requetes.Add("delete from commande where id=@id");
+                List<string> requetes = new List<string>
+                {
+                    "delete from suivicommandedoc where idcommande=@id",
+                    "delete from commandedocument where id=@id",
+                    "delete from commande where id=@id"
+                };
                 Dictionary<string, object> parameters = new Dictionary<string, object>
                 {
                     {"@id", id },
@@ -761,7 +784,7 @@ namespace Mediatek86.modele
             catch
             {
                 return false;
-            }        
+            }
         }
 
         /// <summary>
@@ -774,12 +797,14 @@ namespace Mediatek86.modele
         {
             try
             {
-                List<string> requetes = new List<string>();
-                requetes.Add("update suivicommandedoc set idsuivi=@idsuivi where idcommande=@idcommande");
+                List<string> requetes = new List<string>
+                {
+                    "update suivicommandedoc set idsuivi=@idsuivi where idcommande=@idcommande"
+                };
                 Dictionary<string, object> parameters = new Dictionary<string, object>
                 {
                     {"@idsuivi", idSuivi },
-                    {"@idcommande", idCommandeDocument },                  
+                    {"@idcommande", idCommandeDocument },
                 };
                 BddMySql curs = BddMySql.GetInstance(connectionString);
                 curs.ReqUpdate(requetes, parameters);
@@ -801,9 +826,11 @@ namespace Mediatek86.modele
         {
             try
             {
-                List<string> requetes = new List<string>();
-                requetes.Add("insert into commande values (@id, @dateCommande, @montant) ");
-                requetes.Add("insert into abonnement values (@id, @dateFinAbonnement, @idRevue) ");
+                List<string> requetes = new List<string>
+                {
+                    "insert into commande values (@id, @dateCommande, @montant) ",
+                    "insert into abonnement values (@id, @dateFinAbonnement, @idRevue) "
+                };
                 Dictionary<string, object> parameters = new Dictionary<string, object>
                 {
                     {"@id", abonnement.Id },
@@ -832,9 +859,11 @@ namespace Mediatek86.modele
         {
             try
             {
-                List<string> requetes = new List<string>();
-                requetes.Add("delete from abonnement where id=@id");
-                requetes.Add("delete from commande where id=@id");
+                List<string> requetes = new List<string>
+                {
+                    "delete from abonnement where id=@id",
+                    "delete from commande where id=@id"
+                };
                 Dictionary<string, object> parameters = new Dictionary<string, object>
                 {
                     {"@id", id },

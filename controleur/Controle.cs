@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using Mediatek86.metier;
 using Mediatek86.modele;
-using Mediatek86.metier;
 using Mediatek86.vue;
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
-using System.Text;
 using System.Security.Cryptography;
+using System.Text;
+using System.Windows.Forms;
 
 namespace Mediatek86.controleur
 {
@@ -23,7 +23,7 @@ namespace Mediatek86.controleur
         /// <summary>
         /// Le service dont dépend l'utilisateur connecté
         /// </summary>
-        public Service leService { get; private set; }
+        public Service LeService { get; private set; }
 
         /// <summary>
         /// Ouverture de la fenêtre d'authentification
@@ -37,10 +37,10 @@ namespace Mediatek86.controleur
             lesGenres = Dao.GetAllGenres();
             lesRayons = Dao.GetAllRayons();
             lesPublics = Dao.GetAllPublics();
-            lesSuivis = Dao.GetAllSuivis();            
+            lesSuivis = Dao.GetAllSuivis();
             Authentification authentification = new Authentification(this);
             Application.Run(authentification);
-            if (authentification.authentificationSucces)
+            if (authentification.AuthentificationSucces)
             {
                 FrmMediatek frmMediatek = new FrmMediatek(this);
                 Application.Run(frmMediatek);
@@ -325,7 +325,7 @@ namespace Mediatek86.controleur
             bool parution = false;
             foreach (Exemplaire exemplaire in lesExemplaires.Where(ex => ParutionDansAbonnement(abonnement.DateCommande, abonnement.DateFinAbonnement, ex.DateAchat)))
             {
-                    parution = true;
+                parution = true;
             }
             return parution;
         }
@@ -385,7 +385,7 @@ namespace Mediatek86.controleur
         public Service Authentification(string utilisateur, string mdp)
         {
             Service service = Dao.Authentification(utilisateur, CreateMD5(mdp));
-            leService = service;
+            LeService = service;
             return service;
         }
     }

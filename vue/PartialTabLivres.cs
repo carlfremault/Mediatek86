@@ -1,12 +1,9 @@
-﻿using System;
+﻿using Mediatek86.metier;
+using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
-using Mediatek86.metier;
-using Mediatek86.controleur;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Mediatek86.vue
 {
@@ -308,8 +305,10 @@ namespace Mediatek86.vue
                 Livre livre = lesLivres.Find(x => x.Id.Equals(txbLivresNumRecherche.Text.Trim()));
                 if (livre != null)
                 {
-                    List<Livre> livres = new List<Livre>();
-                    livres.Add(livre);
+                    List<Livre> livres = new List<Livre>
+                    {
+                        livre
+                    };
                     RemplirLivresListe(livres);
                 }
                 else
@@ -377,7 +376,7 @@ namespace Mediatek86.vue
                 }
             }
         }
-        
+
         /// <summary>
         /// Evénement changement de sélection combobox Genres
         /// On vérifie si l'utilisateur est en train de faire une saisie
@@ -617,6 +616,34 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
+        /// Recherche image du livre sur disque 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnLivreRechercheImage_Click(object sender, EventArgs e)
+        {
+            string filePath = "";
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                InitialDirectory = DOSSIERINITIALRECHERCHEIMAGE,
+                Filter = "Files|*.jpg;*.bmp;*.jpeg;*.png;*.gif"
+            };
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                filePath = openFileDialog.FileName;
+            }
+            txbLivresImage.Text = filePath;
+            try
+            {
+                pcbLivresImage.Image = Image.FromFile(filePath);
+            }
+            catch
+            {
+                pcbLivresImage.Image = null;
+            }
+        }
+
+        /// <summary>
         /// Evénement clic sur le bouton 'Enregistrer'
         /// Vérifie si les champs requis (numéro, genre, public, rayon) sont saisies.
         /// Si oui procède à l'ajout ou modification du livre
@@ -732,24 +759,6 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// (Dés)Activer le bouton qui permet d'enregistrer un livre
-        /// </summary>
-        /// <param name="actif"></param>
-        private void ActiverBoutonEnregLivre(Boolean actif)
-        {
-            btnEnregistrerLivre.Enabled = actif;
-        }
-
-        /// <summary>
-        /// (Dés)Activer le bouton qui permet d'annuler une saisie d'un livre
-        /// </summary>
-        /// <param name="actif"></param>
-        private void ActiverBoutonAnnulerSaisieLivre(Boolean actif)
-        {
-            btnAnnulerSaisieLivre.Enabled = actif;
-        }
-
-        /// <summary>
         /// Démarre la saisie d'un livre, déverouille les champs 'infos'
         /// </summary>
         private void StartSaisieLivre()
@@ -787,8 +796,9 @@ namespace Mediatek86.vue
             cbxInfosLivresGenres.Enabled = actif;
             cbxInfosLivresPublics.Enabled = actif;
             cbxInfosLivresRayons.Enabled = actif;
-            ActiverBoutonEnregLivre(actif);
-            ActiverBoutonAnnulerSaisieLivre(actif);
+            btnEnregistrerLivre.Enabled = actif;
+            btnAnnulerSaisieLivre.Enabled = actif;
+            btnLivreRechercheImage.Enabled = actif;
         }
 
         /// <summary>

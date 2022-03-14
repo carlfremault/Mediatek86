@@ -15,7 +15,7 @@ namespace Mediatek86.metier
         private readonly string rayon;
 
 #pragma warning disable S107 // Methods should not have too many parameters
-        public Document(string id, string titre, string image, string idGenre, string genre, 
+        public Document(string id, string titre, string image, string idGenre, string genre,
             string idPublic, string lePublic, string idRayon, string rayon)
 #pragma warning restore S107 // Methods should not have too many parameters
         {

@@ -1,13 +1,9 @@
-﻿using System;
+﻿using Mediatek86.metier;
+using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
-using Mediatek86.metier;
-using Mediatek86.controleur;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Globalization;
+using System.Windows.Forms;
 
 namespace Mediatek86.vue
 {
@@ -76,7 +72,7 @@ namespace Mediatek86.vue
             {
                 FinSaisieCommandeLivres();
                 CommandeLivresRechercher();
-            } 
+            }
             else if (!saisieCommandeLivres)
             {
                 CommandeLivresRechercher();
@@ -135,7 +131,7 @@ namespace Mediatek86.vue
             {
                 AccesGestionCommandeLivresGroupBox(false);
                 VideCommandeLivresInfos();
-            }           
+            }
         }
 
         /// <summary>
@@ -265,7 +261,7 @@ namespace Mediatek86.vue
             else
             {
                 CommandeLivresListeSelection();
-            }       
+            }
         }
 
         /// <summary>
@@ -372,8 +368,8 @@ namespace Mediatek86.vue
         /// <param name="e"></param>
         private void btnCommandeLivresAjouter_Click(object sender, EventArgs e)
         {
-            DesActivationModificationCommandeLivres();            
-            DebutSaisieCommandeLivres();           
+            DesActivationModificationCommandeLivres();
+            DebutSaisieCommandeLivres();
         }
 
         /// <summary>
@@ -409,11 +405,10 @@ namespace Mediatek86.vue
             int nbExemplaires = (int)nudCommandeLivresExemplaires.Value;
             string idLivreDvd = txbCommandeLivresNumeroLivre.Text.Trim();
             int idSuivi = lesSuivis[0].Id;
-            string libelleSuivi = lesSuivis[0].Libelle;   
-            
+            string libelleSuivi = lesSuivis[0].Libelle;
+
             String montantSaisie = txbCommandeLivresMontant.Text.Replace(',', '.');
-            Double montant;
-            bool success = Double.TryParse(montantSaisie, out montant);
+            bool success = Double.TryParse(montantSaisie, out double montant);
             if (!success)
             {
                 MessageBox.Show("La valeur saisie pour le montant doit être numérique.", "Erreur");
@@ -452,7 +447,7 @@ namespace Mediatek86.vue
         /// <param name="e"></param>
         private void btnCommandeLivresSupprimer_Click(object sender, EventArgs e)
         {
-            if(ValidationSuppressionCommande())
+            if (ValidationSuppressionCommande())
             {
                 CommandeDocument commandeDocument = (CommandeDocument)bdgCommandesLivresListe.List[bdgCommandesLivresListe.Position];
                 if (controle.SupprCommandeDocument(commandeDocument.Id))

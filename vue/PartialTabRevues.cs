@@ -1,12 +1,9 @@
-﻿using System;
+﻿using Mediatek86.metier;
+using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
-using Mediatek86.metier;
-using Mediatek86.controleur;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Mediatek86.vue
 {
@@ -306,8 +303,10 @@ namespace Mediatek86.vue
                 Revue revue = lesRevues.Find(x => x.Id.Equals(txbRevuesNumRecherche.Text.Trim()));
                 if (revue != null)
                 {
-                    List<Revue> revues = new List<Revue>();
-                    revues.Add(revue);
+                    List<Revue> revues = new List<Revue>
+                    {
+                        revue
+                    };
                     RemplirRevuesListe(revues);
                 }
                 else
@@ -612,6 +611,34 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
+        /// Recherche image de la revue sur disque
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnRevuesRechercheImage_Click(object sender, EventArgs e)
+        {
+            string filePath = "";
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                InitialDirectory = DOSSIERINITIALRECHERCHEIMAGE,
+                Filter = "Files|*.jpg;*.bmp;*.jpeg;*.png;*.gif"
+            };
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                filePath = openFileDialog.FileName;
+            }
+            txbRevuesImage.Text = filePath;
+            try
+            {
+                pcbRevuesImage.Image = Image.FromFile(filePath);
+            }
+            catch
+            {
+                pcbRevuesImage.Image = null;
+            }
+        }
+
+        /// <summary>
         /// Evénement clic sur le bouton 'Enregistrer'
         /// Vérifie si les champs requis (numéro, genre, public, rayon) sont saisies.
         /// Si oui procède à l'ajout ou modification de la revue
@@ -740,24 +767,6 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// (Dés)Activer le bouton qui permet d'enregistrer une revue
-        /// </summary>
-        /// <param name="actif"></param>
-        private void ActiverBoutonEnregRevue(Boolean actif)
-        {
-            btnEnregistrerRevue.Enabled = actif;
-        }
-
-        /// <summary>
-        /// (Dés)Activer le bouton qui permet d'annuler une saisie d'une revue
-        /// </summary>
-        /// <param name="actif"></param>
-        private void ActiverBoutonAnnulerSaisieRevue(Boolean actif)
-        {
-            btnAnnulerSaisieRevue.Enabled = actif;
-        }
-
-        /// <summary>
         /// Démarre la saisie d'une revue, déverouille les champs 'infos'
         /// </summary>
         private void StartSaisieRevue()
@@ -795,8 +804,10 @@ namespace Mediatek86.vue
             cbxInfosRevuesGenres.Enabled = actif;
             cbxInfosRevuesPublics.Enabled = actif;
             cbxInfosRevuesRayons.Enabled = actif;
-            ActiverBoutonEnregRevue(actif);
-            ActiverBoutonAnnulerSaisieRevue(actif);
+            btnEnregistrerRevue.Enabled = actif;
+            btnAnnulerSaisieRevue.Enabled = actif;
+            btnRevuesRechercheImage.Enabled = actif;
+            
         }
 
         /// <summary>

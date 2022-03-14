@@ -9,7 +9,7 @@ namespace Mediatek86.vue
     public partial class AlerteFinAbonnements : Form
     {
         private readonly BindingSource bdgAlerteAbonnements = new BindingSource();
-        private List<FinAbonnement> lesFinAbonnement;
+        private readonly List<FinAbonnement> lesFinAbonnement;
 
         /// <summary>
         /// Constructeur. Remplit le tableau des abonnements
@@ -25,7 +25,7 @@ namespace Mediatek86.vue
             dgvAlerteFinAbonnements.Columns["idRevue"].DisplayIndex = 2;
             dgvAlerteFinAbonnements.Columns[0].HeaderCell.Value = "Date fin d'abonnement";
             dgvAlerteFinAbonnements.Columns[1].HeaderCell.Value = "Identifiant Revue";
-            dgvAlerteFinAbonnements.Columns[2].HeaderCell.Value = "Revue";            
+            dgvAlerteFinAbonnements.Columns[2].HeaderCell.Value = "Revue";
         }
 
         /// <summary>

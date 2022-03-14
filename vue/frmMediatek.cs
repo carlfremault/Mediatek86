@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
+﻿using Mediatek86.controleur;
 using Mediatek86.metier;
-using Mediatek86.controleur;
-using System.Drawing;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace Mediatek86.vue
 {
@@ -15,6 +14,7 @@ namespace Mediatek86.vue
 
         private readonly Controle controle;
         const string ETATNEUF = "00001";
+        const string DOSSIERINITIALRECHERCHEIMAGE = "c:\\";
 
         private readonly BindingSource bdgLivresListe = new BindingSource();
         private readonly BindingSource bdgDvdListe = new BindingSource();
@@ -48,21 +48,21 @@ namespace Mediatek86.vue
         {
             InitializeComponent();
             this.controle = controle;
-            if (controle.leService.Libelle == "prêt")
+            if (controle.LeService.Libelle == "prêt")
             {
-                    tabOngletsApplication.TabPages.Remove(tabCommandeLivres);
-                    tabOngletsApplication.TabPages.Remove(tabCommandeDVD);
-                    tabOngletsApplication.TabPages.Remove(tabAbonnementRevue);
-                    grpReceptionExemplaire.Visible = false;
-                    grpGestionLivres.Visible = false;
-                    grpGestionDVD.Visible = false;
-                    grpGestionRevues.Visible = false;
-                    btnEnregistrerLivre.Visible = false;
-                    btnEnregistrerDvd.Visible = false;
-                    btnEnregistrerRevue.Visible = false;
-                    btnAnnulerSaisieLivre.Visible = false;
-                    btnAnnulerSaisieDvd.Visible = false;
-                    btnAnnulerSaisieRevue.Visible = false;
+                tabOngletsApplication.TabPages.Remove(tabCommandeLivres);
+                tabOngletsApplication.TabPages.Remove(tabCommandeDVD);
+                tabOngletsApplication.TabPages.Remove(tabAbonnementRevue);
+                grpReceptionExemplaire.Visible = false;
+                grpGestionLivres.Visible = false;
+                grpGestionDVD.Visible = false;
+                grpGestionRevues.Visible = false;
+                btnEnregistrerLivre.Visible = false;
+                btnEnregistrerDvd.Visible = false;
+                btnEnregistrerRevue.Visible = false;
+                btnAnnulerSaisieLivre.Visible = false;
+                btnAnnulerSaisieDvd.Visible = false;
+                btnAnnulerSaisieRevue.Visible = false;
             }
         }
 
@@ -73,10 +73,12 @@ namespace Mediatek86.vue
         /// <param name="e"></param>
         private void FrmMediatek_Shown(object sender, EventArgs e)
         {
-            if (controle.leService.Libelle != "prêt")
+            if (controle.LeService.Libelle != "prêt")
             {
-                AlerteFinAbonnements alerteFinAbonnements = new AlerteFinAbonnements(controle);
-                alerteFinAbonnements.StartPosition = FormStartPosition.CenterParent;
+                AlerteFinAbonnements alerteFinAbonnements = new AlerteFinAbonnements(controle)
+                {
+                    StartPosition = FormStartPosition.CenterParent
+                };
                 alerteFinAbonnements.ShowDialog();
             }
         }
@@ -170,14 +172,14 @@ namespace Mediatek86.vue
         /// <param name="e"></param>
         private void tabOngletsApplication_Deselecting(object sender, TabControlCancelEventArgs e)
         {
-            if ((saisieLivre ||saisieDvd || saisieRevue || saisieCommandeLivres) && !VerifAbandonSaisie())
+            if ((saisieLivre || saisieDvd || saisieRevue || saisieCommandeLivres) && !VerifAbandonSaisie())
             {
                 e.Cancel = true;
             }
             else
             {
                 CancelAllSaisies();
-            }            
+            }
         }
 
         /// <summary>

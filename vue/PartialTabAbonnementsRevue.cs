@@ -1,13 +1,10 @@
-﻿using System;
+﻿using Mediatek86.metier;
+using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
-using Mediatek86.metier;
-using Mediatek86.controleur;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Globalization;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace Mediatek86.vue
 {
@@ -165,7 +162,7 @@ namespace Mediatek86.vue
         /// Affichage des détails d'un abonne;ent
         /// </summary>
         /// <param name="commandeDocument"></param>
-        private void AfficheAbonnementRevueAbonnement (Abonnement abonnement)
+        private void AfficheAbonnementRevueAbonnement(Abonnement abonnement)
         {
             txbAbonnementRevueNumeroAbonnement.Text = abonnement.Id;
             dtpAbonnementRevueDateCommande.Value = abonnement.DateCommande;
@@ -188,7 +185,7 @@ namespace Mediatek86.vue
         /// Vide les zones d'affchage des informations de la revue
         /// </summary>
         private void VideAbonnementRevueInfos()
-        {         
+        {
             txbAbonnementRevueTitre.Text = "";
             txbAbonnementRevuePeriodicite.Text = "";
             txbAbonnementRevueDelaiMiseADispo.Text = "";
@@ -381,8 +378,7 @@ namespace Mediatek86.vue
             string idRevue = txbAbonnementRevueNumeroRevue.Text.Trim();
 
             String montantSaisie = txbAbonnementRevueMontant.Text.Replace(',', '.');
-            Double montant;
-            bool success = Double.TryParse(montantSaisie, out montant);
+            bool success = Double.TryParse(montantSaisie, out double montant);
             if (!success)
             {
                 MessageBox.Show("La valeur saisie pour le montant doit être numérique.", "Erreur");
@@ -424,11 +420,11 @@ namespace Mediatek86.vue
         private void btnAbonnementRevueSupprimer_Click(object sender, EventArgs e)
         {
             Abonnement abonnement = (Abonnement)bdgAbonnementRevueListe.List[bdgAbonnementRevueListe.Position];
-            if(!controle.VerifSuppressionAbonnement(abonnement))
+            if (!controle.VerifSuppressionAbonnement(abonnement))
             {
-                if(ValidationSuppressionAbonnement())
+                if (ValidationSuppressionAbonnement())
                 {
-                    if(controle.SupprAbonnement(abonnement.Id))
+                    if (controle.SupprAbonnement(abonnement.Id))
                     {
                         AfficheAbonnementsRevue();
                     }
@@ -437,7 +433,7 @@ namespace Mediatek86.vue
                         MessageBox.Show("Une erreur s'est produite.", "Erreur");
                     }
                 }
-            } 
+            }
             else
             {
                 MessageBox.Show("Impossible de supprimer cet abonnement, des exemplaires rattachés existent.", "Information");
