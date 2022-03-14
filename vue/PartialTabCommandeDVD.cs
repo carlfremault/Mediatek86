@@ -31,7 +31,7 @@ namespace Mediatek86.vue
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void tabCommandeDVD_Enter_1(object sender, EventArgs e)
+        private void tabCommandeDVD_Enter(object sender, EventArgs e)
         {
             CancelAllSaisies();
             lesDvd = controle.GetAllDvd();

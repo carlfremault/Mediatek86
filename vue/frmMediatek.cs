@@ -39,10 +39,31 @@ namespace Mediatek86.vue
 
         #endregion
 
+        /// <summary>
+        /// Constructeur. Rend invisible certaines fonctionnalités en cas de connection
+        /// d'un utilisateur du service "prêt"
+        /// </summary>
+        /// <param name="controle"></param>
         internal FrmMediatek(Controle controle)
         {
             InitializeComponent();
             this.controle = controle;
+            if (controle.leService.Libelle == "prêt")
+            {
+                    tabOngletsApplication.TabPages.Remove(tabCommandeLivres);
+                    tabOngletsApplication.TabPages.Remove(tabCommandeDVD);
+                    tabOngletsApplication.TabPages.Remove(tabAbonnementRevue);
+                    grpReceptionExemplaire.Visible = false;
+                    grpGestionLivres.Visible = false;
+                    grpGestionDVD.Visible = false;
+                    grpGestionRevues.Visible = false;
+                    btnEnregistrerLivre.Visible = false;
+                    btnEnregistrerDvd.Visible = false;
+                    btnEnregistrerRevue.Visible = false;
+                    btnAnnulerSaisieLivre.Visible = false;
+                    btnAnnulerSaisieDvd.Visible = false;
+                    btnAnnulerSaisieRevue.Visible = false;
+            }
         }
 
         /// <summary>
@@ -52,9 +73,12 @@ namespace Mediatek86.vue
         /// <param name="e"></param>
         private void FrmMediatek_Shown(object sender, EventArgs e)
         {
-            AlerteFinAbonnements alerteFinAbonnements = new AlerteFinAbonnements(controle);
-            alerteFinAbonnements.StartPosition = FormStartPosition.CenterParent;
-            alerteFinAbonnements.ShowDialog();
+            if (controle.leService.Libelle != "prêt")
+            {
+                AlerteFinAbonnements alerteFinAbonnements = new AlerteFinAbonnements(controle);
+                alerteFinAbonnements.StartPosition = FormStartPosition.CenterParent;
+                alerteFinAbonnements.ShowDialog();
+            }
         }
 
         #region modules communs
