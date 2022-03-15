@@ -44,12 +44,12 @@ namespace Mediatek86.vue
         /// d'un utilisateur du service "prêt"
         /// </summary>
         /// <param name="controle"></param>
-        internal FrmMediatek(Controle controle)
+        public FrmMediatek(Controle controle)
         {
             InitializeComponent();
             this.controle = controle;
             if (controle.LeService.Libelle == "prêt")
-            {
+            {                
                 tabOngletsApplication.TabPages.Remove(tabCommandeLivres);
                 tabOngletsApplication.TabPages.Remove(tabCommandeDVD);
                 tabOngletsApplication.TabPages.Remove(tabAbonnementRevue);
