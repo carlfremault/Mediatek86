@@ -7,6 +7,8 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
+using Serilog;
+using Serilog.Formatting.Json;
 
 namespace Mediatek86.controleur
 {
@@ -25,12 +27,20 @@ namespace Mediatek86.controleur
         /// </summary>
         public Service LeService { get; private set; }
 
+       
         /// <summary>
         /// Ouverture de la fenêtre d'authentification
+        /// Initialisation des différentes collections
+        /// Initialisation de la journalisation
         /// Si l'authentification a réussi, ouverture de l'application
         /// </summary>
         public Controle()
         {
+     /*       Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Information()
+                .WriteTo.File(new JsonFormatter(), "logs/log.txt",
+                rollingInterval : RollingInterval.Day)
+                .CreateLogger();*/
             lesLivres = Dao.GetAllLivres();
             lesDvd = Dao.GetAllDvd();
             lesRevues = Dao.GetAllRevues();

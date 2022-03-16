@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Serilog;
+using Serilog.Formatting.Json;
 
 namespace Mediatek86.bdd
 {
@@ -35,7 +37,8 @@ namespace Mediatek86.bdd
             }
             catch (MySqlException e)
             {
-                ErreurGraveBddNonAccessible(e);
+                Log.Error("BddMySql.BddMySql catch **** stringConnect = " + stringConnect + " **** MySqlException = "+ e.Message);
+                ErreurGraveBddNonAccessible();                
             }
         }
 
@@ -60,7 +63,6 @@ namespace Mediatek86.bdd
         public void ReqSelect(string stringQuery, Dictionary<string, object> parameters)
         {
             MySqlCommand command;
-
             try
             {
                 command = new MySqlCommand(stringQuery, connection);
@@ -76,11 +78,12 @@ namespace Mediatek86.bdd
             }
             catch (MySqlException e)
             {
-                Console.WriteLine(e.Message);
+                Log.Error("BddMySql.ReqSelect catch **** stringQuery = " + stringQuery + " **** MySqlException = " + e.Message);
             }
             catch (InvalidOperationException e)
             {
-                ErreurGraveBddNonAccessible(e);
+                Log.Error("BddMySql.ReqSelect catch **** stringQuery = " + stringQuery + " **** InvaldOperationException = " + e.Message);
+                ErreurGraveBddNonAccessible();
             }
         }
 
@@ -98,8 +101,9 @@ namespace Mediatek86.bdd
             {
                 return reader.Read();
             }
-            catch
+            catch (Exception e)
             {
+                Log.Error("BddMySql.Read catch **** Exception = " + e.Message);
                 return false;
             }
         }
@@ -119,8 +123,9 @@ namespace Mediatek86.bdd
             {
                 return reader[nameField];
             }
-            catch
+            catch (Exception e)
             {
+                Log.Error("BddMySql.Field catch **** nameField = " + nameField + " **** MySqlException = " + e.Message);
                 return null;
             }
         }
@@ -155,12 +160,13 @@ namespace Mediatek86.bdd
             catch (MySqlException e)
             {
                 transaction.Rollback();
-                Console.WriteLine(e.Message);
+                Log.Error("BddMySql.ReqUpdate catch **** queries = " + string.Join(" --- ", queries) + " **** MySqlException = " + e.Message);
                 throw;
             }
             catch (InvalidOperationException e)
             {
-                ErreurGraveBddNonAccessible(e);
+                Log.Error("BddMySql.ReqUpdate catch **** queries = " + string.Join(" --- ", queries) + " **** InvalidOperationException = " + e.Message);
+                ErreurGraveBddNonAccessible();
             }
         }
 
@@ -178,10 +184,9 @@ namespace Mediatek86.bdd
         /// <summary>
         /// Pas d'accès à la BDD : arrêt de l'application
         /// </summary>
-        private void ErreurGraveBddNonAccessible(Exception e)
+        private void ErreurGraveBddNonAccessible()
         {
-            MessageBox.Show("Base de données non accessibles", "Erreur grave");
-            Console.WriteLine(e.Message);
+            MessageBox.Show("Base de données non accessible", "Erreur grave");
             Environment.Exit(1);
         }
     }
