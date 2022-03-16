@@ -1,19 +1,40 @@
-﻿using Mediatek86.metier;
-using System.Collections.Generic;
-using Mediatek86.bdd;
+﻿using Mediatek86.bdd;
+using Mediatek86.metier;
 using System;
-using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace Mediatek86.modele
 {
+    /// <summary>
+    /// Classe Data Access Object.
+    /// Gère les requêtes et réponses vers et depuis la base de données
+    /// </summary>
     public static class Dao
     {
-
+        /// <summary>
+        /// Adresse du serveur
+        /// </summary>
         private static readonly string server = "localhost";
+
+        /// <summary>
+        /// Identifiant utilisateur pour la base de données
+        /// </summary>
         private static readonly string userid = "root";
+
+        /// <summary>
+        /// Mot de passe pour la base de données
+        /// </summary>
         private static readonly string password = "";
+
+        /// <summary>
+        /// Nom de la base de données
+        /// </summary>
         private static readonly string database = "mediatek86";
-        private static readonly string connectionString = "server="+server+";user id="+userid+";password="+password+";database="+database+";SslMode=none";
+
+        /// <summary>
+        /// Chaine de connexion pour la base de données
+        /// </summary>
+        private static readonly string connectionString = "server=" + server + ";user id=" + userid + ";password=" + password + ";database=" + database + ";SslMode=none";
 
         /// <summary>
         /// Retourne le service d'un utilisateur
@@ -44,7 +65,7 @@ namespace Mediatek86.modele
         /// <summary>
         /// Retourne tous les genres à partir de la BDD
         /// </summary>
-        /// <returns>Liste d'objets Genre</returns>
+        /// <returns>Collection d'objets Genre</returns>
         public static List<Categorie> GetAllGenres()
         {
             List<Categorie> lesGenres = new List<Categorie>();
@@ -107,7 +128,7 @@ namespace Mediatek86.modele
         /// <summary>
         /// Retourne tous les états de suivi à partir de la bdd
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Collection d'objets Suivi</returns>
         public static List<Suivi> GetAllSuivis()
         {
             List<Suivi> lesSuivis = new List<Suivi>();
@@ -126,7 +147,7 @@ namespace Mediatek86.modele
         }
 
         /// <summary>
-        /// Retourne toutes les livres à partir de la BDD
+        /// Retourne tous les livres à partir de la BDD
         /// </summary>
         /// <returns>Liste d'objets Livre</returns>
         public static List<Livre> GetAllLivres()
@@ -157,17 +178,16 @@ namespace Mediatek86.modele
                 string genre = (string)curs.Field("genre");
                 string lepublic = (string)curs.Field("public");
                 string rayon = (string)curs.Field("rayon");
-                Livre livre = new Livre(id, titre, image, isbn, auteur, collection, idgenre, genre, 
+                Livre livre = new Livre(id, titre, image, isbn, auteur, collection, idgenre, genre,
                     idpublic, lepublic, idrayon, rayon);
                 lesLivres.Add(livre);
             }
             curs.Close();
-
             return lesLivres;
         }
 
         /// <summary>
-        /// Retourne toutes les dvd à partir de la BDD
+        /// Retourne tous les dvd à partir de la BDD
         /// </summary>
         /// <returns>Liste d'objets Dvd</returns>
         public static List<Dvd> GetAllDvd()
@@ -203,7 +223,6 @@ namespace Mediatek86.modele
                 lesDvd.Add(dvd);
             }
             curs.Close();
-
             return lesDvd;
         }
 
@@ -244,13 +263,13 @@ namespace Mediatek86.modele
                 lesRevues.Add(revue);
             }
             curs.Close();
-
             return lesRevues;
         }
 
         /// <summary>
-        /// Retourne les exemplaires d'une revue
-        /// <param name="idDoc"></param>
+        /// Retourne les exemplaires d'une revue à partir de la BDD
+        /// </summary>
+        /// <param name="idDoc">Identifiant de la revue</param>
         /// <returns>Liste d'objets Exemplaire</returns>
         public static List<Exemplaire> GetExemplairesRevue(string idDoc)
         {
@@ -278,12 +297,11 @@ namespace Mediatek86.modele
                 lesExemplaires.Add(exemplaire);
             }
             curs.Close();
-
             return lesExemplaires;
         }
 
         /// <summary>
-        /// Retourne les commandes d'un livre ou d'un DVD
+        /// Retourne les commandes d'un livre ou d'un DVD à partir de la BDD
         /// </summary>
         /// <param name="idDoc">Identifiant du livre ou DVD</param>
         /// <returns>Liste d'objets CommandeDocument</returns>
@@ -317,12 +335,11 @@ namespace Mediatek86.modele
                 lesCommandes.Add(commandeDocument);
             }
             curs.Close();
-
             return lesCommandes;
         }
 
         /// <summary>
-        /// Retourne les abonnements à une revue
+        /// Retourne les abonnements à une revue à partir de la BDD
         /// </summary>
         /// <param name="idDoc">identifiant de la revue</param>
         /// <returns>Liste d'objets CommandeDocument</returns>
@@ -352,15 +369,19 @@ namespace Mediatek86.modele
                 lesAbonnements.Add(abonnement);
             }
             curs.Close();
-
             return lesAbonnements;
         }
 
+        /// <summary>
+        /// Retourne la liste des FinAbonnement à partir de la BDD
+        /// Ce sont les abonnements avec date d'expiration à moins de 30 jours
+        /// </summary>
+        /// <returns>Collection d'objets de type FinAbonnement</returns>
         public static List<FinAbonnement> GetFinAbonnement()
         {
             List<FinAbonnement> lesFinAbonnement = new List<FinAbonnement>();
             string req = "call  abonnementsFin30()";
-            
+
             BddMySql curs = BddMySql.GetInstance(connectionString);
             curs.ReqSelect(req, null);
 
@@ -374,21 +395,22 @@ namespace Mediatek86.modele
                 lesFinAbonnement.Add(finAbonnement);
             }
             curs.Close();
-
             return lesFinAbonnement;
         }
 
         /// <summary>
-        /// ecriture d'un exemplaire en base de données
+        /// Ecriture d'un exemplaire en base de données
         /// </summary>
-        /// <param name="exemplaire"></param>
-        /// <returns>true si l'insertion a pu se faire</returns>
+        /// <param name="exemplaire">Exemplaire à insérer</param>
+        /// <returns>True si l'insertion a pu se faire</returns>
         public static bool CreerExemplaire(Exemplaire exemplaire)
         {
             try
             {
-                List<string> requetes = new List<string>();
-                requetes.Add("insert into exemplaire values (@idDocument,@numero,@dateAchat,@photo,@idEtat)");
+                List<string> requetes = new List<string>
+                {
+                    "insert into exemplaire values (@idDocument,@numero,@dateAchat,@photo,@idEtat)"
+                };
                 Dictionary<string, object> parameters = new Dictionary<string, object>
                 {
                     { "@idDocument", exemplaire.IdDocument},
@@ -409,18 +431,20 @@ namespace Mediatek86.modele
         }
 
         /// <summary>
-        /// écriture d'un livre en base de données
+        /// Ecriture d'un livre en base de données
         /// </summary>
-        /// <param name="livre">le livre à ajouter</param>
+        /// <param name="livre">Le livre à ajouter</param>
         /// <returns>Le message de confirmation ou d'erreur</returns>
         public static string CreerLivre(Livre livre)
         {
             try
             {
-                List<string> requetes = new List<string>();
-                requetes.Add("insert into document values (@id, @titre, @image, @idRayon, @idPublic, @idGenre)");
-                requetes.Add("insert into livres_dvd values (@id)");
-                requetes.Add("insert into livre values (@id, @isbn, @auteur, @collection)");
+                List<string> requetes = new List<string>
+                {
+                    "insert into document values (@id, @titre, @image, @idRayon, @idPublic, @idGenre)",
+                    "insert into livres_dvd values (@id)",
+                    "insert into livre values (@id, @isbn, @auteur, @collection)"
+                };
                 Dictionary<string, object> parameters = new Dictionary<string, object>
                 {
                     {"@id", livre.Id },
@@ -433,7 +457,7 @@ namespace Mediatek86.modele
                     {"@auteur", livre.Auteur },
                     {"@collection", livre.Collection },
                 };
-                BddMySql curs = BddMySql.GetInstance(connectionString);              
+                BddMySql curs = BddMySql.GetInstance(connectionString);
                 curs.ReqUpdate(requetes, parameters);
                 curs.Close();
                 return "Ajout de livre réussi!";
@@ -441,21 +465,23 @@ namespace Mediatek86.modele
             catch (Exception e)
             {
                 return e.Message;
-            }           
+            }
         }
 
         /// <summary>
-        /// modification d'un livre en base de données
+        /// Modification d'un livre en base de données
         /// </summary>
-        /// <param name="livre">le livre à modifier</param>
-        /// <returns>true si la modification a pu se faire</returns>
+        /// <param name="livre">Le livre à modifier</param>
+        /// <returns>True si la modification a pu se faire</returns>
         public static bool ModifLivre(Livre livre)
         {
             try
             {
-                List<string> requetes = new List<string>();
-                requetes.Add("update document set titre=@titre, image=@image, idRayon=@idRayon, idPublic=@idPublic, idGenre=@idGenre where id=@id");
-                requetes.Add("update livre set isbn=@isbn, auteur=@auteur, collection=@collection where id=@id");
+                List<string> requetes = new List<string>
+                {
+                    "update document set titre=@titre, image=@image, idRayon=@idRayon, idPublic=@idPublic, idGenre=@idGenre where id=@id",
+                    "update livre set isbn=@isbn, auteur=@auteur, collection=@collection where id=@id"
+                };
                 Dictionary<string, object> parameters = new Dictionary<string, object>
                 {
                     {"@id", livre.Id },
@@ -476,22 +502,24 @@ namespace Mediatek86.modele
             catch
             {
                 return false;
-            }            
+            }
         }
 
         /// <summary>
         /// Suppression d'un livre de la base de données
         /// </summary>
-        /// <param name="id">identifiant du livre à supprimer</param>
-        /// <returns>true si la modification a pu se faire</returns>
+        /// <param name="id">Identifiant du livre à supprimer</param>
+        /// <returns>True si la modification a pu se faire</returns>
         public static bool SupprLivre(string id)
         {
             try
             {
-                List<string> requetes = new List<string>();
-                requetes.Add("delete from livre  where id=@id");
-                requetes.Add("delete from livres_dvd  where id=@id");
-                requetes.Add("delete from document  where id=@id");
+                List<string> requetes = new List<string>
+                {
+                    "delete from livre  where id=@id",
+                    "delete from livres_dvd  where id=@id",
+                    "delete from document  where id=@id"
+                };
                 Dictionary<string, object> parameters = new Dictionary<string, object>
                 {
                     {"@id", id },
@@ -508,18 +536,20 @@ namespace Mediatek86.modele
         }
 
         /// <summary>
-        /// écriture d'un DVD en base de données
+        /// Ecriture d'un DVD en base de données
         /// </summary>
-        /// <param name="dvd">le DVD à ajouter</param>
+        /// <param name="dvd">Le DVD à ajouter</param>
         /// <returns>Le message de confirmation ou d'erreur</returns>
         public static string CreerDvd(Dvd dvd)
         {
             try
             {
-                List<string> requetes = new List<string>();
-                requetes.Add("insert into document values (@id, @titre, @image, @idRayon, @idPublic, @idGenre)");
-                requetes.Add("insert into livres_dvd values (@id)");
-                requetes.Add("insert into dvd values (@id, @synopsis, @realisateur, @duree)");
+                List<string> requetes = new List<string>
+                {
+                    "insert into document values (@id, @titre, @image, @idRayon, @idPublic, @idGenre)",
+                    "insert into livres_dvd values (@id)",
+                    "insert into dvd values (@id, @synopsis, @realisateur, @duree)"
+                };
                 Dictionary<string, object> parameters = new Dictionary<string, object>
                 {
                     {"@id", dvd.Id },
@@ -544,17 +574,19 @@ namespace Mediatek86.modele
         }
 
         /// <summary>
-        /// modification d'un DVD en base de données
+        /// Modification d'un DVD en base de données
         /// </summary>
-        /// <param name="dvd">le DVD à modifier</param>
-        /// <returns>true si la modification a pu se faire</returns>
+        /// <param name="dvd">Le DVD à modifier</param>
+        /// <returns>True si la modification a pu se faire</returns>
         public static bool ModifDvd(Dvd dvd)
         {
             try
             {
-                List<string> requetes = new List<string>();
-                requetes.Add("update document set titre=@titre, image=@image, idRayon=@idRayon, idPublic=@idPublic, idGenre=@idGenre where id=@id");
-                requetes.Add("update dvd set synopsis=@synopsis, realisateur=@realisateur, duree=@duree where id=@id");
+                List<string> requetes = new List<string>
+                {
+                    "update document set titre=@titre, image=@image, idRayon=@idRayon, idPublic=@idPublic, idGenre=@idGenre where id=@id",
+                    "update dvd set synopsis=@synopsis, realisateur=@realisateur, duree=@duree where id=@id"
+                };
                 Dictionary<string, object> parameters = new Dictionary<string, object>
                 {
                     {"@id", dvd.Id },
@@ -581,16 +613,18 @@ namespace Mediatek86.modele
         /// <summary>
         /// Suppression d'un DVD de la base de données
         /// </summary>
-        /// <param name="id">identifiant du DVD à supprimer</param>
-        /// <returns>true si la modification a pu se faire</returns>
+        /// <param name="id">Identifiant du DVD à supprimer</param>
+        /// <returns>True si la modification a pu se faire</returns>
         public static bool SupprDvd(string id)
         {
             try
             {
-                List<string> requetes = new List<string>();
-                requetes.Add("delete from dvd  where id=@id");
-                requetes.Add("delete from livres_dvd  where id=@id");
-                requetes.Add("delete from document  where id=@id");
+                List<string> requetes = new List<string>
+                {
+                    "delete from dvd  where id=@id",
+                    "delete from livres_dvd  where id=@id",
+                    "delete from document  where id=@id"
+                };
                 Dictionary<string, object> parameters = new Dictionary<string, object>
                 {
                     {"@id", id },
@@ -607,17 +641,19 @@ namespace Mediatek86.modele
         }
 
         /// <summary>
-        /// écriture d'une revue en base de données
+        /// Ecriture d'une revue en base de données
         /// </summary>
-        /// <param name="revue">la revue à ajouter</param>
+        /// <param name="revue">La revue à ajouter</param>
         /// <returns>Le message de confirmation ou d'erreur</returns>
         public static string CreerRevue(Revue revue)
         {
             try
             {
-                List<string> requetes = new List<string>();
-                requetes.Add("insert into document values (@id, @titre, @image, @idRayon, @idPublic, @idGenre)");
-                requetes.Add("insert into revue values (@id, @empruntable, @periodicite, @delaiMiseADispo)");
+                List<string> requetes = new List<string>
+                {
+                    "insert into document values (@id, @titre, @image, @idRayon, @idPublic, @idGenre)",
+                    "insert into revue values (@id, @empruntable, @periodicite, @delaiMiseADispo)"
+                };
                 Dictionary<string, object> parameters = new Dictionary<string, object>
                 {
                     {"@id", revue.Id },
@@ -642,17 +678,19 @@ namespace Mediatek86.modele
         }
 
         /// <summary>
-        /// modification d'une revue en base de données
+        /// Modification d'une revue en base de données
         /// </summary>
-        /// <param name="revue">la revue à modifier</param>
-        /// <returns>true si la modification a pu se faire</returns>
+        /// <param name="revue">La revue à modifier</param>
+        /// <returns>True si la modification a pu se faire</returns>
         public static bool ModifRevue(Revue revue)
         {
             try
             {
-                List<string> requetes = new List<string>();
-                requetes.Add("update document set titre=@titre, image=@image, idRayon=@idRayon, idPublic=@idPublic, idGenre=@idGenre where id=@id");
-                requetes.Add("update revue set empruntable=@empruntable, periodicite=@periodicite, delaiMiseADispo=@delaiMiseADispo where id=@id");
+                List<string> requetes = new List<string>
+                {
+                    "update document set titre=@titre, image=@image, idRayon=@idRayon, idPublic=@idPublic, idGenre=@idGenre where id=@id",
+                    "update revue set empruntable=@empruntable, periodicite=@periodicite, delaiMiseADispo=@delaiMiseADispo where id=@id"
+                };
                 Dictionary<string, object> parameters = new Dictionary<string, object>
                 {
                     {"@id", revue.Id },
@@ -679,15 +717,17 @@ namespace Mediatek86.modele
         /// <summary>
         /// Suppression d'une revue de la base de données
         /// </summary>
-        /// <param name="id">identifiant de la revue à supprimer</param>
-        /// <returns>true si la modification a pu se faire</returns>
+        /// <param name="id">Identifiant de la revue à supprimer</param>
+        /// <returns>True si la modification a pu se faire</returns>
         public static bool SupprRevue(string id)
         {
             try
             {
-                List<string> requetes = new List<string>();
-                requetes.Add("delete from revue  where id=@id");
-                requetes.Add("delete from document  where id=@id");
+                List<string> requetes = new List<string>
+                {
+                    "delete from revue  where id=@id",
+                    "delete from document  where id=@id"
+                };
                 Dictionary<string, object> parameters = new Dictionary<string, object>
                 {
                     {"@id", id },
@@ -712,10 +752,12 @@ namespace Mediatek86.modele
         {
             try
             {
-                List<string> requetes = new List<string>();
-                requetes.Add("insert into commande values (@id, @dateCommande, @montant) ");
-                requetes.Add("insert into commandedocument values (@id, @nbExemplaire, @idLivreDvd) ");
-                requetes.Add("insert into suivicommandedoc values (@idSuivi, @id)");
+                List<string> requetes = new List<string>
+                {
+                    "insert into commande values (@id, @dateCommande, @montant) ",
+                    "insert into commandedocument values (@id, @nbExemplaire, @idLivreDvd) ",
+                    "insert into suivicommandedoc values (@idSuivi, @id)"
+                };
                 Dictionary<string, object> parameters = new Dictionary<string, object>
                 {
                     {"@id", commandeDocument.Id },
@@ -739,16 +781,18 @@ namespace Mediatek86.modele
         /// <summary>
         /// Suppression d'une CommandeDocument de la bdd
         /// </summary>
-        /// <param name="id">identifiant de la CommandeDocument à supprimer</param>
-        /// <returns>Ttrue si la suppression a réussi</returns>
+        /// <param name="id">Identifiant de la CommandeDocument à supprimer</param>
+        /// <returns>True si la suppression a réussi</returns>
         public static bool SupprCommandeDocument(string id)
         {
             try
             {
-                List<string> requetes = new List<string>();
-                requetes.Add("delete from suivicommandedoc where idcommande=@id");
-                requetes.Add("delete from commandedocument where id=@id");
-                requetes.Add("delete from commande where id=@id");
+                List<string> requetes = new List<string>
+                {
+                    "delete from suivicommandedoc where idcommande=@id",
+                    "delete from commandedocument where id=@id",
+                    "delete from commande where id=@id"
+                };
                 Dictionary<string, object> parameters = new Dictionary<string, object>
                 {
                     {"@id", id },
@@ -761,25 +805,27 @@ namespace Mediatek86.modele
             catch
             {
                 return false;
-            }        
+            }
         }
 
         /// <summary>
         /// Modification d'état de suivi d'une CommandeDocument
         /// </summary>
-        /// <param name="idCommandeDocument">identifiant de la CommandeDocument à modifier</param>
-        /// <param name="idSuivi">identifiant du nouveau état de suivi</param>
+        /// <param name="idCommandeDocument">Identifiant de la CommandeDocument à modifier</param>
+        /// <param name="idSuivi">Identifiant du nouveau état de suivi</param>
         /// <returns>True si la modification a réussi</returns>
         public static bool ModifSuiviCommandeDocument(string idCommandeDocument, int idSuivi)
         {
             try
             {
-                List<string> requetes = new List<string>();
-                requetes.Add("update suivicommandedoc set idsuivi=@idsuivi where idcommande=@idcommande");
+                List<string> requetes = new List<string>
+                {
+                    "update suivicommandedoc set idsuivi=@idsuivi where idcommande=@idcommande"
+                };
                 Dictionary<string, object> parameters = new Dictionary<string, object>
                 {
                     {"@idsuivi", idSuivi },
-                    {"@idcommande", idCommandeDocument },                  
+                    {"@idcommande", idCommandeDocument },
                 };
                 BddMySql curs = BddMySql.GetInstance(connectionString);
                 curs.ReqUpdate(requetes, parameters);
@@ -801,9 +847,11 @@ namespace Mediatek86.modele
         {
             try
             {
-                List<string> requetes = new List<string>();
-                requetes.Add("insert into commande values (@id, @dateCommande, @montant) ");
-                requetes.Add("insert into abonnement values (@id, @dateFinAbonnement, @idRevue) ");
+                List<string> requetes = new List<string>
+                {
+                    "insert into commande values (@id, @dateCommande, @montant) ",
+                    "insert into abonnement values (@id, @dateFinAbonnement, @idRevue) "
+                };
                 Dictionary<string, object> parameters = new Dictionary<string, object>
                 {
                     {"@id", abonnement.Id },
@@ -826,15 +874,17 @@ namespace Mediatek86.modele
         /// <summary>
         /// Suppression d'un abonnement de la base de données
         /// </summary>
-        /// <param name="id">identifiant de l'abonnement à supprimer</param>
-        /// <returns>true si la modification a pu se faire</returns>
+        /// <param name="id">Identifiant de l'abonnement à supprimer</param>
+        /// <returns>True si la modification a pu se faire</returns>
         public static bool SupprAbonnement(string id)
         {
             try
             {
-                List<string> requetes = new List<string>();
-                requetes.Add("delete from abonnement where id=@id");
-                requetes.Add("delete from commande where id=@id");
+                List<string> requetes = new List<string>
+                {
+                    "delete from abonnement where id=@id",
+                    "delete from commande where id=@id"
+                };
                 Dictionary<string, object> parameters = new Dictionary<string, object>
                 {
                     {"@id", id },

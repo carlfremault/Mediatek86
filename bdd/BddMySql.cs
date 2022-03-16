@@ -1,10 +1,14 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
+using Serilog;
 
 namespace Mediatek86.bdd
 {
+    /// <summary>
+    /// Classe qui gère la connexion avec la base de données
+    /// </summary>
     public class BddMySql
     {
         /// <summary>
@@ -35,7 +39,8 @@ namespace Mediatek86.bdd
             }
             catch (MySqlException e)
             {
-                ErreurGraveBddNonAccessible(e);
+                Log.Error("BddMySql.BddMySql catch **** stringConnect = " + stringConnect + " **** MySqlException = "+ e.Message);
+                ErreurGraveBddNonAccessible();                
             }
         }
 
@@ -57,10 +62,10 @@ namespace Mediatek86.bdd
         /// Exécute une requête type "select" et valorise le curseur
         /// </summary>
         /// <param name="stringQuery">requête select</param>
+        /// <param name="parameters">Paramètres à insérer dans la requête</param>
         public void ReqSelect(string stringQuery, Dictionary<string, object> parameters)
         {
             MySqlCommand command;
-
             try
             {
                 command = new MySqlCommand(stringQuery, connection);
@@ -76,11 +81,12 @@ namespace Mediatek86.bdd
             }
             catch (MySqlException e)
             {
-                Console.WriteLine(e.Message);
+                Log.Error("BddMySql.ReqSelect catch **** stringQuery = " + stringQuery + " **** MySqlException = " + e.Message);
             }
             catch (InvalidOperationException e)
             {
-                ErreurGraveBddNonAccessible(e);
+                Log.Error("BddMySql.ReqSelect catch **** stringQuery = " + stringQuery + " **** InvaldOperationException = " + e.Message);
+                ErreurGraveBddNonAccessible();
             }
         }
 
@@ -98,8 +104,9 @@ namespace Mediatek86.bdd
             {
                 return reader.Read();
             }
-            catch
+            catch (Exception e)
             {
+                Log.Error("BddMySql.Read catch **** Exception = " + e.Message);
                 return false;
             }
         }
@@ -119,8 +126,9 @@ namespace Mediatek86.bdd
             {
                 return reader[nameField];
             }
-            catch
+            catch (Exception e)
             {
+                Log.Error("BddMySql.Field catch **** nameField = " + nameField + " **** MySqlException = " + e.Message);
                 return null;
             }
         }
@@ -129,39 +137,40 @@ namespace Mediatek86.bdd
         /// Exécution de requêtes autre que "select" dans une seule transaction
         /// </summary>
         /// <param name="queries">Liste des requêtes à faire</param>
-        /// <param name="parameters"></param>
+        /// <param name="parameters">Paramètres à insérer dans les requêtes</param>
         public void ReqUpdate(List<string> queries, Dictionary<string, object> parameters)
         {
             MySqlCommand command;
             MySqlTransaction transaction = connection.BeginTransaction();
-                try
+            try
+            {
+                foreach (string stringQuery in queries)
                 {
-                    foreach (string stringQuery in queries)
+                    command = new MySqlCommand(stringQuery, connection, transaction);
+                    if (!(parameters is null))
                     {
-                        command = new MySqlCommand(stringQuery, connection, transaction);
-                        if (!(parameters is null))
+                        foreach (KeyValuePair<string, object> parameter in parameters)
                         {
-                            foreach (KeyValuePair<string, object> parameter in parameters)
-                            {
-                                command.Parameters.Add(new MySqlParameter(parameter.Key, parameter.Value));
-                            }
+                            command.Parameters.Add(new MySqlParameter(parameter.Key, parameter.Value));
                         }
-                        command.Prepare();
-                        command.ExecuteNonQuery();
                     }
+                    command.Prepare();
+                    command.ExecuteNonQuery();
+                }
 
-                    transaction.Commit();
-                }
-                catch (MySqlException e)
-                {
-                    transaction.Rollback();
-                    Console.WriteLine(e.Message);
-                    throw;
-                }
-                catch (InvalidOperationException e)
-                {
-                    ErreurGraveBddNonAccessible(e);
-                }
+                transaction.Commit();
+            }
+            catch (MySqlException e)
+            {
+                transaction.Rollback();
+                Log.Error("BddMySql.ReqUpdate catch **** queries = " + string.Join(" --- ", queries) + " **** MySqlException = " + e.Message);
+                throw;
+            }
+            catch (InvalidOperationException e)
+            {
+                Log.Error("BddMySql.ReqUpdate catch **** queries = " + string.Join(" --- ", queries) + " **** InvalidOperationException = " + e.Message);
+                ErreurGraveBddNonAccessible();
+            }
         }
 
         /// <summary>
@@ -178,10 +187,9 @@ namespace Mediatek86.bdd
         /// <summary>
         /// Pas d'accès à la BDD : arrêt de l'application
         /// </summary>
-        private void ErreurGraveBddNonAccessible(Exception e)
+        private void ErreurGraveBddNonAccessible()
         {
-            MessageBox.Show("Base de données non accessibles", "Erreur grave");
-            Console.WriteLine(e.Message);
+            MessageBox.Show("Base de données non accessible", "Erreur grave");
             Environment.Exit(1);
         }
     }

@@ -1,7 +1,7 @@
 ﻿
 namespace Mediatek86.vue
 {
-    partial class Authentification
+    partial class FrmAuthentification
     {
         /// <summary>
         /// Required designer variable.

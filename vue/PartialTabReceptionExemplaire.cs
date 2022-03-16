@@ -1,15 +1,15 @@
-﻿using System;
+﻿using Mediatek86.metier;
+using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
-using Mediatek86.metier;
-using Mediatek86.controleur;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Mediatek86.vue
 {
+    /// <summary>
+    /// Classe partielle représentant l'onglet de réception d'exemplaires de revues
+    /// </summary>
     public partial class FrmMediatek : Form
     {
         //-----------------------------------------------------------
@@ -17,7 +17,10 @@ namespace Mediatek86.vue
         //-----------------------------------------------------------
 
         /// <summary>
-        /// Ouverture de l'onglet : blocage en saisie des champs de saisie des infos de l'exemplaire
+        /// Ouverture de l'onglet : 
+        /// Tous les booléens concernant une saisie sont mis en false (validation d'abandon a été demandé avant changement d'onglet)
+        /// La collection des revues et récupéré depuis la bdd
+        /// Blocage en saisie des champs de saisie de réception d'exemplaires
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -25,12 +28,13 @@ namespace Mediatek86.vue
         {
             CancelAllSaisies();
             lesRevues = controle.GetAllRevues();
-            accesReceptionExemplaireGroupBox(false);
+            AccesReceptionExemplaireGroupBox(false);
         }
 
         /// <summary>
-        /// Remplit le dategrid avec la liste reçue en paramètre
+        /// Remplit le dategrid avec la collection reçue en paramètre
         /// </summary>
+        /// <param name="exemplaires">La collection d'exemplaires</param>
         private void RemplirReceptionExemplairesListe(List<Exemplaire> exemplaires)
         {
             bdgExemplairesListe.DataSource = exemplaires;
@@ -69,7 +73,7 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// Entrée dans champ de recherche déclenche recherche aussi
+        /// Taper Entrée dans champ de recherche déclenche recherche aussi
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -90,14 +94,14 @@ namespace Mediatek86.vue
         /// <param name="e"></param>
         private void txbReceptionRevueNumero_TextChanged(object sender, EventArgs e)
         {
-            accesReceptionExemplaireGroupBox(false);
+            AccesReceptionExemplaireGroupBox(false);
             VideReceptionRevueInfos();
         }
 
         /// <summary>
         /// Affichage des informations de la revue sélectionnée et les exemplaires
         /// </summary>
-        /// <param name="revue"></param>
+        /// <param name="revue">La revue sélectionnée</param>
         private void AfficheReceptionRevueInfos(Revue revue)
         {
             // informations sur la revue
@@ -120,15 +124,15 @@ namespace Mediatek86.vue
                 pcbReceptionRevueImage.Image = null;
             }
             // affiche la liste des exemplaires de la revue
-            afficheReceptionExemplairesRevue();
+            AfficheReceptionExemplairesRevue();
             // accès à la zone d'ajout d'un exemplaire
-            accesReceptionExemplaireGroupBox(true);
+            AccesReceptionExemplaireGroupBox(true);
         }
 
         /// <summary>
         /// Réceptionne et affiche les exemplaires d'une revue
         /// </summary>
-        private void afficheReceptionExemplairesRevue()
+        private void AfficheReceptionExemplairesRevue()
         {
             string idDocument = txbReceptionRevueNumero.Text.Trim();
             lesExemplaires = controle.GetExemplairesRevue(idDocument);
@@ -151,7 +155,7 @@ namespace Mediatek86.vue
             pcbReceptionRevueImage.Image = null;
             lesExemplaires = new List<Exemplaire>();
             RemplirReceptionExemplairesListe(lesExemplaires);
-            accesReceptionExemplaireGroupBox(false);
+            AccesReceptionExemplaireGroupBox(false);
         }
 
         /// <summary>
@@ -166,11 +170,10 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// Permet ou interdit l'accès à la gestion de la réception d'un exemplaire
-        /// et vide les objets graphiques
+        /// Permet ou interdit l'accès à la gestion de la réception d'un exemplaire et vide les champs d'infos
         /// </summary>
-        /// <param name="acces"></param>
-        private void accesReceptionExemplaireGroupBox(bool acces)
+        /// <param name="acces">'True' permet l'accès</param>
+        private void AccesReceptionExemplaireGroupBox(bool acces)
         {
             VideReceptionExemplaireInfos();
             grpReceptionExemplaire.Enabled = acces;
@@ -184,9 +187,11 @@ namespace Mediatek86.vue
         private void btnReceptionExemplaireImage_Click(object sender, EventArgs e)
         {
             string filePath = "";
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.InitialDirectory = "c:\\";
-            openFileDialog.Filter = "Files|*.jpg;*.bmp;*.jpeg;*.png;*.gif";
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                InitialDirectory = DOSSIERINITIALRECHERCHEIMAGE,
+                Filter = "Files|*.jpg;*.bmp;*.jpeg;*.png;*.gif"
+            };
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 filePath = openFileDialog.FileName;
@@ -222,7 +227,7 @@ namespace Mediatek86.vue
                     if (controle.CreerExemplaire(exemplaire))
                     {
                         VideReceptionExemplaireInfos();
-                        afficheReceptionExemplairesRevue();
+                        AfficheReceptionExemplairesRevue();
                     }
                     else
                     {

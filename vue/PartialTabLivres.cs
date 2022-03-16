@@ -1,15 +1,15 @@
-﻿using System;
+﻿using Mediatek86.metier;
+using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
-using Mediatek86.metier;
-using Mediatek86.controleur;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Mediatek86.vue
 {
+    /// <summary>
+    /// Classe partielle représentant l'onglet Livres
+    /// </summary>
     public partial class FrmMediatek : Form
     {
         //-----------------------------------------------------------
@@ -53,8 +53,9 @@ namespace Mediatek86.vue
         #region dataGridView + fonctions et événements associées
 
         /// <summary>
-        /// Remplit le dategrid avec la liste reçue en paramètre
+        /// Remplit le dategrid avec la collection reçue en paramètre
         /// </summary>
+        /// <param name="livres">Collection des livres</param>
         private void RemplirLivresListe(List<Livre> livres)
         {
             bdgLivresListe.DataSource = livres;
@@ -124,8 +125,7 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// Affichage de la liste complète des livres
-        /// et annulation de toutes les recherches et filtres
+        /// Affichage de la liste complète des livres et annulation de toutes les recherches et filtres
         /// </summary>
         private void RemplirLivresListeComplete()
         {
@@ -134,7 +134,7 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// vide les zones de recherche et de filtre
+        /// Vide les zones de recherche et de filtre
         /// </summary>
         private void VideLivresZones()
         {
@@ -280,7 +280,7 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// Entrée dans champ recherche déclenche la recherche aussi
+        /// Taper Entrée dans champ recherche déclenche la recherche aussi
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -308,8 +308,10 @@ namespace Mediatek86.vue
                 Livre livre = lesLivres.Find(x => x.Id.Equals(txbLivresNumRecherche.Text.Trim()));
                 if (livre != null)
                 {
-                    List<Livre> livres = new List<Livre>();
-                    livres.Add(livre);
+                    List<Livre> livres = new List<Livre>
+                    {
+                        livre
+                    };
                     RemplirLivresListe(livres);
                 }
                 else
@@ -377,7 +379,7 @@ namespace Mediatek86.vue
                 }
             }
         }
-        
+
         /// <summary>
         /// Evénement changement de sélection combobox Genres
         /// On vérifie si l'utilisateur est en train de faire une saisie
@@ -595,7 +597,7 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// Evénement clic sur le bouton 'Supprimer'. Vérifie validation de l'utilisateur avant de procéder.
+        /// Evénement clic sur le bouton 'Supprimer'. Demande validation de l'utilisateur avant de procéder.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -613,6 +615,34 @@ namespace Mediatek86.vue
                 {
                     MessageBox.Show("Il n'est pas possible de supprimer ce livre car ils existent un ou plusieurs exemplaires ou commandes le concernant.", "Erreur");
                 }
+            }
+        }
+
+        /// <summary>
+        /// Recherche image du livre sur disque 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnLivreRechercheImage_Click(object sender, EventArgs e)
+        {
+            string filePath = "";
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                InitialDirectory = DOSSIERINITIALRECHERCHEIMAGE,
+                Filter = "Files|*.jpg;*.bmp;*.jpeg;*.png;*.gif"
+            };
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                filePath = openFileDialog.FileName;
+            }
+            txbLivresImage.Text = filePath;
+            try
+            {
+                pcbLivresImage.Image = Image.FromFile(filePath);
+            }
+            catch
+            {
+                pcbLivresImage.Image = null;
             }
         }
 
@@ -646,7 +676,6 @@ namespace Mediatek86.vue
             String isbn = txbLivresIsbn.Text;
             String auteur = txbLivresAuteur.Text;
             String collection = txbLivresCollection.Text;
-
             Livre leLivre = new Livre(id, titre, image, isbn, auteur, collection, idGenre, genre, idPublic, unPublic, idRayon, rayon);
 
             if (modifLivre)
@@ -707,7 +736,7 @@ namespace Mediatek86.vue
         /// <summary>
         /// (Dés)Activer le bouton qui permet d'ajouter un livre
         /// </summary>
-        /// <param name="actif"></param>
+        /// <param name="actif">'True' active, 'False' désactive</param>
         private void ActiverBoutonAjoutLivre(Boolean actif)
         {
             btnAjoutLivre.Enabled = actif;
@@ -716,7 +745,7 @@ namespace Mediatek86.vue
         /// <summary>
         /// (Dés)Activer le bouton qui permet de modifier un livre
         /// </summary>
-        /// <param name="actif"></param>
+        /// <param name="actif">'True' active, 'False' désactive</param>
         private void ActiverBoutonModifLivre(Boolean actif)
         {
             btnModifLivre.Enabled = actif;
@@ -725,28 +754,10 @@ namespace Mediatek86.vue
         /// <summary>
         /// (Dés)Activer le bouton qui permet de supprimer un livre
         /// </summary>
-        /// <param name="actif"></param>
+        /// <param name="actif">'True' active, 'False' désactive</param>
         private void ActiverBoutonSupprLivre(Boolean actif)
         {
             btnSupprLivre.Enabled = actif;
-        }
-
-        /// <summary>
-        /// (Dés)Activer le bouton qui permet d'enregistrer un livre
-        /// </summary>
-        /// <param name="actif"></param>
-        private void ActiverBoutonEnregLivre(Boolean actif)
-        {
-            btnEnregistrerLivre.Enabled = actif;
-        }
-
-        /// <summary>
-        /// (Dés)Activer le bouton qui permet d'annuler une saisie d'un livre
-        /// </summary>
-        /// <param name="actif"></param>
-        private void ActiverBoutonAnnulerSaisieLivre(Boolean actif)
-        {
-            btnAnnulerSaisieLivre.Enabled = actif;
         }
 
         /// <summary>
@@ -774,9 +785,9 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// (Dés)activation de La protection des différents champs 'informations détaillées' ainsi que le bouton 'enregistrer'
+        /// (Dés)activation de La protection des différents champs 'informations détaillées' ainsi que les boutons 'enregistrer', 'annuler' et de recherche d'image
         /// </summary>
-        /// <param name="actif"></param>
+        /// <param name="actif">'True' déverrouille les champs, active les boutons</param>
         private void AutoriserModifLivre(Boolean actif)
         {
             txbLivresTitre.ReadOnly = !actif;
@@ -787,14 +798,15 @@ namespace Mediatek86.vue
             cbxInfosLivresGenres.Enabled = actif;
             cbxInfosLivresPublics.Enabled = actif;
             cbxInfosLivresRayons.Enabled = actif;
-            ActiverBoutonEnregLivre(actif);
-            ActiverBoutonAnnulerSaisieLivre(actif);
+            btnEnregistrerLivre.Enabled = actif;
+            btnAnnulerSaisieLivre.Enabled = actif;
+            btnLivreRechercheImage.Enabled = actif;
         }
 
         /// <summary>
         /// (Dés)activation de la protection du champ 'Numéro du document'
         /// </summary>
-        /// <param name="actif"></param>
+        /// <param name="actif">'True' enlève la protection</param>
         private void AutoriserModifLivreId(Boolean actif)
         {
             txbLivresNumero.ReadOnly = !actif;

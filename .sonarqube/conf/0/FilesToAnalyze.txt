@@ -8,6 +8,7 @@ C:\Users\carlf\source\repos\Mediatek86gestion\metier\FinAbonnement.cs
 C:\Users\carlf\source\repos\Mediatek86gestion\metier\LivreDvd.cs
 C:\Users\carlf\source\repos\Mediatek86gestion\metier\Public.cs
 C:\Users\carlf\source\repos\Mediatek86gestion\metier\Rayon.cs
+C:\Users\carlf\source\repos\Mediatek86gestion\metier\Service.cs
 C:\Users\carlf\source\repos\Mediatek86gestion\metier\Suivi.cs
 C:\Users\carlf\source\repos\Mediatek86gestion\modele\Dao.cs
 C:\Users\carlf\source\repos\Mediatek86gestion\bdd\BddMySql.cs
@@ -18,6 +19,8 @@ C:\Users\carlf\source\repos\Mediatek86gestion\metier\Exemplaire.cs
 C:\Users\carlf\source\repos\Mediatek86gestion\metier\Revue.cs
 C:\Users\carlf\source\repos\Mediatek86gestion\vue\AlerteFinAbonnements.cs
 C:\Users\carlf\source\repos\Mediatek86gestion\vue\AlerteFinAbonnements.Designer.cs
+C:\Users\carlf\source\repos\Mediatek86gestion\vue\Authentification.cs
+C:\Users\carlf\source\repos\Mediatek86gestion\vue\Authentification.Designer.cs
 C:\Users\carlf\source\repos\Mediatek86gestion\vue\FrmMediatek.cs
 C:\Users\carlf\source\repos\Mediatek86gestion\vue\FrmMediatek.Designer.cs
 C:\Users\carlf\source\repos\Mediatek86gestion\metier\Genre.cs
@@ -32,6 +35,7 @@ C:\Users\carlf\source\repos\Mediatek86gestion\vue\PartialTabReceptionExemplaire.
 C:\Users\carlf\source\repos\Mediatek86gestion\vue\PartialTabRevues.cs
 C:\Users\carlf\source\repos\Mediatek86gestion\Properties\Resources.resx
 C:\Users\carlf\source\repos\Mediatek86gestion\vue\AlerteFinAbonnements.resx
+C:\Users\carlf\source\repos\Mediatek86gestion\vue\Authentification.resx
 C:\Users\carlf\source\repos\Mediatek86gestion\vue\FrmMediatek.resx
 C:\Users\carlf\source\repos\Mediatek86gestion\.sonarlint\mediatek86csharp.ruleset
 C:\Users\carlf\source\repos\Mediatek86gestion\packages.config

@@ -1,15 +1,15 @@
-﻿using System;
+﻿using Mediatek86.metier;
+using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
-using Mediatek86.metier;
-using Mediatek86.controleur;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Mediatek86.vue
 {
+    /// <summary>
+    /// Classe partielle représentant l'onglet DVD
+    /// </summary>
     public partial class FrmMediatek : Form
     {
         //-----------------------------------------------------------
@@ -53,8 +53,9 @@ namespace Mediatek86.vue
         #region dataGridView + fonctions et événements associées
 
         /// <summary>
-        /// Remplit le dategrid avec la liste reçue en paramètre
+        /// Remplit le dategrid avec la collection reçue en paramètre
         /// </summary>
+        /// <param name="Dvds">La collection de DVD</param>
         private void RemplirDvdListe(List<Dvd> Dvds)
         {
             bdgDvdListe.DataSource = Dvds;
@@ -124,8 +125,7 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// Affichage de la liste complète des Dvd
-        /// et annulation de toutes les recherches et filtres
+        /// Affichage de la liste complète des Dvd et annulation de toutes les recherches et filtres
         /// </summary>
         private void RemplirDvdListeComplete()
         {
@@ -134,7 +134,7 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// vide les zones de recherche et de filtre
+        /// Vide les zones de recherche et de filtre
         /// </summary>
         private void VideDvdZones()
         {
@@ -280,7 +280,7 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// Entrée dans champ recherche déclenche la recherche aussi
+        /// Taper Entrée dans champ recherche déclenche la recherche aussi
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -308,8 +308,10 @@ namespace Mediatek86.vue
                 Dvd dvd = lesDvd.Find(x => x.Id.Equals(txbDvdNumRecherche.Text.Trim()));
                 if (dvd != null)
                 {
-                    List<Dvd> Dvd = new List<Dvd>();
-                    Dvd.Add(dvd);
+                    List<Dvd> Dvd = new List<Dvd>
+                    {
+                        dvd
+                    };
                     RemplirDvdListe(Dvd);
                 }
                 else
@@ -618,6 +620,34 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
+        /// Recherche image du DVD sur disque
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnDvdRechercheImage_Click(object sender, EventArgs e)
+        {
+            string filePath = "";
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                InitialDirectory = DOSSIERINITIALRECHERCHEIMAGE,
+                Filter = "Files|*.jpg;*.bmp;*.jpeg;*.png;*.gif"
+            };
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                filePath = openFileDialog.FileName;
+            }
+            txbDvdImage.Text = filePath;
+            try
+            {
+                pcbDvdImage.Image = Image.FromFile(filePath);
+            }
+            catch
+            {
+                pcbDvdImage.Image = null;
+            }
+        }
+
+        /// <summary>
         /// Evénement clic sur le bouton 'Enregistrer'
         /// Vérifie si les champs requis (numéro, genre, public, rayon) sont saisies.
         /// Si oui procède à l'ajout ou modification du DVD
@@ -646,7 +676,6 @@ namespace Mediatek86.vue
             String realisateur = txbDvdRealisateur.Text;
             String synopsis = txbDvdSynopsis.Text;
             String image = txbDvdImage.Text;
-
             int duree = 0;
             if (txbDvdDuree.Text != "")
             {
@@ -659,7 +688,6 @@ namespace Mediatek86.vue
                     return;
                 }
             }
-
             Dvd leDvd = new Dvd(id, titre, image, duree, realisateur, synopsis, idGenre, genre, idPublic, unPublic, idRayon, rayon);
 
             if (modifDvd)
@@ -721,7 +749,7 @@ namespace Mediatek86.vue
         /// <summary>
         /// (Dés)Activer le bouton qui permet d'ajouter un DVD
         /// </summary>
-        /// <param name="actif"></param>
+        /// <param name="actif">'True' active, 'False' désactive</param>
         private void ActiverBoutonAjoutDvd(Boolean actif)
         {
             btnAjoutDvd.Enabled = actif;
@@ -730,7 +758,7 @@ namespace Mediatek86.vue
         /// <summary>
         /// (Dés)Activer le bouton qui permet de modifier un DVD
         /// </summary>
-        /// <param name="actif"></param>
+        /// <param name="actif">'True' active, 'False' désactive</param>
         private void ActiverBoutonModifDvd(Boolean actif)
         {
             btnModifDvd.Enabled = actif;
@@ -739,29 +767,11 @@ namespace Mediatek86.vue
         /// <summary>
         /// (Dés)Activer le bouton qui permet de supprimer un DVD
         /// </summary>
-        /// <param name="actif"></param>
+        /// <param name="actif">'True' active, 'False' désactive</param>
         private void ActiverBoutonSupprDvd(Boolean actif)
         {
             btnSupprDvd.Enabled = actif;
         }
-
-        /// <summary>
-        /// (Dés)Activer le bouton qui permet d'enregistrer un DVD
-        /// </summary>
-        /// <param name="actif"></param>
-        private void ActiverBoutonEnregDvd(Boolean actif)
-        {
-            btnEnregistrerDvd.Enabled = actif;
-        }
-
-        /// <summary>
-        /// (Dés)Activer le bouton qui permet d'annuler une saisie d'un DVD
-        /// </summary>
-        /// <param name="actif"></param>
-        private void ActiverBoutonAnnulerSaisieDvd(Boolean actif)
-        {
-            btnAnnulerSaisieDvd.Enabled = actif;
-        }        
 
         /// <summary>
         /// Démarre la saisie d'un DVD, déverouille les champs 'infos'
@@ -788,9 +798,9 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// (Dés)activation de La protection des différents champs 'informations détaillées' ainsi que le bouton 'enregistrer'
+        /// (Dés)activation de La protection des différents champs 'informations détaillées' ainsi que les boutons 'enregistrer', 'annuler' et de recherche d'image
         /// </summary>
-        /// <param name="actif"></param>
+        /// <param name="actif">'True' déverrouille les champs, active les boutons</param>
         private void AutoriserModifDvd(Boolean actif)
         {
             txbDvdTitre.ReadOnly = !actif;
@@ -801,14 +811,15 @@ namespace Mediatek86.vue
             cbxInfosDvdGenres.Enabled = actif;
             cbxInfosDvdPublics.Enabled = actif;
             cbxInfosDvdRayons.Enabled = actif;
-            ActiverBoutonEnregDvd(actif);
-            ActiverBoutonAnnulerSaisieDvd(actif);
+            btnEnregistrerDvd.Enabled = actif;
+            btnAnnulerSaisieDvd.Enabled = actif;
+            btnDvdRechercheImage.Enabled = actif;
         }
 
         /// <summary>
         /// (Dés)activation de la protection du champ 'Numéro du document'
         /// </summary>
-        /// <param name="actif"></param>
+        /// <param name="actif">'True' enlève la protection</param>
         private void AutoriserModifDvdId(Boolean actif)
         {
             txbDvdNumero.ReadOnly = !actif;
