@@ -3,6 +3,9 @@ using Mediatek86.metier;
 using System;
 using System.Windows.Forms;
 
+/// <summary>
+/// Les vues de l'application
+/// </summary>
 namespace Mediatek86.vue
 {
     /// <summary>

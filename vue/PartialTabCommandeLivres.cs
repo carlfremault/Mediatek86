@@ -5,6 +5,9 @@ using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
 
+/// <summary>
+/// Les vues de l'application
+/// </summary>
 namespace Mediatek86.vue
 {
     /// <summary>

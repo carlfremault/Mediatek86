@@ -1,4 +1,7 @@
-﻿namespace Mediatek86.metier
+﻿/// <summary>
+/// Classes métier
+/// </summary>
+namespace Mediatek86.metier
 {
     /// <summary>
     /// Classe métier représentant un service dont peut dépendre un utilisateur

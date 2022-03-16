@@ -1,4 +1,7 @@
-﻿namespace Mediatek86.metier
+﻿/// <summary>
+/// Classes métier
+/// </summary>
+namespace Mediatek86.metier
 {
     /// <summary>
     /// Classe métier représentant un LivreDvd. Classe fille de la classe Document

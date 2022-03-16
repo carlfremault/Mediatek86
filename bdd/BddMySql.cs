@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using Serilog;
 
+/// <summary>
+/// Connexion à et interactions avec la base de données
+/// </summary>
 namespace Mediatek86.bdd
 {
     /// <summary>

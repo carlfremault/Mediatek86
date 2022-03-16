@@ -3,6 +3,9 @@ using Mediatek86.metier;
 using System;
 using System.Collections.Generic;
 
+/// <summary>
+/// Modèle : classe Dao (Data Access Object) pour envoyer requêtes à la base de données et récupérer les réponses
+/// </summary>
 namespace Mediatek86.modele
 {
     /// <summary>
