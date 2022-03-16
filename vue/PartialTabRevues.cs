@@ -7,6 +7,9 @@ using System.Windows.Forms;
 
 namespace Mediatek86.vue
 {
+    /// <summary>
+    /// Classe partielle représentant l'onglet Revues
+    /// </summary>
     public partial class FrmMediatek : Form
     {
         //-----------------------------------------------------------
@@ -50,8 +53,9 @@ namespace Mediatek86.vue
         #region dataGridView + fonctions et événements associées
 
         /// <summary>
-        /// Remplit le datagrid avec la liste reçue en paramètre
+        /// Remplit le datagrid avec la collection reçue en paramètre
         /// </summary>
+        /// <param name="revues">La collection de revues</param>
         private void RemplirRevuesListe(List<Revue> revues)
         {
             bdgRevuesListe.DataSource = revues;
@@ -121,8 +125,7 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// Affichage de la liste complète des revues
-        /// et annulation de toutes les recherches et filtres
+        /// Affichage de la liste complète des revues et annulation de toutes les recherches et filtres
         /// </summary>
         private void RemplirRevuesListeComplete()
         {
@@ -131,7 +134,7 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// vide les zones de recherche et de filtre
+        /// Vide les zones de recherche et de filtre
         /// </summary>
         private void VideRevuesZones()
         {
@@ -275,7 +278,7 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// Entrée dans champ recherche déclenche la recherche aussi
+        /// Taper Entrée dans champ recherche déclenche la recherche aussi
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -667,7 +670,6 @@ namespace Mediatek86.vue
             String periodicite = txbRevuesPeriodicite.Text;
             String image = txbRevuesImage.Text;
             Boolean empruntable = chkRevuesEmpruntable.Checked;
-
             int delaiMiseADispo = 0;
             if (txbRevuesDateMiseADispo.Text != "")
             {
@@ -680,7 +682,6 @@ namespace Mediatek86.vue
                     return;
                 }
             }
-
             Revue laRevue = new Revue(id, titre, image, idGenre, genre, idPublic, unPublic, idRayon, rayon, empruntable, periodicite, delaiMiseADispo);
 
             if (modifRevue)
@@ -742,7 +743,7 @@ namespace Mediatek86.vue
         /// <summary>
         /// (Dés)Activer le bouton qui permet d'ajouter une revue
         /// </summary>
-        /// <param name="actif"></param>
+        /// <param name="actif">'True' active, 'False' désactive</param>
         private void ActiverBoutonAjoutRevue(Boolean actif)
         {
             btnAjoutRevue.Enabled = actif;
@@ -751,7 +752,7 @@ namespace Mediatek86.vue
         /// <summary>
         /// (Dés)Activer le bouton qui permet de modifier une revue
         /// </summary>
-        /// <param name="actif"></param>
+        /// <param name="actif">'True' active, 'False' désactive</param>
         private void ActiverBoutonModifRevue(Boolean actif)
         {
             btnModifRevue.Enabled = actif;
@@ -760,7 +761,7 @@ namespace Mediatek86.vue
         /// <summary>
         /// (Dés)Activer le bouton qui permet de supprimer une revue
         /// </summary>
-        /// <param name="actif"></param>
+        /// <param name="actif">'True' active, 'False' désactive</param>
         private void ActiverBoutonSupprRevue(Boolean actif)
         {
             btnSupprRevue.Enabled = actif;
@@ -791,9 +792,9 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// (Dés)activation de La protection des différents champs 'informations détaillées' ainsi que le bouton 'enregistrer'
+        /// (Dés)activation de La protection des différents champs 'informations détaillées' ainsi que les boutons 'enregistrer', 'annuler' et de recherche d'image
         /// </summary>
-        /// <param name="actif"></param>
+        /// <param name="actif">'True' déverrouille les champs, active les boutons</param>
         private void AutoriserModifRevue(Boolean actif)
         {
             txbRevuesTitre.ReadOnly = !actif;
@@ -813,7 +814,7 @@ namespace Mediatek86.vue
         /// <summary>
         /// (Dés)activation de la protection du champ 'Numéro du document'
         /// </summary>
-        /// <param name="actif"></param>
+        /// <param name="actif">'True' enlève la protection</param>
         private void AutoriserModifRevueId(Boolean actif)
         {
             txbRevuesNumero.ReadOnly = !actif;

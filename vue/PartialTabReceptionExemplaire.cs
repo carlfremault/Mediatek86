@@ -7,6 +7,9 @@ using System.Windows.Forms;
 
 namespace Mediatek86.vue
 {
+    /// <summary>
+    /// Classe partielle représentant l'onglet de réception d'exemplaires de revues
+    /// </summary>
     public partial class FrmMediatek : Form
     {
         //-----------------------------------------------------------
@@ -14,7 +17,10 @@ namespace Mediatek86.vue
         //-----------------------------------------------------------
 
         /// <summary>
-        /// Ouverture de l'onglet : blocage en saisie des champs de saisie des infos de l'exemplaire
+        /// Ouverture de l'onglet : 
+        /// Tous les booléens concernant une saisie sont mis en false (validation d'abandon a été demandé avant changement d'onglet)
+        /// La collection des revues et récupéré depuis la bdd
+        /// Blocage en saisie des champs de saisie de réception d'exemplaires
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -26,8 +32,9 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// Remplit le dategrid avec la liste reçue en paramètre
+        /// Remplit le dategrid avec la collection reçue en paramètre
         /// </summary>
+        /// <param name="exemplaires">La collection d'exemplaires</param>
         private void RemplirReceptionExemplairesListe(List<Exemplaire> exemplaires)
         {
             bdgExemplairesListe.DataSource = exemplaires;
@@ -66,7 +73,7 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// Entrée dans champ de recherche déclenche recherche aussi
+        /// Taper Entrée dans champ de recherche déclenche recherche aussi
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -94,7 +101,7 @@ namespace Mediatek86.vue
         /// <summary>
         /// Affichage des informations de la revue sélectionnée et les exemplaires
         /// </summary>
-        /// <param name="revue"></param>
+        /// <param name="revue">La revue sélectionnée</param>
         private void AfficheReceptionRevueInfos(Revue revue)
         {
             // informations sur la revue
@@ -163,10 +170,9 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// Permet ou interdit l'accès à la gestion de la réception d'un exemplaire
-        /// et vide les objets graphiques
+        /// Permet ou interdit l'accès à la gestion de la réception d'un exemplaire et vide les champs d'infos
         /// </summary>
-        /// <param name="acces"></param>
+        /// <param name="acces">'True' permet l'accès</param>
         private void AccesReceptionExemplaireGroupBox(bool acces)
         {
             VideReceptionExemplaireInfos();

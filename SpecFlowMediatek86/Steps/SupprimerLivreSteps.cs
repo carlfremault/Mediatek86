@@ -1,5 +1,4 @@
 ﻿using Mediatek86.vue;
-using System;
 using System.Windows.Forms;
 using TechTalk.SpecFlow;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

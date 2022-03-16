@@ -7,19 +7,47 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
-using Serilog;
-using Serilog.Formatting.Json;
 
 namespace Mediatek86.controleur
 {
+    /// <summary>
+    /// Contrôleur de l'application
+    /// </summary>
     public class Controle
     {
+        /// <summary>
+        /// Collection d'objets Livre
+        /// </summary>
         private List<Livre> lesLivres;
+
+        /// <summary>
+        /// Collection d'objets Dvd
+        /// </summary>
         private List<Dvd> lesDvd;
+
+        /// <summary>
+        /// Collection d'objets Revue
+        /// </summary>
         private List<Revue> lesRevues;
+
+        /// <summary>
+        /// Collection d'objets Rayon dont la classe mère est Categorie
+        /// </summary>
         private readonly List<Categorie> lesRayons;
+
+        /// <summary>
+        /// Collection d'objets Public dont la classe mère est Categorie
+        /// </summary>
         private readonly List<Categorie> lesPublics;
+
+        /// <summary>
+        /// Collection d'objets Genre dont la classe mère est Categorie
+        /// </summary>
         private readonly List<Categorie> lesGenres;
+
+        /// <summary>
+        /// Collection d'objets Suivi
+        /// </summary>
         private readonly List<Suivi> lesSuivis;
 
         /// <summary>
@@ -27,20 +55,15 @@ namespace Mediatek86.controleur
         /// </summary>
         public Service LeService { get; private set; }
 
-       
+
         /// <summary>
-        /// Ouverture de la fenêtre d'authentification
+        /// Constructeur
         /// Initialisation des différentes collections
-        /// Initialisation de la journalisation
+        /// Ouverture de la fenêtre d'authentification
         /// Si l'authentification a réussi, ouverture de l'application
         /// </summary>
         public Controle()
         {
-     /*       Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Information()
-                .WriteTo.File(new JsonFormatter(), "logs/log.txt",
-                rollingInterval : RollingInterval.Day)
-                .CreateLogger();*/
             lesLivres = Dao.GetAllLivres();
             lesDvd = Dao.GetAllDvd();
             lesRevues = Dao.GetAllRevues();
@@ -48,7 +71,7 @@ namespace Mediatek86.controleur
             lesRayons = Dao.GetAllRayons();
             lesPublics = Dao.GetAllPublics();
             lesSuivis = Dao.GetAllSuivis();
-            Authentification authentification = new Authentification(this);
+            FrmAuthentification authentification = new FrmAuthentification(this);
             Application.Run(authentification);
             if (authentification.AuthentificationSucces)
             {
@@ -58,7 +81,7 @@ namespace Mediatek86.controleur
         }
 
         /// <summary>
-        /// getter sur la liste des genres
+        /// Getter sur la liste des genres
         /// </summary>
         /// <returns>Collection d'objets Genre</returns>
         public List<Categorie> GetAllGenres()
@@ -67,7 +90,7 @@ namespace Mediatek86.controleur
         }
 
         /// <summary>
-        /// getter sur les rayons
+        /// Getter sur les rayons
         /// </summary>
         /// <returns>Collection d'objets Rayon</returns>
         public List<Categorie> GetAllRayons()
@@ -76,7 +99,7 @@ namespace Mediatek86.controleur
         }
 
         /// <summary>
-        /// getter sur les publics
+        /// Getter sur les publics
         /// </summary>
         /// <returns>Collection d'objets Public</returns>
         public List<Categorie> GetAllPublics()
@@ -94,7 +117,7 @@ namespace Mediatek86.controleur
         }
 
         /// <summary>
-        /// getter sur la liste des livres
+        /// Getter sur la liste des livres
         /// </summary>
         /// <returns>Collection d'objets Livre</returns>
         public List<Livre> GetAllLivres()
@@ -103,7 +126,7 @@ namespace Mediatek86.controleur
         }
 
         /// <summary>
-        /// Recupère la liste des livres depuis la bdd
+        /// Réactualise la liste des livres depuis la bdd
         /// </summary>
         public void RefreshAllLivres()
         {
@@ -111,7 +134,7 @@ namespace Mediatek86.controleur
         }
 
         /// <summary>
-        /// getter sur la liste des Dvd
+        /// Getter sur la liste des Dvd
         /// </summary>
         /// <returns>Collection d'objets dvd</returns>
         public List<Dvd> GetAllDvd()
@@ -120,7 +143,7 @@ namespace Mediatek86.controleur
         }
 
         /// <summary>
-        /// Recupère la liste des DVD depuis la bdd
+        /// Réactualise la liste des DVD depuis la bdd
         /// </summary>
         public void RefreshAllDvd()
         {
@@ -128,7 +151,7 @@ namespace Mediatek86.controleur
         }
 
         /// <summary>
-        /// getter sur la liste des revues
+        /// Getter sur la liste des revues
         /// </summary>
         /// <returns>Collection d'objets Revue</returns>
         public List<Revue> GetAllRevues()
@@ -137,7 +160,7 @@ namespace Mediatek86.controleur
         }
 
         /// <summary>
-        /// Recupère la liste des revues depuis la bdd
+        /// Réactualise la liste des revues depuis la bdd
         /// </summary>
         public void RefreshAllRevues()
         {
@@ -145,7 +168,7 @@ namespace Mediatek86.controleur
         }
 
         /// <summary>
-        /// récupère les exemplaires d'une revue
+        /// Récupère les exemplaires d'une revue depuis la bdd
         /// </summary>
         /// <returns>Collection d'objets Exemplaire</returns>
         public List<Exemplaire> GetExemplairesRevue(string idDocuement)
@@ -154,29 +177,29 @@ namespace Mediatek86.controleur
         }
 
         /// <summary>
-        /// récupère les commandes d'un livre ou d'un DVD
+        /// Récupère les commandes d'un livre ou d'un DVD depuis la bdd
         /// </summary>
-        /// <param name="idDocument"></param>
-        /// <returns></returns>
+        /// <param name="idDocument">Identifiant du livre ou DVD concerné</param>
+        /// <returns>Collection d'objets de type CommandeDocument</returns>
         public List<CommandeDocument> GetCommandeDocument(string idDocument)
         {
             return Dao.GetCommandeDocument(idDocument);
         }
 
         /// <summary>
-        /// récupère les abonnements d'une revue
+        /// Récupère les abonnements d'une revue depuis la bdd
         /// </summary>
-        /// <param name="idDocument"></param>
-        /// <returns></returns>
+        /// <param name="idDocument">Identifiant de la revue concerné</param>
+        /// <returns>Collection d'objets de type Abonnement</returns>
         public List<Abonnement> GetAbonnement(string idDocument)
         {
             return Dao.GetAbonnement(idDocument);
         }
 
         /// <summary>
-        /// récupère les abonnements avec date d'expiration à moins de 30 jours
+        /// Récupère les abonnements avec date d'expiration à moins de 30 jours depuis la bdd
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Collection d'objets de type Abonnement</returns>
         public List<FinAbonnement> GetFinAbonnement()
         {
             return Dao.GetFinAbonnement();
@@ -215,7 +238,7 @@ namespace Mediatek86.controleur
         /// <summary>
         /// Supprime un livre dans la bdd
         /// </summary>
-        /// <param name="id">L'id du livre à supprimer</param>
+        /// <param name="id">L'identifiant du livre à supprimer</param>
         /// <returns>True si la suppression a pu se faire</returns>
         public bool SupprLivre(string id)
         {
@@ -275,7 +298,7 @@ namespace Mediatek86.controleur
         /// <summary>
         /// Supprime un DVD dans la bdd
         /// </summary>
-        /// <param name="id">L'id du DVD à supprimer</param>
+        /// <param name="id">L'identifiant du DVD à supprimer</param>
         /// <returns>True si la suppression a pu se faire</returns>
         public bool SupprDvd(string id)
         {
@@ -305,8 +328,8 @@ namespace Mediatek86.controleur
         /// <summary>
         /// Modification d'état de suivi d'une CommandeDocument
         /// </summary>
-        /// <param name="idCommandeDocument">identifiant de la CommandeDocument à modifier</param>
-        /// <param name="idSuivi">identifiant du nouveau état de suivi</param>
+        /// <param name="idCommandeDocument">Identifiant de la CommandeDocument à modifier</param>
+        /// <param name="idSuivi">Identifiant du nouvel état de suivi</param>
         /// <returns>True si la modification a réussi</returns>
         public bool ModifSuiviCommandeDocument(string idCommandeDocument, int idSuivi)
         {
@@ -327,7 +350,7 @@ namespace Mediatek86.controleur
         /// Récupère les exemplaires rattachés à la revue concerné par un abonnement
         /// puis demande vérification s'ils font partie de l'abonnement
         /// </summary>
-        /// <param name="abonnement"></param>
+        /// <param name="abonnement">L'abonnement concerné</param>
         /// <returns>True si un exemplaire est rattaché à l'abonnement</returns>
         public bool VerifSuppressionAbonnement(Abonnement abonnement)
         {
@@ -343,9 +366,9 @@ namespace Mediatek86.controleur
         /// <summary>
         /// Vérifie si la dateParution est comprise entre dateCommande et dateFinAbonnement
         /// </summary>
-        /// <param name="dateCommande"></param>
-        /// <param name="dateFinAbonnement"></param>
-        /// <param name="dateParution"></param>
+        /// <param name="dateCommande">Date de commande d'un abonnement</param>
+        /// <param name="dateFinAbonnement">Date de fin d'un abonnement</param>
+        /// <param name="dateParution">Date de parution d'un exemplaire</param>
         /// <returns>True si la date est comprise</returns>
         public bool ParutionDansAbonnement(DateTime dateCommande, DateTime dateFinAbonnement, DateTime dateParution)
         {

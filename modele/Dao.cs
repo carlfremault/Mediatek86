@@ -5,13 +5,35 @@ using System.Collections.Generic;
 
 namespace Mediatek86.modele
 {
+    /// <summary>
+    /// Classe Data Access Object.
+    /// Gère les requêtes et réponses vers et depuis la base de données
+    /// </summary>
     public static class Dao
     {
-
+        /// <summary>
+        /// Adresse du serveur
+        /// </summary>
         private static readonly string server = "localhost";
+
+        /// <summary>
+        /// Identifiant utilisateur pour la base de données
+        /// </summary>
         private static readonly string userid = "root";
+
+        /// <summary>
+        /// Mot de passe pour la base de données
+        /// </summary>
         private static readonly string password = "";
+
+        /// <summary>
+        /// Nom de la base de données
+        /// </summary>
         private static readonly string database = "mediatek86";
+
+        /// <summary>
+        /// Chaine de connexion pour la base de données
+        /// </summary>
         private static readonly string connectionString = "server=" + server + ";user id=" + userid + ";password=" + password + ";database=" + database + ";SslMode=none";
 
         /// <summary>
@@ -43,7 +65,7 @@ namespace Mediatek86.modele
         /// <summary>
         /// Retourne tous les genres à partir de la BDD
         /// </summary>
-        /// <returns>Liste d'objets Genre</returns>
+        /// <returns>Collection d'objets Genre</returns>
         public static List<Categorie> GetAllGenres()
         {
             List<Categorie> lesGenres = new List<Categorie>();
@@ -106,7 +128,7 @@ namespace Mediatek86.modele
         /// <summary>
         /// Retourne tous les états de suivi à partir de la bdd
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Collection d'objets Suivi</returns>
         public static List<Suivi> GetAllSuivis()
         {
             List<Suivi> lesSuivis = new List<Suivi>();
@@ -125,7 +147,7 @@ namespace Mediatek86.modele
         }
 
         /// <summary>
-        /// Retourne toutes les livres à partir de la BDD
+        /// Retourne tous les livres à partir de la BDD
         /// </summary>
         /// <returns>Liste d'objets Livre</returns>
         public static List<Livre> GetAllLivres()
@@ -161,12 +183,11 @@ namespace Mediatek86.modele
                 lesLivres.Add(livre);
             }
             curs.Close();
-
             return lesLivres;
         }
 
         /// <summary>
-        /// Retourne toutes les dvd à partir de la BDD
+        /// Retourne tous les dvd à partir de la BDD
         /// </summary>
         /// <returns>Liste d'objets Dvd</returns>
         public static List<Dvd> GetAllDvd()
@@ -202,7 +223,6 @@ namespace Mediatek86.modele
                 lesDvd.Add(dvd);
             }
             curs.Close();
-
             return lesDvd;
         }
 
@@ -243,13 +263,13 @@ namespace Mediatek86.modele
                 lesRevues.Add(revue);
             }
             curs.Close();
-
             return lesRevues;
         }
 
         /// <summary>
-        /// Retourne les exemplaires d'une revue
-        /// <param name="idDoc"></param>
+        /// Retourne les exemplaires d'une revue à partir de la BDD
+        /// </summary>
+        /// <param name="idDoc">Identifiant de la revue</param>
         /// <returns>Liste d'objets Exemplaire</returns>
         public static List<Exemplaire> GetExemplairesRevue(string idDoc)
         {
@@ -277,12 +297,11 @@ namespace Mediatek86.modele
                 lesExemplaires.Add(exemplaire);
             }
             curs.Close();
-
             return lesExemplaires;
         }
 
         /// <summary>
-        /// Retourne les commandes d'un livre ou d'un DVD
+        /// Retourne les commandes d'un livre ou d'un DVD à partir de la BDD
         /// </summary>
         /// <param name="idDoc">Identifiant du livre ou DVD</param>
         /// <returns>Liste d'objets CommandeDocument</returns>
@@ -316,12 +335,11 @@ namespace Mediatek86.modele
                 lesCommandes.Add(commandeDocument);
             }
             curs.Close();
-
             return lesCommandes;
         }
 
         /// <summary>
-        /// Retourne les abonnements à une revue
+        /// Retourne les abonnements à une revue à partir de la BDD
         /// </summary>
         /// <param name="idDoc">identifiant de la revue</param>
         /// <returns>Liste d'objets CommandeDocument</returns>
@@ -351,10 +369,14 @@ namespace Mediatek86.modele
                 lesAbonnements.Add(abonnement);
             }
             curs.Close();
-
             return lesAbonnements;
         }
 
+        /// <summary>
+        /// Retourne la liste des FinAbonnement à partir de la BDD
+        /// Ce sont les abonnements avec date d'expiration à moins de 30 jours
+        /// </summary>
+        /// <returns>Collection d'objets de type FinAbonnement</returns>
         public static List<FinAbonnement> GetFinAbonnement()
         {
             List<FinAbonnement> lesFinAbonnement = new List<FinAbonnement>();
@@ -373,15 +395,14 @@ namespace Mediatek86.modele
                 lesFinAbonnement.Add(finAbonnement);
             }
             curs.Close();
-
             return lesFinAbonnement;
         }
 
         /// <summary>
-        /// ecriture d'un exemplaire en base de données
+        /// Ecriture d'un exemplaire en base de données
         /// </summary>
-        /// <param name="exemplaire"></param>
-        /// <returns>true si l'insertion a pu se faire</returns>
+        /// <param name="exemplaire">Exemplaire à insérer</param>
+        /// <returns>True si l'insertion a pu se faire</returns>
         public static bool CreerExemplaire(Exemplaire exemplaire)
         {
             try
@@ -410,9 +431,9 @@ namespace Mediatek86.modele
         }
 
         /// <summary>
-        /// écriture d'un livre en base de données
+        /// Ecriture d'un livre en base de données
         /// </summary>
-        /// <param name="livre">le livre à ajouter</param>
+        /// <param name="livre">Le livre à ajouter</param>
         /// <returns>Le message de confirmation ou d'erreur</returns>
         public static string CreerLivre(Livre livre)
         {
@@ -448,10 +469,10 @@ namespace Mediatek86.modele
         }
 
         /// <summary>
-        /// modification d'un livre en base de données
+        /// Modification d'un livre en base de données
         /// </summary>
-        /// <param name="livre">le livre à modifier</param>
-        /// <returns>true si la modification a pu se faire</returns>
+        /// <param name="livre">Le livre à modifier</param>
+        /// <returns>True si la modification a pu se faire</returns>
         public static bool ModifLivre(Livre livre)
         {
             try
@@ -487,8 +508,8 @@ namespace Mediatek86.modele
         /// <summary>
         /// Suppression d'un livre de la base de données
         /// </summary>
-        /// <param name="id">identifiant du livre à supprimer</param>
-        /// <returns>true si la modification a pu se faire</returns>
+        /// <param name="id">Identifiant du livre à supprimer</param>
+        /// <returns>True si la modification a pu se faire</returns>
         public static bool SupprLivre(string id)
         {
             try
@@ -515,9 +536,9 @@ namespace Mediatek86.modele
         }
 
         /// <summary>
-        /// écriture d'un DVD en base de données
+        /// Ecriture d'un DVD en base de données
         /// </summary>
-        /// <param name="dvd">le DVD à ajouter</param>
+        /// <param name="dvd">Le DVD à ajouter</param>
         /// <returns>Le message de confirmation ou d'erreur</returns>
         public static string CreerDvd(Dvd dvd)
         {
@@ -553,10 +574,10 @@ namespace Mediatek86.modele
         }
 
         /// <summary>
-        /// modification d'un DVD en base de données
+        /// Modification d'un DVD en base de données
         /// </summary>
-        /// <param name="dvd">le DVD à modifier</param>
-        /// <returns>true si la modification a pu se faire</returns>
+        /// <param name="dvd">Le DVD à modifier</param>
+        /// <returns>True si la modification a pu se faire</returns>
         public static bool ModifDvd(Dvd dvd)
         {
             try
@@ -592,8 +613,8 @@ namespace Mediatek86.modele
         /// <summary>
         /// Suppression d'un DVD de la base de données
         /// </summary>
-        /// <param name="id">identifiant du DVD à supprimer</param>
-        /// <returns>true si la modification a pu se faire</returns>
+        /// <param name="id">Identifiant du DVD à supprimer</param>
+        /// <returns>True si la modification a pu se faire</returns>
         public static bool SupprDvd(string id)
         {
             try
@@ -620,9 +641,9 @@ namespace Mediatek86.modele
         }
 
         /// <summary>
-        /// écriture d'une revue en base de données
+        /// Ecriture d'une revue en base de données
         /// </summary>
-        /// <param name="revue">la revue à ajouter</param>
+        /// <param name="revue">La revue à ajouter</param>
         /// <returns>Le message de confirmation ou d'erreur</returns>
         public static string CreerRevue(Revue revue)
         {
@@ -657,10 +678,10 @@ namespace Mediatek86.modele
         }
 
         /// <summary>
-        /// modification d'une revue en base de données
+        /// Modification d'une revue en base de données
         /// </summary>
-        /// <param name="revue">la revue à modifier</param>
-        /// <returns>true si la modification a pu se faire</returns>
+        /// <param name="revue">La revue à modifier</param>
+        /// <returns>True si la modification a pu se faire</returns>
         public static bool ModifRevue(Revue revue)
         {
             try
@@ -696,8 +717,8 @@ namespace Mediatek86.modele
         /// <summary>
         /// Suppression d'une revue de la base de données
         /// </summary>
-        /// <param name="id">identifiant de la revue à supprimer</param>
-        /// <returns>true si la modification a pu se faire</returns>
+        /// <param name="id">Identifiant de la revue à supprimer</param>
+        /// <returns>True si la modification a pu se faire</returns>
         public static bool SupprRevue(string id)
         {
             try
@@ -760,8 +781,8 @@ namespace Mediatek86.modele
         /// <summary>
         /// Suppression d'une CommandeDocument de la bdd
         /// </summary>
-        /// <param name="id">identifiant de la CommandeDocument à supprimer</param>
-        /// <returns>Ttrue si la suppression a réussi</returns>
+        /// <param name="id">Identifiant de la CommandeDocument à supprimer</param>
+        /// <returns>True si la suppression a réussi</returns>
         public static bool SupprCommandeDocument(string id)
         {
             try
@@ -790,8 +811,8 @@ namespace Mediatek86.modele
         /// <summary>
         /// Modification d'état de suivi d'une CommandeDocument
         /// </summary>
-        /// <param name="idCommandeDocument">identifiant de la CommandeDocument à modifier</param>
-        /// <param name="idSuivi">identifiant du nouveau état de suivi</param>
+        /// <param name="idCommandeDocument">Identifiant de la CommandeDocument à modifier</param>
+        /// <param name="idSuivi">Identifiant du nouveau état de suivi</param>
         /// <returns>True si la modification a réussi</returns>
         public static bool ModifSuiviCommandeDocument(string idCommandeDocument, int idSuivi)
         {
@@ -853,8 +874,8 @@ namespace Mediatek86.modele
         /// <summary>
         /// Suppression d'un abonnement de la base de données
         /// </summary>
-        /// <param name="id">identifiant de l'abonnement à supprimer</param>
-        /// <returns>true si la modification a pu se faire</returns>
+        /// <param name="id">Identifiant de l'abonnement à supprimer</param>
+        /// <returns>True si la modification a pu se faire</returns>
         public static bool SupprAbonnement(string id)
         {
             try

@@ -4,13 +4,13 @@ using Serilog.Formatting.Json;
 using System;
 using System.Windows.Forms;
 
-
 namespace Mediatek86
 {
     static class Program
     {
         /// <summary>
         /// Point d'entrée principal de l'application.
+        /// Lance la journalisation
         /// </summary>
         [STAThread]
         static void Main()

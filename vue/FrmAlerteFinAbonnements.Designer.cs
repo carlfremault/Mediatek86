@@ -1,7 +1,7 @@
 ﻿
 namespace Mediatek86.vue
 {
-    partial class AlerteFinAbonnements
+    partial class FrmAlerteFinAbonnements
     {
         /// <summary>
         /// Required designer variable.
@@ -62,6 +62,7 @@ namespace Mediatek86.vue
             this.dgvAlerteFinAbonnements.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvAlerteFinAbonnements.Size = new System.Drawing.Size(418, 150);
             this.dgvAlerteFinAbonnements.TabIndex = 0;
+            this.dgvAlerteFinAbonnements.TabStop = false;
             this.dgvAlerteFinAbonnements.SelectionChanged += new System.EventHandler(this.dgvAlerteFinAbonnements_SelectionChanged);
             // 
             // label1
@@ -78,12 +79,12 @@ namespace Mediatek86.vue
             this.btnAlerteFinAbonnements.Location = new System.Drawing.Point(12, 227);
             this.btnAlerteFinAbonnements.Name = "btnAlerteFinAbonnements";
             this.btnAlerteFinAbonnements.Size = new System.Drawing.Size(418, 29);
-            this.btnAlerteFinAbonnements.TabIndex = 2;
+            this.btnAlerteFinAbonnements.TabIndex = 1;
             this.btnAlerteFinAbonnements.Text = "Continuer";
             this.btnAlerteFinAbonnements.UseVisualStyleBackColor = true;
             this.btnAlerteFinAbonnements.Click += new System.EventHandler(this.btnAlerteFinAbonnements_Click);
             // 
-            // AlerteFinAbonnements
+            // FrmAlerteFinAbonnements
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -91,7 +92,7 @@ namespace Mediatek86.vue
             this.Controls.Add(this.btnAlerteFinAbonnements);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.dgvAlerteFinAbonnements);
-            this.Name = "AlerteFinAbonnements";
+            this.Name = "FrmAlerteFinAbonnements";
             this.Text = "Alerte abonnements";
             ((System.ComponentModel.ISupportInitialize)(this.dgvAlerteFinAbonnements)).EndInit();
             this.ResumeLayout(false);

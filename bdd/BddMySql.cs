@@ -3,10 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Serilog;
-using Serilog.Formatting.Json;
 
 namespace Mediatek86.bdd
 {
+    /// <summary>
+    /// Classe qui gère la connexion avec la base de données
+    /// </summary>
     public class BddMySql
     {
         /// <summary>
@@ -60,6 +62,7 @@ namespace Mediatek86.bdd
         /// Exécute une requête type "select" et valorise le curseur
         /// </summary>
         /// <param name="stringQuery">requête select</param>
+        /// <param name="parameters">Paramètres à insérer dans la requête</param>
         public void ReqSelect(string stringQuery, Dictionary<string, object> parameters)
         {
             MySqlCommand command;
@@ -134,7 +137,7 @@ namespace Mediatek86.bdd
         /// Exécution de requêtes autre que "select" dans une seule transaction
         /// </summary>
         /// <param name="queries">Liste des requêtes à faire</param>
-        /// <param name="parameters"></param>
+        /// <param name="parameters">Paramètres à insérer dans les requêtes</param>
         public void ReqUpdate(List<string> queries, Dictionary<string, object> parameters)
         {
             MySqlCommand command;

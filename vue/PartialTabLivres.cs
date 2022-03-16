@@ -7,6 +7,9 @@ using System.Windows.Forms;
 
 namespace Mediatek86.vue
 {
+    /// <summary>
+    /// Classe partielle représentant l'onglet Livres
+    /// </summary>
     public partial class FrmMediatek : Form
     {
         //-----------------------------------------------------------
@@ -50,8 +53,9 @@ namespace Mediatek86.vue
         #region dataGridView + fonctions et événements associées
 
         /// <summary>
-        /// Remplit le dategrid avec la liste reçue en paramètre
+        /// Remplit le dategrid avec la collection reçue en paramètre
         /// </summary>
+        /// <param name="livres">Collection des livres</param>
         private void RemplirLivresListe(List<Livre> livres)
         {
             bdgLivresListe.DataSource = livres;
@@ -121,8 +125,7 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// Affichage de la liste complète des livres
-        /// et annulation de toutes les recherches et filtres
+        /// Affichage de la liste complète des livres et annulation de toutes les recherches et filtres
         /// </summary>
         private void RemplirLivresListeComplete()
         {
@@ -131,7 +134,7 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// vide les zones de recherche et de filtre
+        /// Vide les zones de recherche et de filtre
         /// </summary>
         private void VideLivresZones()
         {
@@ -277,7 +280,7 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// Entrée dans champ recherche déclenche la recherche aussi
+        /// Taper Entrée dans champ recherche déclenche la recherche aussi
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -594,7 +597,7 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// Evénement clic sur le bouton 'Supprimer'. Vérifie validation de l'utilisateur avant de procéder.
+        /// Evénement clic sur le bouton 'Supprimer'. Demande validation de l'utilisateur avant de procéder.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -673,7 +676,6 @@ namespace Mediatek86.vue
             String isbn = txbLivresIsbn.Text;
             String auteur = txbLivresAuteur.Text;
             String collection = txbLivresCollection.Text;
-
             Livre leLivre = new Livre(id, titre, image, isbn, auteur, collection, idGenre, genre, idPublic, unPublic, idRayon, rayon);
 
             if (modifLivre)
@@ -734,7 +736,7 @@ namespace Mediatek86.vue
         /// <summary>
         /// (Dés)Activer le bouton qui permet d'ajouter un livre
         /// </summary>
-        /// <param name="actif"></param>
+        /// <param name="actif">'True' active, 'False' désactive</param>
         private void ActiverBoutonAjoutLivre(Boolean actif)
         {
             btnAjoutLivre.Enabled = actif;
@@ -743,7 +745,7 @@ namespace Mediatek86.vue
         /// <summary>
         /// (Dés)Activer le bouton qui permet de modifier un livre
         /// </summary>
-        /// <param name="actif"></param>
+        /// <param name="actif">'True' active, 'False' désactive</param>
         private void ActiverBoutonModifLivre(Boolean actif)
         {
             btnModifLivre.Enabled = actif;
@@ -752,7 +754,7 @@ namespace Mediatek86.vue
         /// <summary>
         /// (Dés)Activer le bouton qui permet de supprimer un livre
         /// </summary>
-        /// <param name="actif"></param>
+        /// <param name="actif">'True' active, 'False' désactive</param>
         private void ActiverBoutonSupprLivre(Boolean actif)
         {
             btnSupprLivre.Enabled = actif;
@@ -783,9 +785,9 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// (Dés)activation de La protection des différents champs 'informations détaillées' ainsi que le bouton 'enregistrer'
+        /// (Dés)activation de La protection des différents champs 'informations détaillées' ainsi que les boutons 'enregistrer', 'annuler' et de recherche d'image
         /// </summary>
-        /// <param name="actif"></param>
+        /// <param name="actif">'True' déverrouille les champs, active les boutons</param>
         private void AutoriserModifLivre(Boolean actif)
         {
             txbLivresTitre.ReadOnly = !actif;
@@ -804,7 +806,7 @@ namespace Mediatek86.vue
         /// <summary>
         /// (Dés)activation de la protection du champ 'Numéro du document'
         /// </summary>
-        /// <param name="actif"></param>
+        /// <param name="actif">'True' enlève la protection</param>
         private void AutoriserModifLivreId(Boolean actif)
         {
             txbLivresNumero.ReadOnly = !actif;

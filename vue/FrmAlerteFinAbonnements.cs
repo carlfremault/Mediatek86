@@ -6,16 +6,27 @@ using System.Windows.Forms;
 
 namespace Mediatek86.vue
 {
-    public partial class AlerteFinAbonnements : Form
+    /// <summary>
+    /// Vue pour l'alerte d'abonnements qui expirent dans moins de 30 jours
+    /// </summary>
+    public partial class FrmAlerteFinAbonnements : Form
     {
+        /// <summary>
+        /// BindingSource pour la liste des abonnements arrivant à expiration
+        /// </summary>
         private readonly BindingSource bdgAlerteAbonnements = new BindingSource();
+
+        /// <summary>
+        /// Collection des abonnements arrivant à expiration
+        /// </summary>
         private readonly List<FinAbonnement> lesFinAbonnement;
 
         /// <summary>
-        /// Constructeur. Remplit le tableau des abonnements
+        /// Constructeur. Valorise la propriété contrôleur avec le contrôleur reçu en paramètre.
+        /// Remplit le tableau des abonnements
         /// </summary>
-        /// <param name="controle"></param>
-        internal AlerteFinAbonnements(Controle controle)
+        /// <param name="controle">Instance du contrôleur</param>
+        internal FrmAlerteFinAbonnements(Controle controle)
         {
             InitializeComponent();
             lesFinAbonnement = controle.GetFinAbonnement();
@@ -26,6 +37,7 @@ namespace Mediatek86.vue
             dgvAlerteFinAbonnements.Columns[0].HeaderCell.Value = "Date fin d'abonnement";
             dgvAlerteFinAbonnements.Columns[1].HeaderCell.Value = "Identifiant Revue";
             dgvAlerteFinAbonnements.Columns[2].HeaderCell.Value = "Revue";
+            btnAlerteFinAbonnements.Focus();
         }
 
         /// <summary>

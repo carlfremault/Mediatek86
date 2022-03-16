@@ -7,6 +7,9 @@ using System.Windows.Forms;
 
 namespace Mediatek86.vue
 {
+    /// <summary>
+    /// Classe partielle représentant l'onglet de commande de livres
+    /// </summary>
     public partial class FrmMediatek : Form
     {
         //-----------------------------------------------------------
@@ -23,7 +26,7 @@ namespace Mediatek86.vue
         /// Tous les booléens concernant une saisie sont mis en false (validation d'abandon a été demandé avant changement d'onglet)
         /// Récupération des livres et suivis depuis le contrôleur
         /// Désactivation de groupBox de gestion de commandes
-        /// Vide les champs de détails de commande
+        /// Vide les champs des infos des livres et des détails de commande
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -39,8 +42,9 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// Remplit le dategrid avec la liste reçue en paramètre
+        /// Remplit le dategrid avec la collection reçue en paramètre
         /// </summary>
+        /// <param name="lesCommandeDocument">La collection de CommandeDocument</param>
         private void RemplirCommandeLivresListe(List<CommandeDocument> lesCommandeDocument)
         {
             bdgCommandesLivresListe.DataSource = lesCommandeDocument;
@@ -106,7 +110,7 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// Entrée dans champ de recherche déclenche la recherche aussi
+        /// Taper Entrée dans champ de recherche déclenche la recherche aussi
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -137,7 +141,7 @@ namespace Mediatek86.vue
         /// <summary>
         /// Affichage des informations du livre sélectionné et les commandes
         /// </summary>
-        /// <param name="revue"></param>
+        /// <param name="livre">Le livre sélectionné</param>
         private void AfficheCommandeLivresInfos(Livre livre)
         {
             // informations sur le livre
@@ -168,7 +172,7 @@ namespace Mediatek86.vue
         /// <summary>
         /// Affichage des détails d'une commande de livre
         /// </summary>
-        /// <param name="commandeDocument"></param>
+        /// <param name="commandeDocument">La commande concernée</param>
         private void AfficheCommandeLivresCommande(CommandeDocument commandeDocument)
         {
             txbCommandeLivresNumeroCommande.Text = commandeDocument.Id;
@@ -219,10 +223,9 @@ namespace Mediatek86.vue
         }
 
         /// <summary>
-        /// (Dés)active la zone de gestion de commandes
-        /// et vide les objets graphiques
+        /// (Dés)active la zone de gestion de commandes et le bouton 'Ajouter'
         /// </summary>
-        /// <param name="acces"></param>
+        /// <param name="acces">'True' autorise l'accès</param>
         private void AccesGestionCommandeLivresGroupBox(bool acces)
         {
             grpGestionCommandeLivres.Enabled = acces;
@@ -285,7 +288,7 @@ namespace Mediatek86.vue
         /// <summary>
         /// Activation des boutons de gestion de commande en fonction de l'état de suivi
         /// </summary>
-        /// <param name="commandeDocument"></param>
+        /// <param name="commandeDocument">La CommandeDocument concernée</param>
         private void ActivationModificationCommandeLivres(CommandeDocument commandeDocument)
         {
             string etatSuivi = commandeDocument.LibelleSuivi;
@@ -324,7 +327,6 @@ namespace Mediatek86.vue
         /// <summary>
         /// Début de saisie de commande de livre 
         /// </summary>
-        /// <param name="actif"></param>
         private void DebutSaisieCommandeLivres()
         {
             AccesSaisieCommandeLivre(true);
@@ -346,7 +348,7 @@ namespace Mediatek86.vue
         /// (Dés)active la protection readonly des champs de détails de commande
         /// (Dés)active les boutons concernant l'ajout, validation et annulation de saisie de commande
         /// </summary>
-        /// <param name="acces"></param>
+        /// <param name="acces">'True' active les boutons 'Valider' et 'Annuler', désactive le bouton 'Ajouter', déverrouille les champs des détails de commande</param>
         private void AccesSaisieCommandeLivre(bool acces)
         {
             saisieCommandeLivres = acces;
@@ -406,7 +408,6 @@ namespace Mediatek86.vue
             string idLivreDvd = txbCommandeLivresNumeroLivre.Text.Trim();
             int idSuivi = lesSuivis[0].Id;
             string libelleSuivi = lesSuivis[0].Libelle;
-
             String montantSaisie = txbCommandeLivresMontant.Text.Replace(',', '.');
             bool success = Double.TryParse(montantSaisie, out double montant);
             if (!success)
@@ -416,7 +417,6 @@ namespace Mediatek86.vue
                 txbCommandeLivresMontant.Focus();
                 return;
             }
-
             CommandeDocument laCommandeDocument = new CommandeDocument(id, dateCommande, montant, nbExemplaires, idLivreDvd, idSuivi, libelleSuivi);
 
             String message = controle.CreerCommandeDocument(laCommandeDocument);
