@@ -2,6 +2,8 @@
 using Mediatek86.metier;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Security.Cryptography.X509Certificates;
 
 /// <summary>
 /// Modèle : classe Dao (Data Access Object) pour envoyer requêtes à la base de données et récupérer les réponses
@@ -17,17 +19,17 @@ namespace Mediatek86.modele
         /// <summary>
         /// Adresse du serveur
         /// </summary>
-        private static readonly string server = "localhost";
+        private static readonly string server = "mediatek86.mysql.database.azure.com";
 
         /// <summary>
         /// Identifiant utilisateur pour la base de données
         /// </summary>
-        private static readonly string userid = "root";
+        private static readonly string userid = "mediadmin";       
 
         /// <summary>
         /// Mot de passe pour la base de données
         /// </summary>
-        private static readonly string password = "";
+        private static readonly string password = "Gestion86";
 
         /// <summary>
         /// Nom de la base de données
@@ -37,7 +39,7 @@ namespace Mediatek86.modele
         /// <summary>
         /// Chaine de connexion pour la base de données
         /// </summary>
-        private static readonly string connectionString = "server=" + server + ";user id=" + userid + ";password=" + password + ";database=" + database + ";SslMode=none";
+        private static readonly string connectionString = "server=" + server + ";user id=" + userid + ";password=" + password + ";database=" + database + ";SslMode=None";
 
         /// <summary>
         /// Retourne le service d'un utilisateur
