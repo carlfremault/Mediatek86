@@ -1,4 +1,7 @@
-﻿namespace Mediatek86.metier
+﻿/// <summary>
+/// Classes métier
+/// </summary>
+namespace Mediatek86.metier
 {
     /// <summary>
     /// Classe métier représentant une Categorie. Classe mère de Genre, Public et Rayon
@@ -39,7 +42,7 @@
         /// <summary>
         /// Récupération du libellé pour l'affichage dans les combos
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Le libellé de la catégorie</returns>
         public override string ToString()
         {
             return this.libelle;

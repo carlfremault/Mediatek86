@@ -1,4 +1,6 @@
-﻿
+﻿/// <summary>
+/// Classes métier
+/// </summary>
 namespace Mediatek86.metier
 {
     /// <summary>

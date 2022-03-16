@@ -17,10 +17,10 @@ C:\Users\carlf\source\repos\Mediatek86gestion\metier\Document.cs
 C:\Users\carlf\source\repos\Mediatek86gestion\metier\Livre.cs
 C:\Users\carlf\source\repos\Mediatek86gestion\metier\Exemplaire.cs
 C:\Users\carlf\source\repos\Mediatek86gestion\metier\Revue.cs
-C:\Users\carlf\source\repos\Mediatek86gestion\vue\AlerteFinAbonnements.cs
-C:\Users\carlf\source\repos\Mediatek86gestion\vue\AlerteFinAbonnements.Designer.cs
-C:\Users\carlf\source\repos\Mediatek86gestion\vue\Authentification.cs
-C:\Users\carlf\source\repos\Mediatek86gestion\vue\Authentification.Designer.cs
+C:\Users\carlf\source\repos\Mediatek86gestion\vue\FrmAlerteFinAbonnements.cs
+C:\Users\carlf\source\repos\Mediatek86gestion\vue\FrmAlerteFinAbonnements.Designer.cs
+C:\Users\carlf\source\repos\Mediatek86gestion\vue\FrmAuthentification.cs
+C:\Users\carlf\source\repos\Mediatek86gestion\vue\FrmAuthentification.Designer.cs
 C:\Users\carlf\source\repos\Mediatek86gestion\vue\FrmMediatek.cs
 C:\Users\carlf\source\repos\Mediatek86gestion\vue\FrmMediatek.Designer.cs
 C:\Users\carlf\source\repos\Mediatek86gestion\metier\Genre.cs
@@ -34,8 +34,8 @@ C:\Users\carlf\source\repos\Mediatek86gestion\vue\PartialTabLivres.cs
 C:\Users\carlf\source\repos\Mediatek86gestion\vue\PartialTabReceptionExemplaire.cs
 C:\Users\carlf\source\repos\Mediatek86gestion\vue\PartialTabRevues.cs
 C:\Users\carlf\source\repos\Mediatek86gestion\Properties\Resources.resx
-C:\Users\carlf\source\repos\Mediatek86gestion\vue\AlerteFinAbonnements.resx
-C:\Users\carlf\source\repos\Mediatek86gestion\vue\Authentification.resx
+C:\Users\carlf\source\repos\Mediatek86gestion\vue\FrmAlerteFinAbonnements.resx
+C:\Users\carlf\source\repos\Mediatek86gestion\vue\FrmAuthentification.resx
 C:\Users\carlf\source\repos\Mediatek86gestion\vue\FrmMediatek.resx
 C:\Users\carlf\source\repos\Mediatek86gestion\.sonarlint\mediatek86csharp.ruleset
 C:\Users\carlf\source\repos\Mediatek86gestion\packages.config

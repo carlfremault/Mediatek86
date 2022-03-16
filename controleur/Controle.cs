@@ -8,6 +8,9 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
 
+/// <summary>
+/// Contrôleur de l'application
+/// </summary>
 namespace Mediatek86.controleur
 {
     /// <summary>
@@ -170,6 +173,7 @@ namespace Mediatek86.controleur
         /// <summary>
         /// Récupère les exemplaires d'une revue depuis la bdd
         /// </summary>
+        /// <param name="idDocuement">Identifiant de la revue concernée</param>
         /// <returns>Collection d'objets Exemplaire</returns>
         public List<Exemplaire> GetExemplairesRevue(string idDocuement)
         {
