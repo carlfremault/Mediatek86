@@ -31,7 +31,7 @@ namespace Mediatek86.vue
         /// <summary>
         /// Chemin initial lors de la recherche d'un image sur son disque dur
         /// </summary>
-        const string DOSSIERINITIALRECHERCHEIMAGE = "c:\\";
+        const string DOSSIERINITIALRECHERCHEIMAGE = "c:\\MediatekImages";
 
         /// <summary>
         /// BindingSource pour le DataGridView des livres
@@ -270,7 +270,7 @@ namespace Mediatek86.vue
         /// <param name="e"></param>
         private void tabOngletsApplication_Deselecting(object sender, TabControlCancelEventArgs e)
         {
-            if ((saisieLivre || saisieDvd || saisieRevue || saisieCommandeLivres) && !VerifAbandonSaisie())
+            if ((saisieLivre || saisieDvd || saisieRevue || saisieCommandeLivres || saisieCommandeDvd || saisieAbonnementRevue) && !VerifAbandonSaisie())
             {
                 e.Cancel = true;
             }
